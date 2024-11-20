@@ -1,13 +1,13 @@
-package io.urdego.image_service;
+package io.urdego.content_service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ImageServiceApplicationTests {
+class ContentServiceApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    void contextLoads() {
+    }
 
 }
