@@ -1,0 +1,14 @@
+name : google-java-format
+
+on: [push, pull_request]
+jobs:
+
+  formatting:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: axel-op/googlejavaformat-action@v3
+        with:
+          args: "--replace --aosp"
+          commit-message: "Format : Google Java Format"
