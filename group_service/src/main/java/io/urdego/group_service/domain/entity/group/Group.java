@@ -1,6 +1,6 @@
-package io.urdego.group_service.infra.entity.group;
+package io.urdego.group_service.domain.entity.group;
 
-import io.urdego.group_service.infra.entity.BaseEntity;
+import io.urdego.group_service.domain.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,7 +11,7 @@ import lombok.*;
 @Builder
 @Entity
 @Table(name = "Group")
-public class GroupEntity extends BaseEntity {
+public class Group extends BaseEntity {
 
     @Id
     @Column(name = "group_id")
@@ -23,10 +23,12 @@ public class GroupEntity extends BaseEntity {
 
     private String description;
 
-    @Column(name = "maximum", nullable = false)
-    private int memberMax;
+    @Column(name = "member_limit", nullable = false)
+    private Integer memberLimit;
 
-    private String status;
+    // 그룹 상태 처리 (for soft delete)
+    @Column(nullable = false)
+    private boolean groupStatus = true;
 
     // FK
     @Column(name = "user_id", nullable = false)

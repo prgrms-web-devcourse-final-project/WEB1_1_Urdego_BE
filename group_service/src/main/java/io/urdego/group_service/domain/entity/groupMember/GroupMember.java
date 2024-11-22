@@ -1,6 +1,5 @@
-package io.urdego.group_service.infra.entity.group;
+package io.urdego.group_service.domain.entity.groupMember;
 
-import io.urdego.group_service.infra.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,7 +10,7 @@ import lombok.*;
 @Builder
 @Entity
 @Table(name = "GroupMember")
-public class GroupMemberEntity extends BaseEntity {
+public class GroupMember {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
