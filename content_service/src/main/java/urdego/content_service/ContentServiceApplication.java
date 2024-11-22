@@ -1,4 +1,4 @@
-package io.urdego.content_service;
+package urdego.content_service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
