@@ -1,4 +1,4 @@
-package io.urdego.group_service.infra.entity;
+package io.urdego.group_service.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
