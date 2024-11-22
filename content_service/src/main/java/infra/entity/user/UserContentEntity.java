@@ -16,29 +16,29 @@ public class UserContentEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "CONTENT_ID")
+    @Column(name = "content_id")
     private Long id;
 
-    @Column(name = "USER_ID", nullable = false)
+    @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    @Column(name = "URL", columnDefinition = "JSON", nullable = false) // JSON
+    @Column(name = "url", columnDefinition = "JSON", nullable = false) // JSON
     private String url;
 
     @Embedded
-    @Column(name = "INFO", length = 255)
+    @Column(name = "content_info", length = 255)
     private ContentInfo contentInfo;
 
-    @Column(name = "CONTENT_NAME", nullable = false)
+    @Column(name = "content_name", nullable = false)
     private String contentName;
 
-    @Column(name = "LATITUDE", precision = 10, scale = 7) // DECIMAL
+    @Column(name = "latitude", precision = 10, scale = 7) // DECIMAL
     private Double latitude;
 
-    @Column(name = "LONGITUDE", precision = 10, scale = 7) // DECIMAL
+    @Column(name = "longitude", precision = 10, scale = 7) // DECIMAL
     private Double longitude;
 
-    @Column(name = "HINT", length = 255)
+    @Column(name = "hint", length = 255)
     private String hint;
 
 

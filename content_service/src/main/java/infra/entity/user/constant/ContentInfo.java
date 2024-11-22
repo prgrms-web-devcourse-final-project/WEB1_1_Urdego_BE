@@ -12,16 +12,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ContentInfo {
 
-    @Column(name = "PLACE_NAME")
+    @Column(name = "place_name")
     private String placeName;
 
-    @Column(name = "HEIGHT")
+    @Column(name = "height")
     private int height;   // 높이
 
-    @Column(name = "WIDTH")
+    @Column(name = "width")
     private int width;    // 너비
 
-    @Column(name = "SIZE")
+    @Column(name = "size")
     private long size;    // 사진 크기
 
     @Builder
