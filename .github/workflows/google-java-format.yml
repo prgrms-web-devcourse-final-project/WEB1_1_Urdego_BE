@@ -12,9 +12,16 @@ jobs:
   formatting:
     runs-on: ubuntu-latest
     steps:
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
       - uses: actions/checkout@v2
 
       - uses: axel-op/googlejavaformat-action@v3
         with:
-          args: "**/*.java --replace --aosp"
+          args: "--replace --aosp"
+          files: "**/*.java"
           commit-message: "Format : Google Java Format"
