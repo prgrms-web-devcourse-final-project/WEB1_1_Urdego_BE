@@ -1,8 +1,14 @@
-name : google-java-format
+name: google-java-format
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+
 jobs:
-
   formatting:
     runs-on: ubuntu-latest
     steps:
@@ -10,5 +16,5 @@ jobs:
 
       - uses: axel-op/googlejavaformat-action@v3
         with:
-          args: "--replace --aosp"
+          args: "**/*.java --replace --aosp"
           commit-message: "Format : Google Java Format"
