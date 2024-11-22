@@ -11,7 +11,6 @@ public enum Role {
     USER("유저"),
 
     WITHDRAW("탈퇴");
-
     
     private final String text;
 }
