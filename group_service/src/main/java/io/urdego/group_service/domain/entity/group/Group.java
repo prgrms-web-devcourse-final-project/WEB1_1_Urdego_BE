@@ -4,13 +4,14 @@ import io.urdego.group_service.domain.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import static lombok.AccessLevel.PRIVATE;
+import static lombok.AccessLevel.PROTECTED;
+
 @Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@Entity
-@Table(name = "Group")
+@ToString
+@NoArgsConstructor(access = PROTECTED)
+@AllArgsConstructor(access = PRIVATE)
+@Entity(name = "Group")
 public class Group extends BaseEntity {
 
     @Id
@@ -33,4 +34,13 @@ public class Group extends BaseEntity {
     // FK
     @Column(name = "user_id", nullable = false)
     private Long userId;
+
+    @Builder
+    public Group(String groupName, String description, Integer memberLimit, boolean groupStatus, Long userId) {
+        this.groupName = groupName;
+        this.description = description;
+        this.memberLimit = memberLimit;
+        this.groupStatus = groupStatus;
+        this.userId = userId;
+    }
 }
