@@ -12,9 +12,30 @@ jobs:
   formatting:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-
-      - uses: axel-op/googlejavaformat-action@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
         with:
-          args: "**/*.java --replace --aosp"
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
+      - name: Run Google Java Format
+        uses: axel-op/googlejavaformat-action@v3
+        with:
+          args: "--replace --aosp"
+          files: "**/*.java"
           commit-message: "Format : Google Java Format"
+
+      - name: Push changes
+        if: success()
+        run: |
+          git push origin HEAD
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
