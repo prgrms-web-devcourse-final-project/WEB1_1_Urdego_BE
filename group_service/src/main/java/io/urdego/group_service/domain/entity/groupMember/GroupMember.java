@@ -3,13 +3,14 @@ package io.urdego.group_service.domain.entity.groupMember;
 import jakarta.persistence.*;
 import lombok.*;
 
+import static lombok.AccessLevel.PRIVATE;
+import static lombok.AccessLevel.PROTECTED;
+
 @Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@Entity
-@Table(name = "GroupMember")
+@ToString
+@NoArgsConstructor(access = PROTECTED)
+@AllArgsConstructor(access = PRIVATE)
+@Entity(name = "GroupMember")
 public class GroupMember {
 
     @Id
@@ -29,4 +30,13 @@ public class GroupMember {
 
     @Column(name = "user_id", nullable = false)
     private Long userId;
+
+    @Builder
+    public GroupMember(GroupMemberRole memberRole, String memberStatus, Long groupId, Long userId) {
+        this.memberRole = memberRole;
+        this.memberStatus = memberStatus;
+        this.groupId = groupId;
+        this.userId = userId;
+    }
+
 }
