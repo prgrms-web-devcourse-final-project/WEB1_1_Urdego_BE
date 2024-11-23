@@ -1,7 +1,7 @@
-package domain.define.user;
+package domain.entity.user;
 
-import domain.define.BaseEntity;
-import domain.define.user.constant.ContentInfo;
+import domain.entity.BaseEntity;
+import domain.entity.user.constant.ContentInfo;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
