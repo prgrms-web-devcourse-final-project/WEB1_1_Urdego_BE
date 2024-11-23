@@ -1,7 +1,6 @@
 package io.urdego.user_service.api.service;
 
 import io.urdego.user_service.api.controller.request.SignUpRequest;
-import io.urdego.user_service.api.service.constant.NicknameVerificationResult;
 
 public interface UserService {
 
