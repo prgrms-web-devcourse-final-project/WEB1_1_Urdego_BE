@@ -1,4 +1,4 @@
-package application.service.user;
+package api.user.service;
 
 public class UserContentService {
 }

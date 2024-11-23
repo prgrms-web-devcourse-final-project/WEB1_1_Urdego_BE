@@ -1,7 +1,7 @@
-package api.dto.user;
+package api.user.controller;
 
 
-import application.service.user.UserContentService;
+import api.user.service.UserContentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

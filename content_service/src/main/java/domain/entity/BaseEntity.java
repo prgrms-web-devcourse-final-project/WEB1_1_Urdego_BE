@@ -1,4 +1,4 @@
-package domain.define;
+package domain.entity;
 
 
 import jakarta.persistence.Column;
