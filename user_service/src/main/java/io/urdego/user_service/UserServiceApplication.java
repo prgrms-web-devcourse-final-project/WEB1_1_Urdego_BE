@@ -1,9 +1,11 @@
-package io.urdego.user_service.urdego.user_service;
+package io.urdego.user_service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
+@EnableJpaAuditing
 public class UserServiceApplication {
 
     public static void main(String[] args) {

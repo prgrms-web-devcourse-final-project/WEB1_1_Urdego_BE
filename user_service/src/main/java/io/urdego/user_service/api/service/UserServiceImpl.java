@@ -1,12 +1,14 @@
 package io.urdego.user_service.api.service;
 
 import io.urdego.user_service.api.controller.request.SignUpRequest;
-import io.urdego.user_service.api.service.constant.NicknameVerificationResult;
+import io.urdego.user_service.api.service.exception.UserNotFoundException;
 import io.urdego.user_service.domain.define.User;
 import io.urdego.user_service.domain.define.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,15 +30,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public NicknameVerificationResult verifyNickname(final String nickname) {
-        if (userRepository.existsByNickname(nickname)) {
+        if (userRepository.existsByNickname(nickname))
             return NicknameVerificationResult.DUPLICATED;
-        }
         return NicknameVerificationResult.PERMIT;
     }
 
     @Override
     public String login(final String email, final String password) {
-        return null;
+        User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+        return user.getNickname();
     }
 
 
