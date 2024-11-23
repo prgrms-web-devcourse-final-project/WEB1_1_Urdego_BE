@@ -43,7 +43,7 @@ public class UserContent extends BaseEntity {
 
 
     @Builder
-    public UserContentEntity(Long userId, String url, ContentInfo contentInfo, String contentName, Double latitude, Double longitude, String hint) {
+    public UserContent(Long userId, String url, ContentInfo contentInfo, String contentName, Double latitude, Double longitude, String hint) {
         this.userId = userId;
         this.url = url;
         this.contentInfo = contentInfo;
