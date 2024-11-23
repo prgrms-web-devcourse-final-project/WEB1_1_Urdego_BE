@@ -1,4 +1,4 @@
-package infra.entity.user.constant;
+package domain.entity.user.constant;
 
 
 import jakarta.persistence.Column;
