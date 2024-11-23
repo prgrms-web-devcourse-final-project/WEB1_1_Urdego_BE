@@ -28,7 +28,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public NicknameVerificationResult verifyNickname(final String nickname) {
-        return null;
+        if (userRepository.existsByNickname(nickname)) {
+            return NicknameVerificationResult.DUPLICATED;
+        }
+        return NicknameVerificationResult.PERMIT;
     }
 
     @Override
