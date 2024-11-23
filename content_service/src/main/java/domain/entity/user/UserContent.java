@@ -1,7 +1,7 @@
-package infra.entity.user;
+package domain.entity.user;
 
-import infra.entity.BaseEntity;
-import infra.entity.user.constant.ContentInfo;
+import domain.entity.BaseEntity;
+import domain.entity.user.constant.ContentInfo;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "user_content")
-public class UserContentEntity extends BaseEntity {
+public class UserContent extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,7 +43,7 @@ public class UserContentEntity extends BaseEntity {
 
 
     @Builder
-    public UserContentEntity(Long userId, String url, ContentInfo contentInfo, String contentName, Double latitude, Double longitude, String hint) {
+    public UserContent(Long userId, String url, ContentInfo contentInfo, String contentName, Double latitude, Double longitude, String hint) {
         this.userId = userId;
         this.url = url;
         this.contentInfo = contentInfo;
