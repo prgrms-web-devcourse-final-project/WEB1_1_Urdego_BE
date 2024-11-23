@@ -1,7 +1,7 @@
-package infra.entity.user;
+package domain.define.user;
 
-import infra.entity.BaseEntity;
-import infra.entity.user.constant.ContentInfo;
+import domain.define.BaseEntity;
+import domain.define.user.constant.ContentInfo;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "user_content")
-public class UserContentEntity extends BaseEntity {
+public class UserContent extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
