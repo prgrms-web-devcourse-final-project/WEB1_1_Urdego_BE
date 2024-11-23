@@ -2,7 +2,9 @@ package domain.entity.user;
 
 import domain.entity.BaseEntity;
 import domain.entity.user.constant.ContentInfo;
+
 import jakarta.persistence.*;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,9 +43,15 @@ public class UserContent extends BaseEntity {
     @Column(name = "hint", length = 255)
     private String hint;
 
-
     @Builder
-    public UserContent(Long userId, String url, ContentInfo contentInfo, String contentName, Double latitude, Double longitude, String hint) {
+    public UserContent(
+            Long userId,
+            String url,
+            ContentInfo contentInfo,
+            String contentName,
+            Double latitude,
+            Double longitude,
+            String hint) {
         this.userId = userId;
         this.url = url;
         this.contentInfo = contentInfo;
@@ -52,5 +60,4 @@ public class UserContent extends BaseEntity {
         this.longitude = longitude;
         this.hint = hint;
     }
-
 }
