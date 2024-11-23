@@ -1,10 +1,10 @@
-package io.urdego.user_service.user.application.domain;
+package io.urdego.user_service.domain.define;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum Role {
-    ADMIN("관리자"),
+//    ADMIN("관리자"),
 
     UNAUTH("미인증"),
 
