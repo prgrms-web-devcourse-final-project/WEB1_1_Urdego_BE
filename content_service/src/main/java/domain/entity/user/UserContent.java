@@ -26,16 +26,15 @@ public class UserContent extends BaseEntity {
     private String url;
 
     @Embedded
-    @Column(name = "content_info", length = 255)
     private ContentInfo contentInfo;
 
     @Column(name = "content_name", nullable = false)
     private String contentName;
 
-    @Column(name = "latitude", precision = 10, scale = 7) // DECIMAL
+    @Column(name = "latitude")
     private Double latitude;
 
-    @Column(name = "longitude", precision = 10, scale = 7) // DECIMAL
+    @Column(name = "longitude")
     private Double longitude;
 
     @Column(name = "hint", length = 255)
