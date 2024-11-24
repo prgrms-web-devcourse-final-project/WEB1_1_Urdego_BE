@@ -1,14 +1,15 @@
 package io.urdego.user_service.domain.define;
 
 import jakarta.persistence.*;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -30,19 +31,17 @@ public class User {
 
     private String nickname;
 
-//    소셜로그인 제공자
-//    private String provider;
+    //    소셜로그인 제공자
+    //    private String provider;
 
-//    랭킹 점수
-//    private Integer rating;
+    //    랭킹 점수
+    //    private Integer rating;
 
-//    private Role role;
+    //    private Role role;
 
-    @CreatedDate
-    private LocalDateTime created_at;
+    @CreatedDate private LocalDateTime created_at;
 
-    @LastModifiedBy
-    private LocalDateTime updated_at;
+    @LastModifiedBy private LocalDateTime updated_at;
 
     @Builder
     public User(String email, String password, String nickname) {

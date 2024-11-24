@@ -1,8 +1,8 @@
 package io.urdego.user_service.api.service.exception;
 
-import io.urdego.user_service.common.exception.CustomException;
-
 import static io.urdego.user_service.common.exception.HttpStatusConstants.NOT_FOUND;
+
+import io.urdego.user_service.common.exception.CustomException;
 
 public class UserNotFoundException extends CustomException {
     private static final Integer STATUS = NOT_FOUND;
