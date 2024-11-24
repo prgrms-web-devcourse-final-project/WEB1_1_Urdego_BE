@@ -1,4 +1,5 @@
-package filter;
+/*
+package io.urdego.gateway_service.filter;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -29,13 +30,12 @@ public class LoggingFilter extends AbstractGatewayFilterFactory<LoggingFilter.Co
                             ServerHttpRequest request = exchange.getRequest();
                             ServerHttpResponse response = exchange.getResponse();
 
-                            log.info("Global Filter  baseMSG : {}", config.getBaseMessage());
 
                             if (config.isPreLogger()) {
                                 log.info(
                                         "Logging Filter Start : request Id -> {}", request.getId());
                             }
-                            // Custom Post Filter 이후에 할 동작 정의
+
                             return chain.filter(exchange)
                                     .then(
                                             Mono.fromRunnable(
@@ -59,3 +59,4 @@ public class LoggingFilter extends AbstractGatewayFilterFactory<LoggingFilter.Co
         private boolean postLogger;
     }
 }
+*/
