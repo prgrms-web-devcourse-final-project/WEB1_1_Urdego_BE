@@ -1,14 +1,15 @@
 package io.urdego.user_service.api.controller;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.urdego.user_service.api.controller.request.SignInRequest;
 import io.urdego.user_service.api.controller.request.SignUpRequest;
 import io.urdego.user_service.api.controller.request.VerifyNicknameRequest;
-import io.urdego.user_service.api.service.UserService;
 import io.urdego.user_service.api.service.NicknameVerificationResult;
+import io.urdego.user_service.api.service.UserService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
