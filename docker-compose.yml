@@ -6,25 +6,28 @@ services:
   # Spring Cloud Gateway
 #  gateway_service:
 #    image: geonoo/gateway-service:latest
-#    container_name: gateway_service
+#    container_name: gateway-service
 #    ports:
 #      - "8080:8080"
+#    restart: always
 
   # User Service
   user_service:
     image: geonoo/user-service:latest
-    container_name: user_service
+    container_name: user-service
     ports:
       - "8081:8081"
+    restart: always
 
 #  # Content Service
 
   # Group Service
   group_service:
     image: geonoo/group-service:latest
-    container_name: group_service
+    container_name: group-service
     ports:
       - "8083:8083"
+    restart: always
 
 #  # Game Service
 
