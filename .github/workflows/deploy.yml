@@ -26,6 +26,12 @@ jobs:
       - name: Docker Login
         run: echo "${{ secrets.DOCKER_HUB_ACCESSKEY }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
 
+      - name: Run Gradle build
+        working-directory: ./user_service
+        run: |
+          ./gradlew clean build
+          ls -la build/libs  # 빌드 후 파일 목록 출력
+
       # 4. 각 서비스별 application.yml 생성 및 Docker 빌드/푸시
       - name: Generate application.yml for User Service
         working-directory: ./user_service
