@@ -64,9 +64,9 @@ jobs:
       # 5. Docker 컨테이너 배포 (EC2 또는 서버)
       - name: Deploy Docker Containers
         run: |
-          echo "${{ secrets.EC2_SSH_KEY }}" > private_key.pem
-          chmod 600 private_key.pem
-          ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+          echo "${{ secrets.EC2_SSH_KEY }}" > urdego-keypair.pem
+          chmod 600 urdego-keypair.pem
+          ssh -i urdego-keypair.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/user-service
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/group-service
             docker-compose down
