@@ -20,6 +20,7 @@ public class UserContentServiceImpl implements UserContentService {
     private final S3Service s3Service;
     private final UserContentRepository userContentRepository;
 
+    @Override
     public void uploadContent(ContentUploadRequest request, MultipartFile file) {
 
         String url = uploadFile(request.getUserId(), file);
