@@ -11,7 +11,7 @@ import static lombok.AccessLevel.PROTECTED;
 @ToString
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PRIVATE)
-@Entity(name = "Group")
+@Entity(name = "`Groups`")
 public class Group extends BaseEntity {
 
     @Id

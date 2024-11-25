@@ -10,7 +10,7 @@ import static lombok.AccessLevel.PROTECTED;
 @ToString
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PRIVATE)
-@Entity(name = "GroupMember")
+@Entity(name = "GroupMembers")
 public class GroupMember {
 
     @Id
