@@ -4,11 +4,17 @@ FROM openjdk:17-jdk-slim AS build
 # 2. 애플리케이션 빌드 디렉토리 설정
 WORKDIR /app
 
-# 3. Spring Boot 애플리케이션 JAR 파일 복사
-COPY build/libs/*SNAPSHOT.jar user-service.jar
+# 3. 프로젝트 파일 복사
+COPY . .
 
-# 4. 컨테이너 내부 포트 지정
+# 4. Gradle 빌드를 실행 (필요한 경우)
+RUN ./gradlew clean build
+
+# 5. Spring Boot 애플리케이션 JAR 파일 복사
+COPY build/libs/*SNAPSHOT.jar user_service.jar
+
+# 6. 컨테이너 내부 포트 지정
 EXPOSE 8081
 
-# 5. 애플리케이션 실행
-ENTRYPOINT ["java", "-jar", "/app/user-service.jar"]
+# 7. 애플리케이션 실행
+ENTRYPOINT ["java", "-jar", "/app/user_service.jar"]
