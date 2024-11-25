@@ -1,3 +1,3 @@
-package api.user.service;
+package urdego.api.user.service;
 
 public class UserContentService {}
