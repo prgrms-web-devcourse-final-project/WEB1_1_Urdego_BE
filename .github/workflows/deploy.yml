@@ -33,14 +33,14 @@ jobs:
           mkdir -p ./src/main/resources
           echo "${{ secrets.USER_SERVICE_APPLICATION_YML }}" > ./src/main/resources/application.yml
 
-      - name: Build project with Gradle
+      - name: Build User Service with Gradle
         working-directory: ./user_service
         run: ./gradlew build
 
       - name: Build and Push User Service
         working-directory: ./user_service
         run: |
-          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/user_service .
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/user-service .
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/user-service
 
       - name: Generate application.yml for Group Service
@@ -49,10 +49,14 @@ jobs:
           mkdir -p ./src/main/resources
           echo "${{ secrets.GROUP_SERVICE_APPLICATION_YML }}" > ./src/main/resources/application.yml
 
+      - name: Build Group Service with Gradle
+        working-directory: ./user_service
+        run: ./gradlew build
+
       - name: Build and Push Group Service
         working-directory: ./group_service
         run: |
-          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/group_service .
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/group-service .
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/group-service
 
       # 추가 서비스들 반복...
