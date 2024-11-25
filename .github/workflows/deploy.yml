@@ -1,0 +1,55 @@
+name: Build and Deploy MSA
+run-name: Running CI/CD Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-22.04
+
+    steps:
+      # 1. 코드 체크아웃
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Docker 로그인
+      - name: Docker Login
+        run: echo "${{ secrets.DOCKER_HUB_ACCESSKEY }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
+
+      # 3. 각 서비스별 application.yml 생성 및 Docker 빌드/푸시
+      - name: Generate application.yml for User Service
+        working-directory: ./user_service
+        run: echo "${{ secrets.USER_SERVICE_APPLICATION_YML }}" > ./src/main/resources/application.yml
+
+      - name: Build and Push User Service
+        working-directory: ./user_service
+        run: |
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/user_service .
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/user-service
+
+      - name: Generate application.yml for Group Service
+        working-directory: ./group_service
+        run: echo "${{ secrets.GROUP_SERVICE_APPLICATION_YML }}" > ./src/main/resources/application.yml
+
+      - name: Build and Push Group Service
+        working-directory: ./group_service
+        run: |
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/group_service .
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/group-service
+
+      # 추가 서비스들 반복...
+
+      # 4. Docker 컨테이너 배포 (EC2 또는 서버)
+      - name: Deploy Docker Containers
+        run: |
+          echo "${{ secrets.EC2_SSH_KEY }}" > private_key.pem
+          chmod 600 private_key.pem
+          ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/user-service
+            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/group-service
+            docker-compose down
+            docker-compose up -d
+          EOF
