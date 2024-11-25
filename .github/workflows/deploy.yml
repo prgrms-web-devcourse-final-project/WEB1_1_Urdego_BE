@@ -19,6 +19,12 @@ jobs:
       - name: Docker Login
         run: echo "${{ secrets.DOCKER_HUB_ACCESSKEY }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
 
+      - name: Run Gradle build
+        working-directory: ./user_service
+        run: |
+          ./gradlew clean build
+          ls -la build/libs  # 빌드 후 파일 목록 출력
+
       # 3. 각 서비스별 application.yml 생성 및 Docker 빌드/푸시
       - name: Generate application.yml for User Service
         working-directory: ./user_service
@@ -29,7 +35,7 @@ jobs:
       - name: Build and Push User Service
         working-directory: ./user_service
         run: |
-          docker build -f Dockerfile -t ${{ secrets.DOCKER_HUB_USERNAME }}/user_service .
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/user_service .
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/user-service
 
       - name: Generate application.yml for Group Service
@@ -41,7 +47,7 @@ jobs:
       - name: Build and Push Group Service
         working-directory: ./group_service
         run: |
-          docker build -f Dockerfile -t ${{ secrets.DOCKER_HUB_USERNAME }}/group_service .
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/group_service .
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/group-service
 
       # 추가 서비스들 반복...
