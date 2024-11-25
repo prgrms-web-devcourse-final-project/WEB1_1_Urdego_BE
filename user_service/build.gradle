@@ -66,6 +66,6 @@ tasks.named('test') {
 
 tasks.named('bootJar') {
 	manifest {
-		attributes 'Main-Class': 'io.urdego.user_service.UserServiceApplication'
+		attributes 'Main-Class': 'org.springframework.boot.loader.JarLauncher'
 	}
 }
