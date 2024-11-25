@@ -11,4 +11,4 @@ COPY build/libs/*SNAPSHOT.jar user-service.jar
 EXPOSE 8081
 
 # 5. 애플리케이션 실행
-ENTRYPOINT ["java", "-jar", "/app/user_service.jar"]
+ENTRYPOINT ["java", "-jar", "/app/user-service.jar"]
