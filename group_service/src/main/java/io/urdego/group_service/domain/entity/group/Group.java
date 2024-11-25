@@ -29,18 +29,34 @@ public class Group extends BaseEntity {
 
     // 그룹 상태 처리 (for soft delete)
     @Column(nullable = false)
-    private boolean groupStatus = true;
+    private boolean isDeleted = false;
 
     // FK
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
     @Builder
-    public Group(String groupName, String description, Integer memberLimit, boolean groupStatus, Long userId) {
+    public Group(String groupName, String description, Integer memberLimit, Long userId) {
         this.groupName = groupName;
         this.description = description;
         this.memberLimit = memberLimit;
-        this.groupStatus = groupStatus;
+        this.isDeleted = false;
         this.userId = userId;
+    }
+
+    // 그룹 정보 수정 메서드
+    public void update(String groupName, String description, Integer memberLimit) {
+        this.groupName = groupName;
+        this.description = description;
+        this.memberLimit = memberLimit;
+    }
+
+    // 상태 변경 메서드
+    public void deactivate() {
+        this.isDeleted = true;
+    }
+
+    public void activate() {
+        this.isDeleted = false;
     }
 }
