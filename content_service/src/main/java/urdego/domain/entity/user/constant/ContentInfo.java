@@ -1,4 +1,4 @@
-package domain.entity.user.constant;
+package urdego.domain.entity.user.constant;
 
 
 import jakarta.persistence.Column;
@@ -21,22 +21,14 @@ public class ContentInfo {
     @Column(name = "meta_longitude")
     private Double metaLongitude;
 
-    @Column(name = "height")
-    private int height;   // 높이
-
-    @Column(name = "width")
-    private int width;    // 너비
-
     @Column(name = "size")
     private long size;    // 사진 크기
 
     @Builder
-    public ContentInfo(String contentType, Double metaLatitude, Double metaLongitude, int height, int width, long size) {
+    public ContentInfo(String contentType, Double metaLatitude, Double metaLongitude, long size) {
         this.contentType = contentType;
         this.metaLatitude = metaLatitude;
         this.metaLongitude = metaLongitude;
-        this.height = height;
-        this.width = width;
         this.size = size;
     }
 }
