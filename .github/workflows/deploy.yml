@@ -62,11 +62,16 @@ jobs:
       # 추가 서비스들 반복...
 
       # 5. Docker 컨테이너 배포 (EC2 또는 서버)
-      - name: Deploy Docker Containers
+      - name: Upload docker-compose.yml to EC2
         run: |
           echo "${{ secrets.EC2_SSH_KEY }}" > urdego-keypair.pem
           chmod 600 urdego-keypair.pem
-          ssh -i urdego-keypair.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+          scp -o StrictHostKeyChecking=no -i urdego-keypair.pem docker-compose.yml ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/
+
+      - name: Deploy Docker Containers
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            cd /home/${{ secrets.EC2_USER }}
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/user-service
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/group-service
             docker compose down
