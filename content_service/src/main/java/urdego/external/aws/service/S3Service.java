@@ -74,7 +74,7 @@ public class S3Service {
         String extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
 
         // 유효한 확장자
-        List<String> validExtensions = List.of(".jpg", ".jpeg", ".png", ".mp4");
+        List<String> validExtensions = List.of(".jpg", ".jpeg", ".png", ".mp4", ".mov");
 
         // 확장자가 유효하지 않으면 예외 발생
         if (!validExtensions.contains(extension.toLowerCase())) {
