@@ -50,7 +50,7 @@ jobs:
           echo "${{ secrets.GROUP_SERVICE_APPLICATION_YML }}" > ./src/main/resources/application.yml
 
       - name: Build Group Service with Gradle
-        working-directory: ./user_service
+        working-directory: ./group_service
         run: ./gradlew build
 
       - name: Build and Push Group Service
