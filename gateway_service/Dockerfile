@@ -4,17 +4,22 @@ FROM openjdk:17-jdk-slim AS build
 # 2. 애플리케이션 빌드 디렉토리 설정
 WORKDIR /app
 
-# 3. 프로젝트 파일 복사
+# 3. Gradle Wrapper 복사
+COPY gradlew .
+COPY gradle ./gradle
+RUN chmod +x ./gradlew
+
+# 4. 프로젝트 파일 복사
 COPY . .
 
-# 4. Gradle 빌드를 실행 (필요한 경우)
+# 5. Gradle 빌드를 실행
 RUN ./gradlew clean build
 
-# 5. Spring Boot 애플리케이션 JAR 파일 복사
+# 6. Spring Boot 애플리케이션 JAR 파일 복사
 COPY build/libs/*SNAPSHOT.jar gateway_service.jar
 
-# 6. 컨테이너 내부 포트 지정
+# 7. 컨테이너 내부 포트 지정
 EXPOSE 8080
 
-# 7. 애플리케이션 실행
+# 8. 애플리케이션 실행
 ENTRYPOINT ["java", "-jar", "/app/gateway_service.jar"]
