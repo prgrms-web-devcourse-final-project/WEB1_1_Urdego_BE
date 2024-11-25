@@ -11,6 +11,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/content-service")
 @RequiredArgsConstructor
 public class UserContentController {
-
     private final UserContentService userContentService;
 }

@@ -8,7 +8,6 @@ import io.urdego.user_service.api.controller.response.UserInfo;
 import io.urdego.user_service.api.service.NicknameVerificationResult;
 import io.urdego.user_service.api.service.UserService;
 
-import io.urdego.user_service.domain.define.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -44,9 +43,9 @@ public class UserController {
         return ResponseEntity.ok(nickname);
     }
 
-   @GetMapping("/users/{email}")
+    @GetMapping("/users/{email}")
     public ResponseEntity<UserInfo> getUser(@PathVariable("email") String email){
         UserInfo response = userService.findUserByEmail(email);
         return ResponseEntity.ok(response);
-   }
+    }
 }
