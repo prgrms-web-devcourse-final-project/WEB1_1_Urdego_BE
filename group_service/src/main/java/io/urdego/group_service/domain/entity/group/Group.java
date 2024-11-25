@@ -1,11 +1,13 @@
 package io.urdego.group_service.domain.entity.group;
 
-import io.urdego.group_service.domain.entity.BaseEntity;
-import jakarta.persistence.*;
-import lombok.*;
-
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
+
+import io.urdego.group_service.domain.entity.BaseEntity;
+
+import jakarta.persistence.*;
+
+import lombok.*;
 
 @Getter
 @ToString

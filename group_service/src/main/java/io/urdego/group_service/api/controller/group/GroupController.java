@@ -1,16 +1,18 @@
 package io.urdego.group_service.api.controller.group;
 
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
+
 import io.urdego.group_service.api.controller.group.dto.request.CreateGroupReq;
 import io.urdego.group_service.api.controller.group.dto.request.UpdateGroupReq;
 import io.urdego.group_service.api.controller.group.dto.response.GroupListRes;
 import io.urdego.group_service.api.controller.group.dto.response.GroupRes;
 import io.urdego.group_service.api.service.group.GroupService;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping("/api/group-service/groups")
@@ -28,9 +30,16 @@ public class GroupController {
 
     // 그룹 정보 수정
     @PutMapping("/{groupId}")
-    public ResponseEntity<GroupRes> updateGroup(@PathVariable Long groupId, @RequestBody UpdateGroupReq request) {
+    public ResponseEntity<GroupRes> updateGroup(
+            @PathVariable Long groupId, @RequestBody UpdateGroupReq request) {
         // 요청 객체에 그룹 ID 설정
-        request = new UpdateGroupReq(groupId, request.groupName(), request.description(), request.memberLimit(), request.userId());
+        request =
+                new UpdateGroupReq(
+                        groupId,
+                        request.groupName(),
+                        request.description(),
+                        request.memberLimit(),
+                        request.userId());
         GroupRes response = groupService.updateGroup(request);
         return ResponseEntity.status(OK).body(response);
     }

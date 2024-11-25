@@ -10,8 +10,10 @@ import io.urdego.group_service.domain.entity.group.Group;
 import io.urdego.group_service.domain.entity.group.repository.GroupRepository;
 import io.urdego.group_service.domain.entity.groupMember.GroupMember;
 import io.urdego.group_service.domain.entity.groupMember.repository.GroupMemberRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,11 +32,18 @@ public class GroupMemberServiceImpl implements GroupMemberService {
     @Override
     public GroupMemberRes addMember(Long groupId, AddGroupMemberReq request) {
         // 그룹 존재 여부 확인
-        Group group = groupRepository.findById(groupId)
-                .orElseThrow(() -> {
-                    log.warn("GroupId {} : {}", groupId, ExceptionMessage.GROUP_NOT_FOUND);
-                    return new GroupException(ExceptionMessage.GROUP_NOT_FOUND.getText());
-                });
+        Group group =
+                groupRepository
+                        .findById(groupId)
+                        .orElseThrow(
+                                () -> {
+                                    log.warn(
+                                            "GroupId {} : {}",
+                                            groupId,
+                                            ExceptionMessage.GROUP_NOT_FOUND);
+                                    return new GroupException(
+                                            ExceptionMessage.GROUP_NOT_FOUND.getText());
+                                });
 
         // 그룹 제한 인원 확인
         long currentMemberCount = groupMemberRepository.countByGroupId(group.getGroupId());
@@ -44,17 +53,25 @@ public class GroupMemberServiceImpl implements GroupMemberService {
         }
 
         // 이미 그룹 멤버인지 확인
-        groupMemberRepository.findByGroupIdAndUserId(groupId, request.userId())
-                .ifPresent(member -> {
-                    log.warn("UserId {}, GroupId {} : {}", request.userId(), groupId, ExceptionMessage.GROUP_MEMBER_ALREADY_EXISTS);
-                    throw new GroupMemberException(ExceptionMessage.GROUP_MEMBER_ALREADY_EXISTS.getText());
-                });
+        groupMemberRepository
+                .findByGroupIdAndUserId(groupId, request.userId())
+                .ifPresent(
+                        member -> {
+                            log.warn(
+                                    "UserId {}, GroupId {} : {}",
+                                    request.userId(),
+                                    groupId,
+                                    ExceptionMessage.GROUP_MEMBER_ALREADY_EXISTS);
+                            throw new GroupMemberException(
+                                    ExceptionMessage.GROUP_MEMBER_ALREADY_EXISTS.getText());
+                        });
 
-        GroupMember groupMember = GroupMember.builder()
-                .groupId(group.getGroupId())
-                .userId(request.userId())
-                .memberRole(request.role())
-                .build();
+        GroupMember groupMember =
+                GroupMember.builder()
+                        .groupId(group.getGroupId())
+                        .userId(request.userId())
+                        .memberRole(request.role())
+                        .build();
         groupMember = groupMemberRepository.save(groupMember);
 
         log.info("UserId : {}, GroupId : {}, Role : {}", request.userId(), groupId, request.role());
@@ -65,11 +82,19 @@ public class GroupMemberServiceImpl implements GroupMemberService {
     // 그룹 멤버 제거
     @Override
     public void removeMember(Long groupId, Long userId) {
-        GroupMember member = groupMemberRepository.findByGroupIdAndUserId(groupId, userId)
-                .orElseThrow(() -> {
-                    log.warn("UserId {}, GroupId {} : {}", userId, groupId, ExceptionMessage.GROUP_MEMBER_NOT_FOUND);
-                    return new GroupMemberException(ExceptionMessage.GROUP_MEMBER_NOT_FOUND.getText());
-                });
+        GroupMember member =
+                groupMemberRepository
+                        .findByGroupIdAndUserId(groupId, userId)
+                        .orElseThrow(
+                                () -> {
+                                    log.warn(
+                                            "UserId {}, GroupId {} : {}",
+                                            userId,
+                                            groupId,
+                                            ExceptionMessage.GROUP_MEMBER_NOT_FOUND);
+                                    return new GroupMemberException(
+                                            ExceptionMessage.GROUP_MEMBER_NOT_FOUND.getText());
+                                });
 
         groupMemberRepository.delete(member);
         log.info("Removed user {} from group {}", userId, groupId);
@@ -84,11 +109,8 @@ public class GroupMemberServiceImpl implements GroupMemberService {
             throw new GroupMemberException(ExceptionMessage.GROUP_MEMBER_NOT_FOUND.getText());
         }
 
-        List<GroupMemberRes> memberList = members.stream()
-                .map(GroupMemberRes::from)
-                .toList();
+        List<GroupMemberRes> memberList = members.stream().map(GroupMemberRes::from).toList();
 
         return GroupMemberListRes.from(memberList);
-
     }
 }

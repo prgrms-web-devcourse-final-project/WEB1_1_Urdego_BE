@@ -1,10 +1,11 @@
 package io.urdego.group_service.domain.entity.groupMember;
 
-import jakarta.persistence.*;
-import lombok.*;
-
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
+
+import jakarta.persistence.*;
+
+import lombok.*;
 
 @Getter
 @ToString
@@ -22,8 +23,8 @@ public class GroupMember {
     @Column(name = "member_role", nullable = false)
     private GroupMemberRole memberRole;
 
-//    @Column(name = "member_status", nullable = false)
-//    private String memberStatus;
+    //    @Column(name = "member_status", nullable = false)
+    //    private String memberStatus;
 
     // FK
     @Column(name = "group_id", nullable = false)
@@ -38,5 +39,4 @@ public class GroupMember {
         this.groupId = groupId;
         this.userId = userId;
     }
-
 }

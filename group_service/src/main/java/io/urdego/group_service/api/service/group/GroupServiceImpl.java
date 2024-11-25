@@ -12,8 +12,10 @@ import io.urdego.group_service.domain.entity.group.repository.GroupRepository;
 import io.urdego.group_service.domain.entity.groupMember.GroupMember;
 import io.urdego.group_service.domain.entity.groupMember.GroupMemberRole;
 import io.urdego.group_service.domain.entity.groupMember.repository.GroupMemberRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,21 +33,23 @@ public class GroupServiceImpl implements GroupService {
     // 그룹 생성
     @Override
     public GroupRes createGroup(CreateGroupReq request) {
-        Group group = Group.builder()
-                .groupName(request.groupName())
-                .description(request.description())
-                .memberLimit(request.memberLimit())
-                .userId(request.userId())
-                .build();
+        Group group =
+                Group.builder()
+                        .groupName(request.groupName())
+                        .description(request.description())
+                        .memberLimit(request.memberLimit())
+                        .userId(request.userId())
+                        .build();
 
         group = groupRepository.save(group);
 
         // 생성자에게 MANAGER 권한 부여
-        GroupMember manager = GroupMember.builder()
-                .groupId(group.getGroupId())
-                .userId(group.getUserId())
-                .memberRole(GroupMemberRole.MANAGER)
-                .build();
+        GroupMember manager =
+                GroupMember.builder()
+                        .groupId(group.getGroupId())
+                        .userId(group.getUserId())
+                        .memberRole(GroupMemberRole.MANAGER)
+                        .build();
         groupMemberRepository.save(manager);
 
         log.info("Group created : {} by {}", group, request.userId());
@@ -59,12 +63,17 @@ public class GroupServiceImpl implements GroupService {
         Group group = findByGroupIdOrThrowGroupException(request.groupId());
 
         // 수정 권한 검증
-        groupMemberRepository.findByGroupIdAndUserId(group.getGroupId(), request.userId())
+        groupMemberRepository
+                .findByGroupIdAndUserId(group.getGroupId(), request.userId())
                 .filter(member -> member.getMemberRole() == GroupMemberRole.MANAGER)
-                    .orElseThrow(() -> {
-                        log.warn("UserId : {} : {}", request.userId(), ExceptionMessage.NOT_MANAGER);
-                        return new GroupMemberException(ExceptionMessage.NOT_MANAGER.getText());
-                    });
+                .orElseThrow(
+                        () -> {
+                            log.warn(
+                                    "UserId : {} : {}",
+                                    request.userId(),
+                                    ExceptionMessage.NOT_MANAGER);
+                            return new GroupMemberException(ExceptionMessage.NOT_MANAGER.getText());
+                        });
 
         group.update(request.groupName(), request.description(), request.memberLimit());
         group = groupRepository.save(group);
@@ -87,9 +96,7 @@ public class GroupServiceImpl implements GroupService {
     @Transactional(readOnly = true)
     public GroupListRes getAllGroups() {
         List<Group> groups = groupRepository.findAll();
-        List<GroupRes> groupList = groups.stream()
-                .map(GroupRes::from)
-                .toList();
+        List<GroupRes> groupList = groups.stream().map(GroupRes::from).toList();
 
         log.info("Retrieved {} groups", groupList.size());
         return GroupListRes.from(groupList);
@@ -117,10 +124,12 @@ public class GroupServiceImpl implements GroupService {
 
     // 공통 메서드
     private Group findByGroupIdOrThrowGroupException(Long groupId) {
-        return groupRepository.findById(groupId)
-                .orElseThrow(() -> {
-                    log.warn("GroupId {} : {}", groupId, ExceptionMessage.GROUP_NOT_FOUND);
-                    return new GroupException(ExceptionMessage.GROUP_NOT_FOUND.getText());
-                });
+        return groupRepository
+                .findById(groupId)
+                .orElseThrow(
+                        () -> {
+                            log.warn("GroupId {} : {}", groupId, ExceptionMessage.GROUP_NOT_FOUND);
+                            return new GroupException(ExceptionMessage.GROUP_NOT_FOUND.getText());
+                        });
     }
 }
