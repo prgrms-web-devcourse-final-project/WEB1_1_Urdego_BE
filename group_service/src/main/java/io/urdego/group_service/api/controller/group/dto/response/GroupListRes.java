@@ -5,7 +5,7 @@ import java.util.List;
 public record GroupListRes(
         List<GroupRes> groups
 ) {
-    public static GroupListRes from(List<GroupRes> groupResList) {
-        return new GroupListRes(groupResList);
+    public static GroupListRes from(List<GroupRes> groupList) {
+        return new GroupListRes(groupList);
     }
 }

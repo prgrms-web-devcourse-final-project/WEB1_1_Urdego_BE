@@ -6,8 +6,12 @@ import io.urdego.group_service.api.controller.group.dto.response.GroupListRes;
 import io.urdego.group_service.api.controller.group.dto.response.GroupRes;
 import io.urdego.group_service.common.exception.ExceptionMessage;
 import io.urdego.group_service.common.exception.group.GroupException;
+import io.urdego.group_service.common.exception.groupMember.GroupMemberException;
 import io.urdego.group_service.domain.entity.group.Group;
 import io.urdego.group_service.domain.entity.group.repository.GroupRepository;
+import io.urdego.group_service.domain.entity.groupMember.GroupMember;
+import io.urdego.group_service.domain.entity.groupMember.GroupMemberRole;
+import io.urdego.group_service.domain.entity.groupMember.repository.GroupMemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,6 +26,7 @@ import java.util.List;
 public class GroupServiceImpl implements GroupService {
 
     private final GroupRepository groupRepository;
+    private final GroupMemberRepository groupMemberRepository;
 
     // 그룹 생성
     @Override
@@ -34,7 +39,16 @@ public class GroupServiceImpl implements GroupService {
                 .build();
 
         group = groupRepository.save(group);
-        log.info("Group created : {} by", group);
+
+        // 생성자에게 MANAGER 권한 부여
+        GroupMember manager = GroupMember.builder()
+                .groupId(group.getGroupId())
+                .userId(group.getUserId())
+                .memberRole(GroupMemberRole.MANAGER)
+                .build();
+        groupMemberRepository.save(manager);
+
+        log.info("Group created : {} by {}", group, request.userId());
 
         return GroupRes.from(group);
     }
@@ -43,6 +57,14 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public GroupRes updateGroup(UpdateGroupReq request) {
         Group group = findByGroupIdOrThrowGroupException(request.groupId());
+
+        // 수정 권한 검증
+        groupMemberRepository.findByGroupIdAndUserId(group.getGroupId(), request.userId())
+                .filter(member -> member.getMemberRole() == GroupMemberRole.MANAGER)
+                    .orElseThrow(() -> {
+                        log.warn("UserId : {} : {}", request.userId(), ExceptionMessage.NOT_MANAGER);
+                        return new GroupMemberException(ExceptionMessage.NOT_MANAGER.getText());
+                    });
 
         group.update(request.groupName(), request.description(), request.memberLimit());
         group = groupRepository.save(group);
@@ -65,12 +87,12 @@ public class GroupServiceImpl implements GroupService {
     @Transactional(readOnly = true)
     public GroupListRes getAllGroups() {
         List<Group> groups = groupRepository.findAll();
-        List<GroupRes> groupResList = groups.stream()
+        List<GroupRes> groupList = groups.stream()
                 .map(GroupRes::from)
                 .toList();
 
-        log.info("Retrieved {} groups", groupResList.size());
-        return GroupListRes.from(groupResList);
+        log.info("Retrieved {} groups", groupList.size());
+        return GroupListRes.from(groupList);
     }
 
     // 그룹 비활성화
