@@ -66,6 +66,6 @@ tasks.named('test') {
 
 tasks.named('bootJar') {
 	manifest {
-		attributes 'Main-Class': 'org.springframework.boot.loader.JarLauncher'
+		attributes 'Main-Class': 'org.springframework.boot.loader.launch.JarLauncher'
 	}
 }
