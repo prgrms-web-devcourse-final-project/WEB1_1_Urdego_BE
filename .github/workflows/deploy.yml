@@ -33,6 +33,10 @@ jobs:
           mkdir -p ./src/main/resources
           echo "${{ secrets.USER_SERVICE_APPLICATION_YML }}" > ./src/main/resources/application.yml
 
+      - name: Build project with Gradle
+        working-directory: ./user_service
+        run: ./gradlew build
+
       - name: Build and Push User Service
         working-directory: ./user_service
         run: |
