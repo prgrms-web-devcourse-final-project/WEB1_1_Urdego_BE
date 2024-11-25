@@ -22,7 +22,9 @@ jobs:
       # 3. 각 서비스별 application.yml 생성 및 Docker 빌드/푸시
       - name: Generate application.yml for User Service
         working-directory: ./user_service
-        run: echo "${{ secrets.USER_SERVICE_APPLICATION_YML }}" > ./src/main/resources/application.yml
+        run: |
+          mkdir -p ./src/main/resources
+          echo "${{ secrets.USER_SERVICE_APPLICATION_YML }}" > ./src/main/resources/application.yml
 
       - name: Build and Push User Service
         working-directory: ./user_service
@@ -32,7 +34,9 @@ jobs:
 
       - name: Generate application.yml for Group Service
         working-directory: ./group_service
-        run: echo "${{ secrets.GROUP_SERVICE_APPLICATION_YML }}" > ./src/main/resources/application.yml
+        run: |
+          mkdir -p ./src/main/resources
+          echo "${{ secrets.GROUP_SERVICE_APPLICATION_YML }}" > ./src/main/resources/application.yml
 
       - name: Build and Push Group Service
         working-directory: ./group_service
