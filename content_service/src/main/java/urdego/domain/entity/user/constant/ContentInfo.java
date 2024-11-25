@@ -1,4 +1,4 @@
-package domain.entity.user.constant;
+package urdego.domain.entity.user.constant;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

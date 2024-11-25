@@ -1,7 +1,7 @@
-package domain.entity.user;
+package urdego.domain.entity.user;
 
-import domain.entity.BaseEntity;
-import domain.entity.user.constant.ContentInfo;
+import urdego.domain.entity.BaseEntity;
+import urdego.domain.entity.user.constant.ContentInfo;
 
 import jakarta.persistence.*;
 

@@ -1,6 +1,6 @@
-package api.user.controller;
+package urdego.api.user.controller;
 
-import api.user.service.UserContentService;
+import urdego.api.user.service.UserContentService;
 
 import lombok.RequiredArgsConstructor;
 

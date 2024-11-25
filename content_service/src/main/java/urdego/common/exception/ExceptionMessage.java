@@ -1,4 +1,4 @@
-package common.exception;
+package urdego.common.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
