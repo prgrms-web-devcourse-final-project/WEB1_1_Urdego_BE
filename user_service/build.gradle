@@ -65,5 +65,7 @@ tasks.named('test') {
 }
 
 tasks.named('bootJar') {
-	archiveFileName = '0-SNAPSHOT.jar'
+	manifest {
+		attributes 'Main-Class': 'io.urdego.user_service.UserServiceApplication'
+	}
 }
