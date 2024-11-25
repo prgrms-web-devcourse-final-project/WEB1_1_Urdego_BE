@@ -8,8 +8,7 @@ public record GroupRes(
         String description,
         Integer memberLimit,
         boolean isDeleted,
-        Long userId
-) {
+        Long userId) {
     public static GroupRes from(Group group) {
         return new GroupRes(
                 group.getGroupId(),
@@ -17,7 +16,6 @@ public record GroupRes(
                 group.getDescription(),
                 group.getMemberLimit(),
                 group.isDeleted(),
-                group.getUserId()
-        );
+                group.getUserId());
     }
 }
