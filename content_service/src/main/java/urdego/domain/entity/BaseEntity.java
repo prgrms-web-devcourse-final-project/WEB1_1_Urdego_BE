@@ -1,4 +1,4 @@
-package domain.entity;
+package urdego.domain.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
