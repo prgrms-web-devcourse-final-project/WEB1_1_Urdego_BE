@@ -69,6 +69,6 @@ jobs:
           ssh -i urdego-keypair.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/user-service
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/group-service
-            docker-compose down
-            docker-compose up -d
+            docker compose down
+            docker compose up -d
           EOF
