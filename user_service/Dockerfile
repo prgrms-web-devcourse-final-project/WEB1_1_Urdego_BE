@@ -16,7 +16,7 @@ COPY . .
 RUN ./gradlew clean build
 
 # 6. Spring Boot 애플리케이션 JAR 파일 복사
-COPY build/libs/0-SNAPSHOT.jar user_service.jar
+COPY build/libs/*.jar user_service.jar
 
 # 7. 컨테이너 내부 포트 지정
 EXPOSE 8081
