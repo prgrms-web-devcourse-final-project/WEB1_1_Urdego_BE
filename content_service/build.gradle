@@ -50,6 +50,12 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
+    // validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // Content Metadata
+    implementation 'com.drewnoakes:metadata-extractor:2.16.0'
+
 }
 
 dependencyManagement {

@@ -1,7 +1,7 @@
-package domain.entity.user;
+package urdego.domain.entity.user;
 
-import domain.entity.BaseEntity;
-import domain.entity.user.constant.ContentInfo;
+import urdego.domain.entity.BaseEntity;
+import urdego.domain.entity.user.constant.ContentInfo;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -32,7 +32,7 @@ public class UserContent extends BaseEntity {
     private String contentName;
 
     @Column(name = "latitude")
-    private Double latitude;
+    private Double latitude;   // 유저가 핀꽂은 위치
 
     @Column(name = "longitude")
     private Double longitude;
