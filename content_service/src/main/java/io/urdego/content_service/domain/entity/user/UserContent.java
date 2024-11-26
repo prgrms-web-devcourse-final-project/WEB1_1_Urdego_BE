@@ -1,8 +1,5 @@
 package io.urdego.content_service.domain.entity.user;
 
-import io.urdego.content_service.domain.entity.BaseEntity;
-import io.urdego.content_service.domain.entity.user.constant.ContentInfo;
-
 import jakarta.persistence.*;
 
 import lombok.AccessLevel;
@@ -10,7 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
+import io.urdego.content_service.domain.entity.BaseEntity;
+import io.urdego.content_service.domain.entity.user.constant.ContentInfo;
 
 @Entity
 @Getter
@@ -29,18 +27,16 @@ public class UserContent extends BaseEntity {
     @Column(name = "url", columnDefinition = "JSON", nullable = false) // JSON
     private String url;
 
-    @Embedded
-    @Column(name = "content_info", length = 255)
-    private ContentInfo contentInfo;
+    @Embedded private ContentInfo contentInfo;
 
     @Column(name = "content_name", nullable = false)
     private String contentName;
 
-    @Column(name = "latitude", precision = 10, scale = 7) // DECIMAL
-    private BigDecimal latitude;
+    @Column(name = "latitude") // 유저가 핀꽂은 위치
+    private Double latitude;
 
-    @Column(name = "longitude", precision = 10, scale = 7) // DECIMAL
-    private BigDecimal longitude;
+    @Column(name = "longitude")
+    private Double longitude;
 
     @Column(name = "hint", length = 255)
     private String hint;
@@ -51,8 +47,8 @@ public class UserContent extends BaseEntity {
             String url,
             ContentInfo contentInfo,
             String contentName,
-            BigDecimal latitude,
-            BigDecimal longitude,
+            Double latitude,
+            Double longitude,
             String hint) {
         this.userId = userId;
         this.url = url;

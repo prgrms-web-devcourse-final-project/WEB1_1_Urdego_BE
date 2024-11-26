@@ -1,4 +1,4 @@
-package urdego.common.exception;
+package io.urdego.content_service.common.exception;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
