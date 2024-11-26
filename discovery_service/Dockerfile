@@ -11,4 +11,4 @@ COPY build/libs/*.jar discovery_service.jar
 EXPOSE 8761
 
 # 5. 애플리케이션 실행
-ENTRYPOINT ["java", "-jar", "/app/eureka_server.jar"]
+ENTRYPOINT ["java", "-jar", "/app/discovery_service.jar"]
