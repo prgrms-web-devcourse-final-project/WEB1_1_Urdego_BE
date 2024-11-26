@@ -3,6 +3,8 @@ package io.urdego.group_service.api.service.groupMember;
 import io.urdego.group_service.api.controller.groupMember.dto.request.AddGroupMemberReq;
 import io.urdego.group_service.api.controller.groupMember.dto.response.GroupMemberListRes;
 import io.urdego.group_service.api.controller.groupMember.dto.response.GroupMemberRes;
+import io.urdego.group_service.api.controller.groupMember.dto.response.ResponseUserInfo;
+import io.urdego.group_service.common.client.UserServiceClient;
 import io.urdego.group_service.common.exception.ExceptionMessage;
 import io.urdego.group_service.common.exception.group.GroupException;
 import io.urdego.group_service.common.exception.groupMember.GroupMemberException;
@@ -27,6 +29,7 @@ public class GroupMemberServiceImpl implements GroupMemberService {
 
     private final GroupRepository groupRepository;
     private final GroupMemberRepository groupMemberRepository;
+    private final UserServiceClient userServiceClient;
 
     // 그룹에 멤버 추가
     @Override
@@ -52,6 +55,9 @@ public class GroupMemberServiceImpl implements GroupMemberService {
             throw new GroupMemberException(ExceptionMessage.GROUP_MEMBER_LIMITED.getText());
         }
 
+        // user-service에서 사용자 정보 가져오기
+        ResponseUserInfo userInfo = userServiceClient.getUser(request.email());
+
         // 이미 그룹 멤버인지 확인
         groupMemberRepository
                 .findByGroupIdAndUserId(groupId, request.userId())
@@ -69,7 +75,8 @@ public class GroupMemberServiceImpl implements GroupMemberService {
         GroupMember groupMember =
                 GroupMember.builder()
                         .groupId(group.getGroupId())
-                        .userId(request.userId())
+                        //.userId(request.userId())
+                        .userId(userInfo.userId())
                         .memberRole(request.role())
                         .build();
         groupMember = groupMemberRepository.save(groupMember);

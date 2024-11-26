@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.urdego.user_service.api.controller.request.SignInRequest;
 import io.urdego.user_service.api.controller.request.SignUpRequest;
 import io.urdego.user_service.api.controller.request.VerifyNicknameRequest;
+import io.urdego.user_service.api.controller.response.UserInfo;
 import io.urdego.user_service.api.service.NicknameVerificationResult;
 import io.urdego.user_service.api.service.UserService;
 
@@ -40,5 +41,11 @@ public class UserController {
     public ResponseEntity<String> signIn(@RequestBody final SignInRequest request) {
         String nickname = userService.login(request.email(), request.password());
         return ResponseEntity.ok(nickname);
+    }
+
+    @GetMapping("/users/{email}")
+    public ResponseEntity<UserInfo> getUser(@PathVariable("email") String email){
+        UserInfo response = userService.findUserByEmail(email);
+        return ResponseEntity.ok(response);
     }
 }
