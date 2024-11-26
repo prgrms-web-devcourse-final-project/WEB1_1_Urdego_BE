@@ -1,5 +1,8 @@
 package io.urdego.content_service.api.user.controller;
 
+import io.urdego.content_service.api.user.controller.request.ContentUploadRequest;
+import io.urdego.content_service.api.user.service.UserContentService;
+
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.MediaType;
@@ -9,9 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import io.urdego.content_service.api.user.controller.request.ContentUploadRequest;
-import io.urdego.content_service.api.user.service.UserContentService;
 
 @RestController
 @RequestMapping("/api/content-service")

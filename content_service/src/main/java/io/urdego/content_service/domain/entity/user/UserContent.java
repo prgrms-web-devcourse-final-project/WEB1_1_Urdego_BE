@@ -1,14 +1,14 @@
 package io.urdego.content_service.domain.entity.user;
 
+import io.urdego.content_service.domain.entity.BaseEntity;
+import io.urdego.content_service.domain.entity.user.constant.ContentInfo;
+
 import jakarta.persistence.*;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import io.urdego.content_service.domain.entity.BaseEntity;
-import io.urdego.content_service.domain.entity.user.constant.ContentInfo;
 
 @Entity
 @Getter
