@@ -1,15 +1,17 @@
 package io.urdego.user_service.api.service;
 
-import io.urdego.user_service.api.controller.request.SignUpRequest;
-import io.urdego.user_service.api.controller.response.UserInfo;
-import io.urdego.user_service.api.service.exception.UserNotFoundException;
-import io.urdego.user_service.domain.define.User;
-import io.urdego.user_service.domain.define.UserRepository;
-
+import io.urdego.user_service.api.controller.external.request.SignUpRequest;
+import io.urdego.user_service.api.controller.internal.response.UserInfo;
+import io.urdego.user_service.api.controller.external.response.UserInfoResponse;
+import io.urdego.user_service.common.exception.UserNotFoundException;
+import io.urdego.user_service.domain.entity.User;
+import io.urdego.user_service.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +42,11 @@ public class UserServiceImpl implements UserService {
     public String login(final String email, final String password) {
         User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
         return user.getNickname();
+    }
+
+    @Override
+    public List<UserInfoResponse> findByNickname(final String string) {
+        return userRepository.findByString(string).stream().map(UserInfoResponse::from).toList();
     }
 
     @Override

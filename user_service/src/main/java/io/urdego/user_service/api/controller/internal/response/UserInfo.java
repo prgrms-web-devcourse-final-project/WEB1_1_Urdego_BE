@@ -1,6 +1,6 @@
-package io.urdego.user_service.api.controller.response;
+package io.urdego.user_service.api.controller.internal.response;
 
-import io.urdego.user_service.domain.define.User;
+import io.urdego.user_service.domain.entity.User;
 
 public record UserInfo(Long userId, String email, String nickname) {
     public static UserInfo convertToUserInfo(final User user) {
