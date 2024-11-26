@@ -75,7 +75,7 @@ public class GroupMemberServiceImpl implements GroupMemberService {
         GroupMember groupMember =
                 GroupMember.builder()
                         .groupId(group.getGroupId())
-                        //.userId(request.userId())
+                        // .userId(request.userId())
                         .userId(userInfo.userId())
                         .memberRole(request.role())
                         .build();

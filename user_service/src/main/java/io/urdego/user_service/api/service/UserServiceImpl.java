@@ -45,10 +45,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserInfo findUserByEmail(String email) {
         User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
-	    return UserInfo.convertToUserInfo(user);
+        return UserInfo.convertToUserInfo(user);
     }
 
-//    @Override
+    //    @Override
     //    public UserDetail getDetail(final Long userId) {
     //        User user = userReader.read(userId);
     //        return UserDetail.from(user);
