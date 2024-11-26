@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @EnableJpaAuditing
 @SpringBootApplication
+@EnableDiscoveryClient
 public class ContentServiceApplication {
 
     public static void main(String[] args) {
