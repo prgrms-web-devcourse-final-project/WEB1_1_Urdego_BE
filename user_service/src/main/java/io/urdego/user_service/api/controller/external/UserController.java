@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.urdego.user_service.api.controller.external.request.SignInRequest;
 import io.urdego.user_service.api.controller.external.request.SignUpRequest;
 import io.urdego.user_service.api.controller.external.request.VerifyNicknameRequest;
-import io.urdego.user_service.api.controller.internal.response.UserInfo;
 import io.urdego.user_service.api.controller.external.response.UserInfoResponse;
 import io.urdego.user_service.api.service.NicknameVerificationResult;
 import io.urdego.user_service.api.service.UserService;

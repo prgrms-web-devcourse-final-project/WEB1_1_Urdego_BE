@@ -19,7 +19,7 @@ public interface UserService {
     // 유저 닉네임 반환
     String login(String email, String password);
 
-    //닉네임으로 유저 검색
+    // 닉네임으로 유저 검색
     List<UserInfoResponse> findByNickname(String string);
 
     //    UserDetail getDetail(Long userId);
