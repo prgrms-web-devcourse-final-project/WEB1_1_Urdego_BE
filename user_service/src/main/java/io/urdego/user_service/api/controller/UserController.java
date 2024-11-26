@@ -5,12 +5,11 @@ import io.urdego.user_service.api.controller.request.SignInRequest;
 import io.urdego.user_service.api.controller.request.SignUpRequest;
 import io.urdego.user_service.api.controller.request.VerifyNicknameRequest;
 import io.urdego.user_service.api.controller.response.UserInfo;
+import io.urdego.user_service.api.controller.response.UserInfoResponse;
 import io.urdego.user_service.api.service.NicknameVerificationResult;
 import io.urdego.user_service.api.service.UserService;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,5 +46,11 @@ public class UserController {
     public ResponseEntity<UserInfo> getUser(@PathVariable("email") String email) {
         UserInfo response = userService.findUserByEmail(email);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<UserInfoResponse> getUserById(@PathVariable("userId") Long userId) {
+        UserInfoResponse response = userService.findUserById(userId);
+        return ResponseEntity.ok().body(response);
     }
 }
