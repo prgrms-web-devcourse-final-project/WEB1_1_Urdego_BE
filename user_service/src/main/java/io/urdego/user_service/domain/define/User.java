@@ -1,6 +1,5 @@
 package io.urdego.user_service.domain.define;
 
-import io.urdego.user_service.api.controller.response.UserInfo;
 import jakarta.persistence.*;
 
 import lombok.AccessLevel;
