@@ -1,4 +1,4 @@
-package io.urdego.user_service.api.controller.request;
+package io.urdego.user_service.api.controller.external.request;
 
 public record SignUpRequest(String email, String password, String nickname
 
