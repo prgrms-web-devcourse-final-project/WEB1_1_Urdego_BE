@@ -1,6 +1,7 @@
 package urdego.api.user.service;
 
 import org.springframework.web.multipart.MultipartFile;
+
 import urdego.api.user.controller.request.ContentUploadRequest;
 
 public interface UserContentService {

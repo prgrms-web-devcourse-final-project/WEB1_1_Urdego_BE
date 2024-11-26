@@ -16,7 +16,7 @@ public class ContentInfo {
     private String contentType; // 파일 콘텐츠 타입 (ex: image/jpg)
 
     @Column(name = "meta_latitude")
-    private Double metaLatitude;   // 컨텐츠 위치정보
+    private Double metaLatitude; // 컨텐츠 위치정보
 
     @Column(name = "meta_longitude")
     private Double metaLongitude;

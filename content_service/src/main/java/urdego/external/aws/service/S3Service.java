@@ -8,10 +8,13 @@ import com.drew.imaging.ImageMetadataReader;
 import com.drew.lang.GeoLocation;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.GpsDirectory;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 import urdego.common.exception.ExceptionMessage;
 import urdego.common.exception.aws.AwsException;
 import urdego.domain.entity.user.constant.ContentInfo;
@@ -30,7 +33,6 @@ public class S3Service {
 
     private final AmazonS3 s3Client;
 
-
     // 파일 업로드 (단일 파일)
     public String uploadSingleContent(Long userId, MultipartFile multipartFile) {
         String filename = createFilename(userId, multipartFile.getOriginalFilename());
@@ -39,8 +41,9 @@ public class S3Service {
         objectMetadata.setContentType(multipartFile.getContentType());
 
         try (InputStream inputStream = multipartFile.getInputStream()) {
-            s3Client.putObject(new PutObjectRequest(bucket, filename, inputStream, objectMetadata)
-                    .withCannedAcl(CannedAccessControlList.PublicRead));
+            s3Client.putObject(
+                    new PutObjectRequest(bucket, filename, inputStream, objectMetadata)
+                            .withCannedAcl(CannedAccessControlList.PublicRead));
 
         } catch (IOException e) {
             throw new AwsException(ExceptionMessage.FILE_UPLOAD_FAILED);
@@ -49,7 +52,6 @@ public class S3Service {
         // 업로드된 파일의 URL 반환
         return s3Client.getUrl(bucket, filename).toString();
     }
-
 
     // 파일이름 생성
     public String createFilename(Long userId, String filename) {
@@ -62,10 +64,9 @@ public class S3Service {
         }
     }
 
-
     /*
-        Todo: 추후 .webp 확장자로 변경 로직 추가 (크기문제)
-     */
+       Todo: 추후 .webp 확장자로 변경 로직 추가 (크기문제)
+    */
     // 파일 확장자 추출
     private String getFileExtension(String filename) {
         if (filename == null || !filename.contains(".")) {
@@ -96,7 +97,7 @@ public class S3Service {
                 GeoLocation geoLocation = gpsDirectory.getGeoLocation();
                 if (geoLocation != null && !geoLocation.isZero()) {
                     // 위도(latitude)와 경도(longitude) 반환
-                    return new double[]{geoLocation.getLatitude(), geoLocation.getLongitude()};
+                    return new double[] {geoLocation.getLatitude(), geoLocation.getLongitude()};
                 }
             }
         } catch (Exception e) {
@@ -124,5 +125,4 @@ public class S3Service {
                 .metaLongitude(longitude)
                 .build();
     }
-
 }

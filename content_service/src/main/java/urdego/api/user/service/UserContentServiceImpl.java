@@ -1,10 +1,13 @@
 package urdego.api.user.service;
 
 import jakarta.transaction.Transactional;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 import urdego.api.user.controller.request.ContentUploadRequest;
 import urdego.domain.entity.user.UserContent;
 import urdego.domain.entity.user.constant.ContentInfo;
@@ -30,15 +33,16 @@ public class UserContentServiceImpl implements UserContentService {
 
         ContentInfo contentInfo = contentMetadata(file);
 
-        UserContent userContent = UserContent.builder()
-                .userId(request.getUserId())
-                .contentName(request.getContentName())
-                .url(urlJson)
-                .contentInfo(contentInfo)
-                .latitude(request.getLatitude())
-                .longitude(request.getLongitude())
-                .hint(request.getHint())
-                .build();
+        UserContent userContent =
+                UserContent.builder()
+                        .userId(request.getUserId())
+                        .contentName(request.getContentName())
+                        .url(urlJson)
+                        .contentInfo(contentInfo)
+                        .latitude(request.getLatitude())
+                        .longitude(request.getLongitude())
+                        .hint(request.getHint())
+                        .build();
         userContentRepository.save(userContent);
     }
 
