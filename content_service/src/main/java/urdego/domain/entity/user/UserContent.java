@@ -1,14 +1,14 @@
 package urdego.domain.entity.user;
 
-import urdego.domain.entity.BaseEntity;
-import urdego.domain.entity.user.constant.ContentInfo;
-
 import jakarta.persistence.*;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import urdego.domain.entity.BaseEntity;
+import urdego.domain.entity.user.constant.ContentInfo;
 
 @Entity
 @Getter
@@ -27,13 +27,12 @@ public class UserContent extends BaseEntity {
     @Column(name = "url", columnDefinition = "JSON", nullable = false) // JSON
     private String url;
 
-    @Embedded
-    private ContentInfo contentInfo;
+    @Embedded private ContentInfo contentInfo;
 
     @Column(name = "content_name", nullable = false)
     private String contentName;
 
-    @Column(name = "latitude")  // 유저가 핀꽂은 위치
+    @Column(name = "latitude") // 유저가 핀꽂은 위치
     private Double latitude;
 
     @Column(name = "longitude")
