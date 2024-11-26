@@ -5,10 +5,10 @@ FROM openjdk:17-jdk-slim AS build
 WORKDIR /app
 
 # 3. Spring Boot 애플리케이션 JAR 파일 복사
-COPY build/libs/*SNAPSHOT.jar group-service.jar
+COPY build/libs/*.jar group_service.jar
 
 # 4. 컨테이너 내부 포트 지정
 EXPOSE 8083
 
 # 5. 애플리케이션 실행
-ENTRYPOINT ["java", "-jar", "/app/group-service.jar"]
+ENTRYPOINT ["java", "-jar", "/app/group_service.jar"]
