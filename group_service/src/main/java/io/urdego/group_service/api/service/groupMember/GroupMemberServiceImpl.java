@@ -57,9 +57,6 @@ public class GroupMemberServiceImpl implements GroupMemberService {
 
         // user-service에서 사용자 정보 가져오기
         ResponseUserInfo userInfo = userServiceClient.getUser(request.email());
-        System.out.println("userInfo.email : " + userInfo.email());
-        System.out.println("userInfo.userId : " + userInfo.userId());
-        System.out.println("userInfo.nickname : " + userInfo.nickname());
 
         // 이미 그룹 멤버인지 확인
         groupMemberRepository
