@@ -1,4 +1,4 @@
-package common.exception;
+package io.urdego.content_service.common.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

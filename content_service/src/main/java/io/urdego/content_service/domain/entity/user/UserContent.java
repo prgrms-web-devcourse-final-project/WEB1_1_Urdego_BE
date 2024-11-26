@@ -1,7 +1,7 @@
-package domain.entity.user;
+package io.urdego.content_service.domain.entity.user;
 
-import domain.entity.BaseEntity;
-import domain.entity.user.constant.ContentInfo;
+import io.urdego.content_service.domain.entity.BaseEntity;
+import io.urdego.content_service.domain.entity.user.constant.ContentInfo;
 
 import jakarta.persistence.*;
 
@@ -9,6 +9,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
 
 @Entity
 @Getter
@@ -35,10 +37,10 @@ public class UserContent extends BaseEntity {
     private String contentName;
 
     @Column(name = "latitude", precision = 10, scale = 7) // DECIMAL
-    private Double latitude;
+    private BigDecimal latitude;
 
     @Column(name = "longitude", precision = 10, scale = 7) // DECIMAL
-    private Double longitude;
+    private BigDecimal longitude;
 
     @Column(name = "hint", length = 255)
     private String hint;
@@ -49,8 +51,8 @@ public class UserContent extends BaseEntity {
             String url,
             ContentInfo contentInfo,
             String contentName,
-            Double latitude,
-            Double longitude,
+            BigDecimal latitude,
+            BigDecimal longitude,
             String hint) {
         this.userId = userId;
         this.url = url;

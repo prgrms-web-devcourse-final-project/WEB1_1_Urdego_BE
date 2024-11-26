@@ -1,6 +1,6 @@
-package common.exception.user;
+package io.urdego.content_service.common.exception.user;
 
-import common.exception.ContentException;
+import io.urdego.content_service.common.exception.ContentException;
 
 public class UserContentException extends ContentException {
     public UserContentException(String message) {
