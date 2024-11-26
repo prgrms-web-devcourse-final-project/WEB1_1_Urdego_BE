@@ -56,6 +56,8 @@ dependencies {
     // Content Metadata
     implementation 'com.drewnoakes:metadata-extractor:2.16.0'
 
+    // Swagger
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
 
 }
 
@@ -67,4 +69,10 @@ dependencyManagement {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+tasks.named('bootJar') {
+    manifest {
+        attributes 'Main-Class': 'org.springframework.boot.loader.launch.JarLauncher'
+    }
 }

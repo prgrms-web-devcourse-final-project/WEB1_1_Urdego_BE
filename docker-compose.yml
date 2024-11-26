@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  # Eureka Server
+  discovery_service:
+    image: geonoo/discovery-service:latest
+    container_name: discovery-service
+    ports:
+      - "8761:8761"
+    restart: always
+
+  # Spring Cloud Gateway
+  gateway_service:
+    image: geonoo/gateway-service:latest
+    container_name: gateway-service
+    ports:
+      - "8000:8000"
+    restart: always
+
+  # User Service
+  user_service:
+    image: geonoo/user-service:latest
+    container_name: user-service
+    ports:
+      - "8081:8081"
+    restart: always
+
+  # Content Service
+  content_service:
+    image: geonoo/content-service:latest
+    container_name: content-service
+    ports:
+      - "8082:8082"
+    restart: always
+
+  # Group Service
+  group_service:
+    image: geonoo/group-service:latest
+    container_name: group-service
+    ports:
+      - "8083:8083"
+    restart: always
+
+#  # Game Service
+
+#  # Notification Service
