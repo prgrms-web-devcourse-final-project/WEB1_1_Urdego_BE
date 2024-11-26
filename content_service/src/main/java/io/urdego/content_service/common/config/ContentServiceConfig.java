@@ -1,4 +1,4 @@
-package urdego.common.config;
+package io.urdego.content_service.common.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
