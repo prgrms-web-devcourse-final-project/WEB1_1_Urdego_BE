@@ -1,4 +1,4 @@
-package io.urdego.user_service.common.exception;
+package io.urdego.user_service.common.constant;
 
 public class HttpStatusConstants {
 
