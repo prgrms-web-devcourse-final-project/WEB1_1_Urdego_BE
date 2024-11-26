@@ -1,17 +1,13 @@
-package io.urdego.user_service.api.controller;
-
-import static io.urdego.user_service.common.exception.HttpStatusConstants.INTERNAL_SERVER;
-
-import io.urdego.user_service.common.exception.CustomException;
-
-import jakarta.servlet.http.HttpServletRequest;
+package io.urdego.user_service.common.exception;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import static io.urdego.user_service.common.constant.HttpStatusConstants.INTERNAL_SERVER;
+
 @RestControllerAdvice
-public class ExceptionController {
+public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = CustomException.class)
     public ResponseEntity<?> errorResponse(final CustomException e) {
@@ -19,7 +15,9 @@ public class ExceptionController {
     }
 
     @ExceptionHandler(value = Exception.class)
-    public ResponseEntity<?> error(final Exception e, final HttpServletRequest request) {
-        return ResponseEntity.status(INTERNAL_SERVER).body(e.getMessage());
+    public ResponseEntity<?> error(final Exception e) {
+        return ResponseEntity
+                .status(INTERNAL_SERVER)
+                .body(e.getMessage());
     }
 }

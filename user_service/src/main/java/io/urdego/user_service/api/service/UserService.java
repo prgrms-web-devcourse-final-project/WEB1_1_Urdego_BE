@@ -1,7 +1,10 @@
 package io.urdego.user_service.api.service;
 
-import io.urdego.user_service.api.controller.request.SignUpRequest;
-import io.urdego.user_service.api.controller.response.UserInfo;
+import io.urdego.user_service.api.controller.external.request.SignUpRequest;
+import io.urdego.user_service.api.controller.external.response.UserInfoResponse;
+import io.urdego.user_service.api.controller.internal.response.UserInfo;
+
+import java.util.List;
 
 public interface UserService {
 
@@ -15,6 +18,9 @@ public interface UserService {
     // 로그인
     // 유저 닉네임 반환
     String login(String email, String password);
+
+    //닉네임으로 유저 검색
+    List<UserInfoResponse> findByNickname(String string);
 
     //    UserDetail getDetail(Long userId);
 

@@ -1,4 +1,4 @@
-package io.urdego.user_service.domain.define;
+package io.urdego.user_service.domain.entity;
 
 import jakarta.persistence.*;
 
