@@ -1,10 +1,11 @@
-package io.urdego.user_service.api.controller;
+package io.urdego.user_service.api.controller.external;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.urdego.user_service.api.controller.request.SignInRequest;
-import io.urdego.user_service.api.controller.request.SignUpRequest;
-import io.urdego.user_service.api.controller.request.VerifyNicknameRequest;
-import io.urdego.user_service.api.controller.response.UserInfo;
+import io.urdego.user_service.api.controller.external.request.SignInRequest;
+import io.urdego.user_service.api.controller.external.request.SignUpRequest;
+import io.urdego.user_service.api.controller.external.request.VerifyNicknameRequest;
+import io.urdego.user_service.api.controller.internal.response.UserInfo;
+import io.urdego.user_service.api.controller.external.response.UserInfoResponse;
 import io.urdego.user_service.api.service.NicknameVerificationResult;
 import io.urdego.user_service.api.service.UserService;
 
@@ -13,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,13 +32,6 @@ public class UserController {
         return ResponseEntity.ok(userId);
     }
 
-    @PostMapping("/nickname")
-    @ApiResponse(responseCode = "200", description = "응답 예시 : PERMIT / DUPLICATED")
-    public ResponseEntity<String> postNickname(@RequestBody final VerifyNicknameRequest request) {
-        NicknameVerificationResult result = userService.verifyNickname(request.nickname());
-        return ResponseEntity.ok(result.getStatus());
-    }
-
     @PostMapping("/login")
     @ApiResponse(responseCode = "200", description = "응답 예시 : Hongildong12")
     public ResponseEntity<String> signIn(@RequestBody final SignInRequest request) {
@@ -43,9 +39,16 @@ public class UserController {
         return ResponseEntity.ok(nickname);
     }
 
-    @GetMapping("/users/{email}")
-    public ResponseEntity<UserInfo> getUser(@PathVariable("email") String email) {
-        UserInfo response = userService.findUserByEmail(email);
-        return ResponseEntity.ok(response);
+    @PostMapping("/nickname")
+    @ApiResponse(responseCode = "200", description = "응답 예시 : PERMIT / DUPLICATED")
+    public ResponseEntity<String> postNickname(@RequestBody final VerifyNicknameRequest request) {
+        NicknameVerificationResult result = userService.verifyNickname(request.nickname());
+        return ResponseEntity.ok(result.getStatus());
+    }
+
+    @GetMapping("/nickname")
+    public ResponseEntity<List<UserInfoResponse>> getUsersByString(final String string) {
+        List<UserInfoResponse> userInfos = userService.findByNickname(string);
+        return ResponseEntity.ok(userInfos);
     }
 }
