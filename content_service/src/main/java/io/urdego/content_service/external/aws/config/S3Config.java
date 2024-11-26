@@ -1,4 +1,4 @@
-package urdego.external.aws.config;
+package io.urdego.content_service.external.aws.config;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
