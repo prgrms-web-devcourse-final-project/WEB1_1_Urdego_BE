@@ -37,15 +37,41 @@ public class UserContentController {
         // Feign 유저 검증
         UserInfoResponse userResponse = userServiceClient.getUserById(userId);
 
-        ContentUploadRequest request =
-                ContentUploadRequest.builder()
-                        .userId(userResponse.getUserId())
-                        .contentName(contentName)
-                        .latitude(latitude)
-                        .longitude(longitude)
-                        .hint(hint)
-                        .build();
+        ContentUploadRequest request = ContentUploadRequest.builder()
+                .userId(userResponse.getUserId())
+                .contentName(contentName)
+                .latitude(latitude)
+                .longitude(longitude)
+                .hint(hint)
+                .build();
         userContentService.uploadContent(request, file);
+
+        return ResponseEntity.ok().build();
+    }
+
+
+    // 여러 컨텐츠 등록
+    @PostMapping(value = "/contents/multiple", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> uploadMultipleContents(
+            @RequestParam("files") MultipartFile[] files,
+            @RequestParam("userId") Long userId,
+            @RequestParam("contentName") String contentName,
+            @RequestParam("latitude") Double latitude,
+            @RequestParam("longitude") Double longitude,
+            @RequestParam("hint") String hint) {
+
+        // Feign 유저 검증
+        UserInfoResponse userResponse = userServiceClient.getUserById(userId);
+
+        // 각 파일에 대해 처리
+        ContentUploadRequest request = ContentUploadRequest.builder()
+                .userId(userResponse.getUserId())
+                .contentName(contentName)
+                .latitude(latitude)
+                .longitude(longitude)
+                .hint(hint)
+                .build();
+        userContentService.uploadContentMultiple(request, files);
 
         return ResponseEntity.ok().build();
     }
