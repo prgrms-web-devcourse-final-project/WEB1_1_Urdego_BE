@@ -1,6 +1,7 @@
 package io.urdego.user_service.api.service;
 
 import io.urdego.user_service.api.controller.request.SignUpRequest;
+import io.urdego.user_service.api.controller.response.UserInfo;
 
 public interface UserService {
 
@@ -25,4 +26,9 @@ public interface UserService {
     //    Long editInfo(Long userId, UserEditInfo userEditInfo);
 
     //    void withdraw(Long userId);
+
+    // email로 user 조회
+    // Content 등록 시 UserId 통신
+    // group 등록 시 UserId 통신
+    UserInfo findUserByEmail(String email);
 }
