@@ -43,6 +43,8 @@ jobs:
           docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/discovery-service .
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/discovery-service
 
+      ####################################################################################################
+
       - name: Generate application.yml for Gateway Service
         working-directory: ./gateway_service
         run: |
@@ -58,6 +60,8 @@ jobs:
         run: |
           docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/gateway-service .
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/gateway-service
+
+      ####################################################################################################
 
       - name: Generate application.yml for User Service
         working-directory: ./user_service
@@ -75,6 +79,8 @@ jobs:
           docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/user-service .
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/user-service
 
+      ####################################################################################################
+
       - name: Generate application.yml for Content Service
         working-directory: ./content_service
         run: |
@@ -91,6 +97,8 @@ jobs:
           docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/content-service .
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/content-service
 
+      ####################################################################################################
+
       - name: Generate application.yml for Group Service
         working-directory: ./group_service
         run: |
@@ -106,8 +114,6 @@ jobs:
         run: |
           docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/group-service .
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/group-service
-
-      # 추가 서비스들 반복...
 
       # 5. Docker 컨테이너 배포 (EC2 또는 서버)
       - name: Upload docker-compose.yml to EC2
