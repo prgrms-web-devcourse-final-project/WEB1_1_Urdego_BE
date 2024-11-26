@@ -1,4 +1,4 @@
-package io.urdego.user_service.config;
+package io.urdego.group_service.common.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -13,8 +13,8 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .info(
                         new Info()
-                                .title("User Service API")
-                                .description("Documentation for User Service API")
+                                .title("Group Service API")
+                                .description("Documentation for Group Service API")
                                 .version("v1.0"));
     }
 }
