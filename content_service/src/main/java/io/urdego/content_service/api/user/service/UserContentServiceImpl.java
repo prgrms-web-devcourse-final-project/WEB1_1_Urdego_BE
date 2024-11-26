@@ -1,4 +1,4 @@
-package urdego.api.user.service;
+package io.urdego.content_service.api.user.service;
 
 import jakarta.transaction.Transactional;
 
@@ -8,11 +8,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import urdego.api.user.controller.request.ContentUploadRequest;
-import urdego.domain.entity.user.UserContent;
-import urdego.domain.entity.user.constant.ContentInfo;
-import urdego.domain.entity.user.repository.UserContentRepository;
-import urdego.external.aws.service.S3Service;
+import io.urdego.content_service.api.user.controller.request.ContentUploadRequest;
+import io.urdego.content_service.domain.entity.user.UserContent;
+import io.urdego.content_service.domain.entity.user.constant.ContentInfo;
+import io.urdego.content_service.domain.entity.user.repository.UserContentRepository;
+import io.urdego.content_service.external.aws.service.S3Service;
 
 @Slf4j
 @Service

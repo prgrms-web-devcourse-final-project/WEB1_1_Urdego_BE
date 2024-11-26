@@ -1,4 +1,4 @@
-package urdego.common.config.multipart;
+package io.urdego.content_service.common.config.multipart;
 
 import jakarta.servlet.MultipartConfigElement;
 

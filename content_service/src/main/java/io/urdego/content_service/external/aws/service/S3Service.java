@@ -1,4 +1,4 @@
-package urdego.external.aws.service;
+package io.urdego.content_service.external.aws.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
@@ -15,9 +15,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import urdego.common.exception.ExceptionMessage;
-import urdego.common.exception.aws.AwsException;
-import urdego.domain.entity.user.constant.ContentInfo;
+import io.urdego.content_service.common.exception.ExceptionMessage;
+import io.urdego.content_service.common.exception.aws.AwsException;
+import io.urdego.content_service.domain.entity.user.constant.ContentInfo;
 
 import java.io.IOException;
 import java.io.InputStream;
