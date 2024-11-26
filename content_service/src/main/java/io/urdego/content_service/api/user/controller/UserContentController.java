@@ -1,6 +1,6 @@
-package api.user.controller;
+package io.urdego.content_service.api.user.controller;
 
-import api.user.service.UserContentService;
+import io.urdego.content_service.api.user.service.UserContentService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -12,5 +12,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserContentController {
 
-    private final UserContentService userContentService;
+//    private final UserContentService userContentService;
 }

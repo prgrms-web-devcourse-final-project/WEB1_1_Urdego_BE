@@ -1,6 +1,6 @@
-package domain.entity.user.repository;
+package io.urdego.content_service.domain.entity.user.repository;
 
-import domain.entity.user.UserContent;
+import io.urdego.content_service.domain.entity.user.UserContent;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
