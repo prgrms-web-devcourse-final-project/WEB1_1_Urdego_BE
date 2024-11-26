@@ -8,7 +8,7 @@ WORKDIR /app
 COPY build/libs/*.jar gateway_service.jar
 
 # 4. 컨테이너 내부 포트 지정
-EXPOSE 8080
+EXPOSE 8000
 
 # 5. 애플리케이션 실행
 ENTRYPOINT ["java", "-jar", "/app/gateway_service.jar"]
