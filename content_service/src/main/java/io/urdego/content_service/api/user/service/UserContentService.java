@@ -1,8 +1,8 @@
 package io.urdego.content_service.api.user.service;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import io.urdego.content_service.api.user.controller.request.ContentUploadRequest;
+
+import org.springframework.web.multipart.MultipartFile;
 
 public interface UserContentService {
 
