@@ -50,6 +50,9 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
+    // Swagger
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
+
 }
 
 dependencyManagement {
@@ -60,4 +63,10 @@ dependencyManagement {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+tasks.named('bootJar') {
+    manifest {
+        attributes 'Main-Class': 'org.springframework.boot.loader.launch.JarLauncher'
+    }
 }
