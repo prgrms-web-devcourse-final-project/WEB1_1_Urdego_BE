@@ -2,9 +2,9 @@ package io.urdego.content_service.api.user.controller;
 
 import io.urdego.content_service.api.user.controller.request.ContentUploadRequest;
 import io.urdego.content_service.api.user.service.UserContentService;
-
+import io.urdego.content_service.common.client.UserServiceClient;
+import io.urdego.content_service.common.client.response.UserInfoResponse;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserContentController {
 
     private final UserContentService userContentService;
+    private final UserServiceClient userServiceClient;
 
     // 컨텐츠 단일 등록
     /*
@@ -33,9 +34,12 @@ public class UserContentController {
             @RequestParam("longitude") Double longitude,
             @RequestParam("hint") String hint) {
 
+        // Feign 유저 검증
+        UserInfoResponse userResponse = userServiceClient.getUserById(userId);
+
         ContentUploadRequest request =
                 ContentUploadRequest.builder()
-                        .userId(userId)
+                        .userId(userResponse.getUserId())
                         .contentName(contentName)
                         .latitude(latitude)
                         .longitude(longitude)
