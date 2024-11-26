@@ -43,7 +43,8 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
 
     // spring cloud
-    //implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.4'
 
     // lombok
