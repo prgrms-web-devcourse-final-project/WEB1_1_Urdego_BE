@@ -9,10 +9,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
@@ -76,6 +73,18 @@ public class UserContentController {
                         .build();
         userContentService.uploadContentMultiple(request, files);
 
+        return ResponseEntity.ok().build();
+    }
+
+    // 컨텐츠 단일 삭제
+    @DeleteMapping(value = "{userId}/contents/{contentId}")
+    public ResponseEntity<Void> deleteContent(@PathVariable(name = "userId") Long userId,
+                                              @PathVariable(name = "contentId") Long contentId) {
+
+        // Feign 유저 검증
+        userServiceClient.getUserById(userId);
+
+        userContentService.deleteContent(contentId);
         return ResponseEntity.ok().build();
     }
 }
