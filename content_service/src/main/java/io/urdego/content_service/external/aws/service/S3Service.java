@@ -2,6 +2,7 @@ package io.urdego.content_service.external.aws.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.drew.imaging.ImageMetadataReader;
@@ -124,5 +125,18 @@ public class S3Service {
                 .metaLatitude(latitude)
                 .metaLongitude(longitude)
                 .build();
+    }
+
+    // filename 추출
+    public String extractFileNameFromUrl(String url) {
+        if (url == null || !url.contains("/")) {
+            throw new AwsException(ExceptionMessage.INVALID_FILE_FORMAT);
+        }
+        return url.substring(url.lastIndexOf("/") + 1);
+    }
+
+    // 컨텐츠 삭제 S3
+    public void deleteFile(String filename) {
+        s3Client.deleteObject(new DeleteObjectRequest(bucket, filename));
     }
 }
