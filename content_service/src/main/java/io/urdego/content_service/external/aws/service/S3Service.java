@@ -2,19 +2,17 @@ package io.urdego.content_service.external.aws.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.lang.GeoLocation;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.GpsDirectory;
-
 import io.urdego.content_service.common.exception.ExceptionMessage;
 import io.urdego.content_service.common.exception.aws.AwsException;
 import io.urdego.content_service.domain.entity.user.constant.ContentInfo;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -97,7 +95,7 @@ public class S3Service {
                 GeoLocation geoLocation = gpsDirectory.getGeoLocation();
                 if (geoLocation != null && !geoLocation.isZero()) {
                     // 위도(latitude)와 경도(longitude) 반환
-                    return new double[] {geoLocation.getLatitude(), geoLocation.getLongitude()};
+                    return new double[]{geoLocation.getLatitude(), geoLocation.getLongitude()};
                 }
             }
         } catch (Exception e) {
@@ -124,5 +122,19 @@ public class S3Service {
                 .metaLatitude(latitude)
                 .metaLongitude(longitude)
                 .build();
+    }
+
+    // filename 추출
+    public String extractFileNameFromUrl(String url) {
+        if (url == null || !url.contains("/")) {
+            throw new AwsException(ExceptionMessage.INVALID_FILE_FORMAT);
+        }
+        return url.substring(url.lastIndexOf("/") + 1);
+    }
+
+
+    // 컨텐츠 삭제 S3
+    public void deleteFile(String filename) {
+        s3Client.deleteObject(new DeleteObjectRequest(bucket, filename));
     }
 }
