@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class UserInfoResponse {
+public class UserResponse {
 
     private Long userId;
 
@@ -15,7 +15,7 @@ public class UserInfoResponse {
     private String nickname;
 
     @Builder
-    public UserInfoResponse(Long userId, String email, String nickname) {
+    public UserResponse(Long userId, String email, String nickname) {
         this.userId = userId;
         this.email = email;
         this.nickname = nickname;
