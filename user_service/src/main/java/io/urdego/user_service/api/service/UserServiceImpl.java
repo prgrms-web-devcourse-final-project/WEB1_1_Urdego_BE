@@ -3,6 +3,7 @@ package io.urdego.user_service.api.service;
 import io.urdego.user_service.api.controller.external.request.SignUpRequest;
 import io.urdego.user_service.api.controller.external.response.UserInfoResponse;
 import io.urdego.user_service.api.controller.internal.response.UserInfo;
+import io.urdego.user_service.api.controller.internal.response.UserResponse;
 import io.urdego.user_service.common.exception.UserNotFoundException;
 import io.urdego.user_service.domain.UserRepository;
 import io.urdego.user_service.domain.entity.User;
@@ -43,6 +44,16 @@ public class UserServiceImpl implements UserService {
     public String login(final String email, final String password) {
         User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
         return user.getNickname();
+    }
+
+    @Override
+    public UserResponse findUserById(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        return UserResponse.builder()
+                .userId(user.getId())
+                .nickname(user.getNickname())
+                .email(user.getEmail())
+                .build();
     }
 
     @Override

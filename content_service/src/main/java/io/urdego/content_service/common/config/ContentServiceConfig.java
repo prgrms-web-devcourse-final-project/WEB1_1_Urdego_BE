@@ -1,7 +1,6 @@
 package io.urdego.content_service.common.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
@@ -22,8 +21,8 @@ public class ContentServiceConfig implements WebMvcConfigurer {
 
         ObjectMapper mapper = new ObjectMapper();
 
-        // 객체의 속성 이름을 snake-case로 설정
-        mapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
+        /*// 객체의 속성 이름을 snake-case로 설정
+        mapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);*/
 
         // Java 8 날짜/시간 모듈 등록
         mapper.registerModule(javaTimeModule);
