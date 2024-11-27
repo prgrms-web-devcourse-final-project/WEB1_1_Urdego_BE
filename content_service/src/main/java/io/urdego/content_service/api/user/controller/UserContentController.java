@@ -78,8 +78,9 @@ public class UserContentController {
 
     // 컨텐츠 단일 삭제
     @DeleteMapping(value = "{userId}/contents/{contentId}")
-    public ResponseEntity<Void> deleteContent(@PathVariable(name = "userId") Long userId,
-                                              @PathVariable(name = "contentId") Long contentId) {
+    public ResponseEntity<Void> deleteContent(
+            @PathVariable(name = "userId") Long userId,
+            @PathVariable(name = "contentId") Long contentId) {
 
         // Feign 유저 검증
         userServiceClient.getUserById(userId);
