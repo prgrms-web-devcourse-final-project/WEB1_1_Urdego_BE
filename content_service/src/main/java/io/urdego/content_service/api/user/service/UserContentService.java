@@ -11,4 +11,7 @@ public interface UserContentService {
 
     // 다증 컨텐츠 등록
     void uploadContentMultiple(ContentUploadRequest request, MultipartFile[] files);
+
+    // 컨텐츠 삭제
+    void deleteContent(Long contentId);
 }
