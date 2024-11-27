@@ -1,6 +1,8 @@
 package io.urdego.content_service.api.user.service;
 
 import io.urdego.content_service.api.user.controller.request.ContentUploadRequest;
+import io.urdego.content_service.api.user.controller.response.UserContentListAndCursorIdxResponse;
+import io.urdego.content_service.api.user.controller.response.UserContentResponse;
 import io.urdego.content_service.common.exception.ExceptionMessage;
 import io.urdego.content_service.common.exception.aws.AwsException;
 import io.urdego.content_service.common.exception.user.UserContentException;
@@ -8,14 +10,14 @@ import io.urdego.content_service.domain.entity.user.UserContent;
 import io.urdego.content_service.domain.entity.user.constant.ContentInfo;
 import io.urdego.content_service.domain.entity.user.repository.UserContentRepository;
 import io.urdego.content_service.external.aws.service.S3Service;
-
 import jakarta.transaction.Transactional;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Collections;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -25,6 +27,7 @@ public class UserContentServiceImpl implements UserContentService {
 
     private final S3Service s3Service;
     private final UserContentRepository userContentRepository;
+    private final static Long MAX_LIMIT = 10L;
 
     // 단일 컨텐츠 등록
     @Override
@@ -89,6 +92,33 @@ public class UserContentServiceImpl implements UserContentService {
 
             throw new AwsException(ExceptionMessage.CONTENT_DELETE_FAILED);
         }
+    }
+
+    // 유저 컨텐츠 조회
+    @Override
+    public UserContentListAndCursorIdxResponse getUserContents(Long userId, Long cursorIdx, Long limit) {
+
+
+        limit = Math.min(limit, MAX_LIMIT);
+
+        List<UserContentResponse> userContents = userContentRepository.findUserContentsByUserId_CursorPaging(userId, cursorIdx, limit);
+
+        // 컨텐츠가 비어있을경우 빈 배열 반환
+        if(userContents.isEmpty()) {
+
+            return UserContentListAndCursorIdxResponse.builder()
+                    .userContents(Collections.emptyList())
+                    .userId(userId)
+                    .build();
+        }
+
+        UserContentListAndCursorIdxResponse response = UserContentListAndCursorIdxResponse.builder()
+                .userContents(userContents)
+                .userId(userId)
+                .build();
+        response.setNextCursorIdx();
+
+        return response;
     }
 
     // 단일 파일 업로드 처리
