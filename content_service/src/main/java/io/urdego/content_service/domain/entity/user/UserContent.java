@@ -27,8 +27,7 @@ public class UserContent extends BaseEntity {
     @Column(name = "url", nullable = false)
     private String url;
 
-    @Embedded
-    private ContentInfo contentInfo;
+    @Embedded private ContentInfo contentInfo;
 
     @Column(name = "content_name", nullable = false)
     private String contentName;
