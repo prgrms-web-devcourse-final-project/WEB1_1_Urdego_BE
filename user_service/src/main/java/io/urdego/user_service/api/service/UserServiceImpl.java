@@ -7,7 +7,9 @@ import io.urdego.user_service.api.controller.internal.response.UserResponse;
 import io.urdego.user_service.common.exception.UserNotFoundException;
 import io.urdego.user_service.domain.UserRepository;
 import io.urdego.user_service.domain.entity.User;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

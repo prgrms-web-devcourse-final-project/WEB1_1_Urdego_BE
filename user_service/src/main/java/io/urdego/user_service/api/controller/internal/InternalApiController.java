@@ -3,7 +3,9 @@ package io.urdego.user_service.api.controller.internal;
 import io.urdego.user_service.api.controller.internal.response.UserInfo;
 import io.urdego.user_service.api.controller.internal.response.UserResponse;
 import io.urdego.user_service.api.service.UserService;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

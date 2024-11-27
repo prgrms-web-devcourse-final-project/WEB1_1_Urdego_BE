@@ -4,7 +4,9 @@ import io.urdego.content_service.api.user.controller.request.ContentUploadReques
 import io.urdego.content_service.api.user.service.UserContentService;
 import io.urdego.content_service.common.client.UserServiceClient;
 import io.urdego.content_service.common.client.response.UserResponse;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,18 +39,18 @@ public class UserContentController {
         // Feign 유저 검증
         UserResponse userResponse = userServiceClient.getUserById(userId);
 
-        ContentUploadRequest request = ContentUploadRequest.builder()
-                .userId(userResponse.getUserId())
-                .contentName(contentName)
-                .latitude(latitude)
-                .longitude(longitude)
-                .hint(hint)
-                .build();
+        ContentUploadRequest request =
+                ContentUploadRequest.builder()
+                        .userId(userResponse.getUserId())
+                        .contentName(contentName)
+                        .latitude(latitude)
+                        .longitude(longitude)
+                        .hint(hint)
+                        .build();
         userContentService.uploadContent(request, file);
 
         return ResponseEntity.ok().build();
     }
-
 
     // 여러 컨텐츠 등록
     @PostMapping(value = "/contents/multiple", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -64,13 +66,14 @@ public class UserContentController {
         UserResponse userResponse = userServiceClient.getUserById(userId);
 
         // 각 파일에 대해 처리
-        ContentUploadRequest request = ContentUploadRequest.builder()
-                .userId(userResponse.getUserId())
-                .contentName(contentName)
-                .latitude(latitude)
-                .longitude(longitude)
-                .hint(hint)
-                .build();
+        ContentUploadRequest request =
+                ContentUploadRequest.builder()
+                        .userId(userResponse.getUserId())
+                        .contentName(contentName)
+                        .latitude(latitude)
+                        .longitude(longitude)
+                        .hint(hint)
+                        .build();
         userContentService.uploadContentMultiple(request, files);
 
         return ResponseEntity.ok().build();

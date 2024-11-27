@@ -8,10 +8,13 @@ import com.drew.imaging.ImageMetadataReader;
 import com.drew.lang.GeoLocation;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.GpsDirectory;
+
 import io.urdego.content_service.common.exception.ExceptionMessage;
 import io.urdego.content_service.common.exception.aws.AwsException;
 import io.urdego.content_service.domain.entity.user.constant.ContentInfo;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -94,7 +97,7 @@ public class S3Service {
                 GeoLocation geoLocation = gpsDirectory.getGeoLocation();
                 if (geoLocation != null && !geoLocation.isZero()) {
                     // 위도(latitude)와 경도(longitude) 반환
-                    return new double[]{geoLocation.getLatitude(), geoLocation.getLongitude()};
+                    return new double[] {geoLocation.getLatitude(), geoLocation.getLongitude()};
                 }
             }
         } catch (Exception e) {

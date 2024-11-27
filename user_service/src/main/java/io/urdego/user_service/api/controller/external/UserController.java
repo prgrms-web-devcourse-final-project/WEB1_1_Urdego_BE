@@ -7,8 +7,10 @@ import io.urdego.user_service.api.controller.external.request.VerifyNicknameRequ
 import io.urdego.user_service.api.controller.external.response.UserInfoResponse;
 import io.urdego.user_service.api.service.NicknameVerificationResult;
 import io.urdego.user_service.api.service.UserService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

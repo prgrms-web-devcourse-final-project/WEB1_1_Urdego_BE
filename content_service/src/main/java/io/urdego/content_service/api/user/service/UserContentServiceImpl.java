@@ -5,9 +5,12 @@ import io.urdego.content_service.domain.entity.user.UserContent;
 import io.urdego.content_service.domain.entity.user.constant.ContentInfo;
 import io.urdego.content_service.domain.entity.user.repository.UserContentRepository;
 import io.urdego.content_service.external.aws.service.S3Service;
+
 import jakarta.transaction.Transactional;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,15 +31,16 @@ public class UserContentServiceImpl implements UserContentService {
 
         ContentInfo contentInfo = contentMetadata(file);
 
-        UserContent userContent = UserContent.builder()
-                .userId(request.getUserId())
-                .contentName(request.getContentName())
-                .url(url)
-                .contentInfo(contentInfo)
-                .latitude(request.getLatitude())
-                .longitude(request.getLongitude())
-                .hint(request.getHint())
-                .build();
+        UserContent userContent =
+                UserContent.builder()
+                        .userId(request.getUserId())
+                        .contentName(request.getContentName())
+                        .url(url)
+                        .contentInfo(contentInfo)
+                        .latitude(request.getLatitude())
+                        .longitude(request.getLongitude())
+                        .hint(request.getHint())
+                        .build();
         userContentRepository.save(userContent);
     }
 
@@ -50,19 +54,19 @@ public class UserContentServiceImpl implements UserContentService {
             ContentInfo contentInfo = contentMetadata(file);
 
             // UserContent 생성
-            UserContent userContent = UserContent.builder()
-                    .userId(request.getUserId())
-                    .url(url)
-                    .contentInfo(contentInfo)
-                    .contentName(request.getContentName())
-                    .latitude(request.getLatitude())
-                    .longitude(request.getLongitude())
-                    .hint(request.getHint())
-                    .build();
+            UserContent userContent =
+                    UserContent.builder()
+                            .userId(request.getUserId())
+                            .url(url)
+                            .contentInfo(contentInfo)
+                            .contentName(request.getContentName())
+                            .latitude(request.getLatitude())
+                            .longitude(request.getLongitude())
+                            .hint(request.getHint())
+                            .build();
             userContentRepository.save(userContent);
         }
     }
-
 
     // 단일 파일 업로드 처리
     private String uploadFile(Long userId, MultipartFile file) {
