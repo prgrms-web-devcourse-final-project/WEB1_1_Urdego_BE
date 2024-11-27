@@ -3,7 +3,7 @@ package io.urdego.content_service.api.user.controller;
 import io.urdego.content_service.api.user.controller.request.ContentUploadRequest;
 import io.urdego.content_service.api.user.service.UserContentService;
 import io.urdego.content_service.common.client.UserServiceClient;
-import io.urdego.content_service.common.client.response.UserInfoResponse;
+import io.urdego.content_service.common.client.response.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +35,7 @@ public class UserContentController {
             @RequestParam("hint") String hint) {
 
         // Feign 유저 검증
-        UserInfoResponse userResponse = userServiceClient.getUserById(userId);
+        UserResponse userResponse = userServiceClient.getUserById(userId);
 
         ContentUploadRequest request = ContentUploadRequest.builder()
                 .userId(userResponse.getUserId())
@@ -61,7 +61,7 @@ public class UserContentController {
             @RequestParam("hint") String hint) {
 
         // Feign 유저 검증
-        UserInfoResponse userResponse = userServiceClient.getUserById(userId);
+        UserResponse userResponse = userServiceClient.getUserById(userId);
 
         // 각 파일에 대해 처리
         ContentUploadRequest request = ContentUploadRequest.builder()

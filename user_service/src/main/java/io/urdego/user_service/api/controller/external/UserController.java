@@ -1,17 +1,18 @@
-package io.urdego.user_service.api.controller;
+package io.urdego.user_service.api.controller.external;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.urdego.user_service.api.controller.request.SignInRequest;
-import io.urdego.user_service.api.controller.request.SignUpRequest;
-import io.urdego.user_service.api.controller.request.VerifyNicknameRequest;
-import io.urdego.user_service.api.controller.response.UserInfo;
-import io.urdego.user_service.api.controller.response.UserInfoResponse;
+import io.urdego.user_service.api.controller.external.request.SignInRequest;
+import io.urdego.user_service.api.controller.external.request.SignUpRequest;
+import io.urdego.user_service.api.controller.external.request.VerifyNicknameRequest;
+import io.urdego.user_service.api.controller.external.response.UserInfoResponse;
 import io.urdego.user_service.api.service.NicknameVerificationResult;
 import io.urdego.user_service.api.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -42,15 +43,9 @@ public class UserController {
         return ResponseEntity.ok(nickname);
     }
 
-    @GetMapping("/users/{email}")
-    public ResponseEntity<UserInfo> getUser(@PathVariable("email") String email) {
-        UserInfo response = userService.findUserByEmail(email);
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<UserInfoResponse> getUserById(@PathVariable("userId") Long userId) {
-        UserInfoResponse response = userService.findUserById(userId);
-        return ResponseEntity.ok().body(response);
+    @GetMapping("/nickname")
+    public ResponseEntity<List<UserInfoResponse>> getUsersByString(final String string) {
+        List<UserInfoResponse> userInfos = userService.findByNickname(string);
+        return ResponseEntity.ok(userInfos);
     }
 }

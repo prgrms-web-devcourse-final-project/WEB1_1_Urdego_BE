@@ -1,6 +1,6 @@
 package io.urdego.content_service.common.client;
 
-import io.urdego.content_service.common.client.response.UserInfoResponse;
+import io.urdego.content_service.common.client.response.UserResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface UserServiceClient {
 
     @GetMapping("/api/user-service/user/{userId}")
-    UserInfoResponse getUserById(@PathVariable("userId") Long userId);
+    UserResponse getUserById(@PathVariable("userId") Long userId);
 }
