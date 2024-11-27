@@ -103,9 +103,15 @@ public class UserContentServiceImpl implements UserContentService {
 
     // 컨텐츠 조회
     private UserContent findUserContentByIdOrException(Long contentId) {
-        return userContentRepository.findById(contentId).orElseThrow(() -> {
-            log.warn(">>>> {} : {} <<<<", contentId, ExceptionMessage.USER_CONTENT_NOT_FOUND);
-            throw new UserContentException(ExceptionMessage.USER_CONTENT_NOT_FOUND);
-        });
+        return userContentRepository
+                .findById(contentId)
+                .orElseThrow(
+                        () -> {
+                            log.warn(
+                                    ">>>> {} : {} <<<<",
+                                    contentId,
+                                    ExceptionMessage.USER_CONTENT_NOT_FOUND);
+                            throw new UserContentException(ExceptionMessage.USER_CONTENT_NOT_FOUND);
+                        });
     }
 }
