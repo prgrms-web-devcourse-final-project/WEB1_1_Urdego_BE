@@ -46,6 +46,7 @@ dependencies {
     // spring cloud
     implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.4'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
     // lombok
     compileOnly 'org.projectlombok:lombok'

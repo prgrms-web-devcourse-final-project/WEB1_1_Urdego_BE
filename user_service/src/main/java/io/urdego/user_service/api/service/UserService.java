@@ -3,6 +3,7 @@ package io.urdego.user_service.api.service;
 import io.urdego.user_service.api.controller.external.request.SignUpRequest;
 import io.urdego.user_service.api.controller.external.response.UserInfoResponse;
 import io.urdego.user_service.api.controller.internal.response.UserInfo;
+import io.urdego.user_service.api.controller.internal.response.UserResponse;
 
 import java.util.List;
 
@@ -37,4 +38,6 @@ public interface UserService {
     // Content 등록 시 UserId 통신
     // group 등록 시 UserId 통신
     UserInfo findUserByEmail(String email);
+
+    UserResponse findUserById(Long userId);
 }

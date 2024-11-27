@@ -24,7 +24,7 @@ public class UserContent extends BaseEntity {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    @Column(name = "url", columnDefinition = "JSON", nullable = false) // JSON
+    @Column(name = "url", nullable = false)
     private String url;
 
     @Embedded private ContentInfo contentInfo;

@@ -31,18 +31,18 @@ public class UserController {
         return ResponseEntity.ok(userId);
     }
 
-    @PostMapping("/login")
-    @ApiResponse(responseCode = "200", description = "응답 예시 : Hongildong12")
-    public ResponseEntity<String> signIn(@RequestBody final SignInRequest request) {
-        String nickname = userService.login(request.email(), request.password());
-        return ResponseEntity.ok(nickname);
-    }
-
     @PostMapping("/nickname")
     @ApiResponse(responseCode = "200", description = "응답 예시 : PERMIT / DUPLICATED")
     public ResponseEntity<String> postNickname(@RequestBody final VerifyNicknameRequest request) {
         NicknameVerificationResult result = userService.verifyNickname(request.nickname());
         return ResponseEntity.ok(result.getStatus());
+    }
+
+    @PostMapping("/login")
+    @ApiResponse(responseCode = "200", description = "응답 예시 : Hongildong12")
+    public ResponseEntity<String> signIn(@RequestBody final SignInRequest request) {
+        String nickname = userService.login(request.email(), request.password());
+        return ResponseEntity.ok(nickname);
     }
 
     @GetMapping("/nickname")
