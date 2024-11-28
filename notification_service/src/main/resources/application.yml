@@ -1,8 +1,14 @@
+server:
+  port: 8085
+
 spring:
-  data:
-    mongodb:
-      uri: mongodb://localhost:27017/mongoNotification-service # MongoDB URI
-  redis:
-    host: localhost
-    port: 6379
+  application:
+    name: notification-service
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
 
