@@ -2,6 +2,7 @@ package io.urdego.content_service.api.user.service;
 
 import io.urdego.content_service.api.user.controller.request.ContentUploadRequest;
 import io.urdego.content_service.api.user.controller.response.UserContentListAndCursorIdxResponse;
+
 import org.springframework.web.multipart.MultipartFile;
 
 public interface UserContentService {

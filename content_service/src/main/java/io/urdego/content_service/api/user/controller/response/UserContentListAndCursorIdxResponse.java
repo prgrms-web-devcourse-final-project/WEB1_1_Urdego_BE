@@ -1,6 +1,5 @@
 package io.urdego.content_service.api.user.controller.response;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,8 +18,9 @@ public class UserContentListAndCursorIdxResponse {
     private Long cursorIdx;
 
     public void setNextCursorIdx() {
-        cursorIdx = userContents == null || userContents.isEmpty() ?
-                0L : userContents.get(userContents.size() - 1).getUserId();
-
+        cursorIdx =
+                userContents == null || userContents.isEmpty()
+                        ? 0L
+                        : userContents.get(userContents.size() - 1).getUserId();
     }
 }

@@ -1,7 +1,7 @@
 package io.urdego.content_service.api.user.controller.response;
 
-
 import io.urdego.content_service.domain.entity.user.constant.ContentInfo;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
