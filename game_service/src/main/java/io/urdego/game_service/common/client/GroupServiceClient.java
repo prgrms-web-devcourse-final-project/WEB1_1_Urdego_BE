@@ -1,4 +1,4 @@
-package io.urdego.game_service.api.dto;
+package io.urdego.game_service.common.client;
 
 import org.springframework.cloud.openfeign.FeignClient;
 
