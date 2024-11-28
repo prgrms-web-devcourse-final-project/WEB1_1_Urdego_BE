@@ -8,8 +8,11 @@ import io.urdego.content_service.api.user.controller.response.UserContentListAnd
 import io.urdego.content_service.api.user.service.UserContentService;
 import io.urdego.content_service.common.client.UserServiceClient;
 import io.urdego.content_service.common.client.response.UserResponse;
+
 import jakarta.validation.constraints.Min;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -96,19 +99,27 @@ public class UserContentController {
     }
 
     // 컨텐츠 조회
-    @ApiResponse(responseCode = "200", description = "유저 컨텐츠 조회 성공", content = @Content(schema = @Schema(implementation = UserContentListAndCursorIdxResponse.class)))
+    @ApiResponse(
+            responseCode = "200",
+            description = "유저 컨텐츠 조회 성공",
+            content =
+                    @Content(
+                            schema =
+                                    @Schema(
+                                            implementation =
+                                                    UserContentListAndCursorIdxResponse.class)))
     @GetMapping(value = "{userId}/contents")
-    public ResponseEntity<UserContentListAndCursorIdxResponse> getUserContents(@PathVariable(name = "userId") Long userId,
-                                                                               @Min(value = 0) @RequestParam(name = "cursorIdx", required = false) Long cursorIdx,
-                                                                               @Min(value = 1) @RequestParam(name = "limit", defaultValue = "5") Long limit) {
+    public ResponseEntity<UserContentListAndCursorIdxResponse> getUserContents(
+            @PathVariable(name = "userId") Long userId,
+            @Min(value = 0) @RequestParam(name = "cursorIdx", required = false) Long cursorIdx,
+            @Min(value = 1) @RequestParam(name = "limit", defaultValue = "5") Long limit) {
 
         // Feign 유저 검증
         UserResponse userResponse = userServiceClient.getUserById(userId);
 
-        UserContentListAndCursorIdxResponse responses = userContentService.getUserContents(userResponse.getUserId(), cursorIdx, limit);
+        UserContentListAndCursorIdxResponse responses =
+                userContentService.getUserContents(userResponse.getUserId(), cursorIdx, limit);
 
         return ResponseEntity.ok().body(responses);
     }
-
-
 }
