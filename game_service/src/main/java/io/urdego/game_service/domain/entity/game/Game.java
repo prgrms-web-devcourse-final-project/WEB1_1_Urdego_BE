@@ -2,6 +2,7 @@ package io.urdego.game_service.domain.entity.game;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -32,10 +33,28 @@ public class Game {
     @Column(nullable = false)
     private boolean inProgress;
 
-    private LocalDateTime started_at;
-    private LocalDateTime ended_at;
+    private LocalDateTime startedAt;
+    private LocalDateTime endedAt;
 
     // FK
     @Column(nullable = false)
     private Long groupId;
+
+    @Builder
+    public Game(int totalRounds, int timer, int playerCounts, boolean inProgress, Long groupId) {
+        this.totalRounds = totalRounds;
+        this.timer = timer;
+        this.playerCounts = playerCounts;
+        this.inProgress = inProgress;
+        this.groupId = groupId;
+    }
+
+    public void setStartedAt(LocalDateTime now) {
+    }
+
+    public void setEndedAt(LocalDateTime now) {
+    }
+
+    public void setInProgress(boolean b) {
+    }
 }
