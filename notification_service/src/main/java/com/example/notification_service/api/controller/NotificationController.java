@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class NotificationController {
 	private final NotificationPublisher notificationPublisher;
 
-	//알림 보내기
+	//알림 발행 및 보내기
 	@PostMapping("/send")
 	public String senNotification(@RequestBody NotificationRequestInfo requestInfo) {
 		notificationPublisher.publishToUser(requestInfo.targetIds(), requestInfo.senderId(), requestInfo.groupId());
