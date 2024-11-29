@@ -5,8 +5,6 @@ public record CreateGroupReq(
         String description,
         Integer memberLimit,
         Long userId,
-        //Integer timer,
+        // Integer timer,
         Integer totalRounds // 라운드 수
-){
-
-}
+        ) {}

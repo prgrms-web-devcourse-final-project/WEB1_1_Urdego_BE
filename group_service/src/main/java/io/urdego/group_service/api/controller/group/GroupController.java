@@ -45,7 +45,7 @@ public class GroupController {
         return ResponseEntity.status(OK).body(response);
     }
 
-    // 그룹 정보 조회 feign 연결 api 
+    // 그룹 정보 조회 feign 연결 api
     @GetMapping("/{groupId}")
     public ResponseEntity<GroupInfoRes> getGroupInfo(@PathVariable Long groupId) {
         GroupInfoRes response = groupService.getGroupInfo(groupId);
