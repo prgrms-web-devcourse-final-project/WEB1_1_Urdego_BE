@@ -6,7 +6,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
-import io.urdego.content_service.api.user.controller.response.UserContentResponse;
+import io.urdego.content_service.api.user.controller.external.response.UserContentResponse;
 
 import lombok.RequiredArgsConstructor;
 

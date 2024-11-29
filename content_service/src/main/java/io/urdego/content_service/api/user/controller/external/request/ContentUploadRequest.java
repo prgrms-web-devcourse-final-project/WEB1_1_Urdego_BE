@@ -1,4 +1,4 @@
-package io.urdego.content_service.api.user.controller.request;
+package io.urdego.content_service.api.user.controller.external.request;
 
 import jakarta.validation.constraints.Size;
 

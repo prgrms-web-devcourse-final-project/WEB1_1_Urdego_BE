@@ -1,4 +1,4 @@
-package io.urdego.content_service.api.user.controller.response;
+package io.urdego.content_service.api.user.controller.external.response;
 
 import io.urdego.content_service.domain.entity.user.constant.ContentInfo;
 
