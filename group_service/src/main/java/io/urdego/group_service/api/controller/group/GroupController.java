@@ -12,12 +12,14 @@ import io.urdego.group_service.api.service.group.GroupService;
 
 import lombok.RequiredArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/group-service/groups")
 @RequiredArgsConstructor
+@Slf4j
 public class GroupController {
 
     private final GroupService groupService;
@@ -25,6 +27,7 @@ public class GroupController {
     // 그룹 생성
     @PostMapping
     public ResponseEntity<GroupRes> createGroup(@RequestBody CreateGroupReq request) {
+        log.info("GroupController.createGroup");
         GroupRes response = groupService.createGroup(request);
         return ResponseEntity.status(CREATED).body(response);
     }
@@ -33,15 +36,8 @@ public class GroupController {
     @PutMapping("/{groupId}")
     public ResponseEntity<GroupRes> updateGroup(
             @PathVariable Long groupId, @RequestBody UpdateGroupReq request) {
-        // 요청 객체에 그룹 ID 설정
-        request =
-                new UpdateGroupReq(
-                        groupId,
-                        request.groupName(),
-                        request.description(),
-                        request.memberLimit(),
-                        request.userId());
-        GroupRes response = groupService.updateGroup(request);
+
+        GroupRes response = groupService.updateGroup(groupId, request);
         return ResponseEntity.status(OK).body(response);
     }
 

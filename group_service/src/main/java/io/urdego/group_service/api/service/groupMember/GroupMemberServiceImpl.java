@@ -3,7 +3,7 @@ package io.urdego.group_service.api.service.groupMember;
 import io.urdego.group_service.api.controller.groupMember.dto.request.AddGroupMemberReq;
 import io.urdego.group_service.api.controller.groupMember.dto.response.GroupMemberListRes;
 import io.urdego.group_service.api.controller.groupMember.dto.response.GroupMemberRes;
-import io.urdego.group_service.api.controller.groupMember.dto.response.ResponseUserInfo;
+import io.urdego.group_service.common.client.response.ResponseUserInfo;
 import io.urdego.group_service.common.client.UserServiceClient;
 import io.urdego.group_service.common.exception.ExceptionMessage;
 import io.urdego.group_service.common.exception.group.GroupException;
