@@ -55,6 +55,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<Long> getIdByNicknameInBatch(List<String> nicknames) {
+        List<User> users = nicknames.stream().map(
+                nickname -> userRepository.findByNickname(nickname).orElseThrow(UserNotFoundException::new)
+        ).toList();
+        return users.stream().map(User::getId).toList();
+    }
+
+    @Override
     public List<UserInfoResponse> findByNickname(final String string) {
         return userRepository.findByString(string).stream().map(UserInfoResponse::from).toList();
     }

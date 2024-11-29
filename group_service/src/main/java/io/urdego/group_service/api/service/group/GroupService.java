@@ -11,7 +11,7 @@ public interface GroupService {
     GroupRes createGroup(CreateGroupReq request);
 
     // 그룹 정보 수정
-    GroupRes updateGroup(UpdateGroupReq request);
+    GroupRes updateGroup(Long groupId, UpdateGroupReq request);
 
     // 그룹 정보 조회
     GroupInfoRes getGroupInfo(Long groupId);
