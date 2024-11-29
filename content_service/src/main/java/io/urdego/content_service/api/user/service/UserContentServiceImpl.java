@@ -1,8 +1,8 @@
 package io.urdego.content_service.api.user.service;
 
-import io.urdego.content_service.api.user.controller.request.ContentUploadRequest;
-import io.urdego.content_service.api.user.controller.response.UserContentListAndCursorIdxResponse;
-import io.urdego.content_service.api.user.controller.response.UserContentResponse;
+import io.urdego.content_service.api.user.controller.external.request.ContentUploadRequest;
+import io.urdego.content_service.api.user.controller.external.response.UserContentListAndCursorIdxResponse;
+import io.urdego.content_service.api.user.controller.external.response.UserContentResponse;
 import io.urdego.content_service.common.exception.ExceptionMessage;
 import io.urdego.content_service.common.exception.aws.AwsException;
 import io.urdego.content_service.common.exception.user.UserContentException;

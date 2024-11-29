@@ -1,6 +1,6 @@
 package io.urdego.content_service.domain.entity.user.repository;
 
-import io.urdego.content_service.api.user.controller.response.UserContentResponse;
+import io.urdego.content_service.api.user.controller.external.response.UserContentResponse;
 
 import java.util.List;
 
