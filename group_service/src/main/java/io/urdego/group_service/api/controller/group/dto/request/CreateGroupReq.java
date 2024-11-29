@@ -8,3 +8,5 @@ public record CreateGroupReq(
         // Integer timer,
         Integer totalRounds // 라운드 수
         ) {}
+
+}
