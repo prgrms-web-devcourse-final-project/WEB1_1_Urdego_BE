@@ -9,6 +9,7 @@ public enum ExceptionMessage {
 
     // UserContent
     USER_CONTENT_NOT_FOUND("존재하지 않는 유저 콘텐츠입니다."),
+    GAME_CONTENT_NOT_ENOUGH("게임을 시작하는데 필요한 컨텐츠가 부족합니다."),
 
     // AWS
     INVALID_FILE_FORMAT("잘못된 형식의 파일입니다."),
