@@ -90,7 +90,7 @@ public class GroupServiceImpl implements GroupService {
     public GroupInfoRes getGroupInfo(Long groupId) {
         Group group = findByGroupIdOrThrowGroupException(groupId);
         List<GroupMember> members = groupMemberRepository.findByGroupId(groupId);
-        return GroupInfoRes.of(group,members);
+        return GroupInfoRes.of(group, members);
     }
 
     // 그룹 리스트 조회

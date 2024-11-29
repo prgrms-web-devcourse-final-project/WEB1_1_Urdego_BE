@@ -43,7 +43,12 @@ public class Group extends BaseEntity {
     private Long userId;
 
     @Builder
-    public Group(String groupName, String description, Integer memberLimit, Integer totalRounds, Long userId) {
+    public Group(
+            String groupName,
+            String description,
+            Integer memberLimit,
+            Integer totalRounds,
+            Long userId) {
         this.groupName = groupName;
         this.description = description;
         this.memberLimit = memberLimit;
