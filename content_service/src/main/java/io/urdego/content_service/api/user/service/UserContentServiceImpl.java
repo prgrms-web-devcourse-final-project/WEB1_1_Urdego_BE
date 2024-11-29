@@ -131,7 +131,7 @@ public class UserContentServiceImpl implements UserContentService {
         // 컨텐츠 조회 (userIds 필터링)
         List<UserContentResponse> allContents = userContentRepository.findRandomContentsByUserIds(userIds);
 
-        // 데이터가 없으면 예외처리
+        // 데이터가 3개미만 예외처리
         if (allContents.size() < 3) {
             throw new UserContentException(ExceptionMessage.GAME_CONTENT_NOT_ENOUGH);
         }
