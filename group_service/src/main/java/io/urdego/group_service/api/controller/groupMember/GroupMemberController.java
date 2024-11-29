@@ -19,6 +19,7 @@ public class GroupMemberController {
     private final GroupMemberService groupMemberService;
 
     // 그룹에 멤버 추가
+    //@TODO 웹 소켓이 필요함
     @PostMapping
     public ResponseEntity<Void> addMember(
             @PathVariable Long groupId, @RequestBody AddGroupMemberReq request) {

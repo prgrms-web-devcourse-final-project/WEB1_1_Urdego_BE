@@ -20,4 +20,6 @@ public class NotificationController {
 		notificationPublisher.publishToUser(requestInfo.targetIds(), requestInfo.senderId(), requestInfo.groupId());
 		return "Notifications sent to " + requestInfo.targetIds().size() + " users.";
 	}
+
+	//그룹 웹 소켓에 연결하기
 }
