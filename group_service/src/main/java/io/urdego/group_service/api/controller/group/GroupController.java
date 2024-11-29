@@ -71,4 +71,7 @@ public class GroupController {
         groupService.activateGroup(groupId);
         return ResponseEntity.status(OK).build();
     }
+
+    //그룹 웹 소켓 open
+    
 }
