@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 import io.urdego.group_service.api.controller.group.dto.request.CreateGroupReq;
 import io.urdego.group_service.api.controller.group.dto.request.UpdateGroupReq;
+import io.urdego.group_service.api.controller.group.dto.response.GroupInfoRes;
 import io.urdego.group_service.api.controller.group.dto.response.GroupListRes;
 import io.urdego.group_service.api.controller.group.dto.response.GroupRes;
 import io.urdego.group_service.api.service.group.GroupService;
@@ -44,10 +45,10 @@ public class GroupController {
         return ResponseEntity.status(OK).body(response);
     }
 
-    // 그룹 정보 조회
+    // 그룹 정보 조회 feign 연결 api 
     @GetMapping("/{groupId}")
-    public ResponseEntity<GroupRes> getGroupInfo(@PathVariable Long groupId) {
-        GroupRes response = groupService.getGroupInfo(groupId);
+    public ResponseEntity<GroupInfoRes> getGroupInfo(@PathVariable Long groupId) {
+        GroupInfoRes response = groupService.getGroupInfo(groupId);
         return ResponseEntity.status(OK).body(response);
     }
 
