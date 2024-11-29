@@ -131,9 +131,9 @@ public class UserContentServiceImpl implements UserContentService {
         // 컨텐츠 조회 (userIds 필터링)
         List<UserContentResponse> allContents = userContentRepository.findRandomContentsByUserIds(userIds);
 
-        // 데이터가 없으면 빈 리스트 반환
-        if (allContents.isEmpty()) {
-            return Collections.emptyList();
+        // 데이터가 없으면 예외처리
+        if (allContents.size() < 3) {
+            throw new UserContentException(ExceptionMessage.GAME_CONTENT_NOT_ENOUGH);
         }
 
         // 위/경도를 기준으로 그룹화
