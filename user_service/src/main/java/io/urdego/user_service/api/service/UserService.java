@@ -40,4 +40,7 @@ public interface UserService {
     UserInfo findUserByEmail(String email);
 
     UserResponse findUserById(Long userId);
+
+    // Feign userId 검증
+    List<Long> validateUserIds(List<Long> userIds);
 }
