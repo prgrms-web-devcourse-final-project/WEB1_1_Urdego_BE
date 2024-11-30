@@ -30,7 +30,7 @@ public class SseServiceImpl implements SseService {
 		container.addMessageListener(new MessageListener() {
 			@Override
 			public void onMessage(Message message, byte[] pattern) {
-				String channel = new String(pattern);
+				String channel = new String(message.getChannel());
 				String msgStr = new String(message.getBody());
 
 				log.debug("Received message on channel {}: {}", channel, msgStr);
