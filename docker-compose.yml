@@ -14,7 +14,10 @@ services:
     image: geonoo/gateway-service:latest
     container_name: gateway-service
     ports:
-      - "8000:8000"
+      - "443:443"
+    volumes:
+      - /etc/letsencrypt/live/urdego.com:/etc/letsencrypt/live/urdego.com:ro
+      - /etc/letsencrypt/archive/urdego.com:/etc/letsencrypt/archive/urdego.com:ro
     restart: always
 
   # User Service
@@ -41,6 +44,12 @@ services:
       - "8083:8083"
     restart: always
 
-#  # Game Service
+  # Game Service
+  game_service:
+    image: geonoo/game-service:latest
+    container_name: game-service
+    ports:
+      - "8084:8084"
+    restart: always
 
 #  # Notification Service
