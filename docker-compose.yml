@@ -16,9 +16,14 @@ services:
     ports:
       - "443:443"
     volumes:
-      - /etc/letsencrypt/live/urdego.com:/etc/letsencrypt/live/urdego.com:ro
-      - /etc/letsencrypt/archive/urdego.com:/etc/letsencrypt/archive/urdego.com:ro
-    restart: always
+      - type: bind
+        source: /etc/letsencrypt/live/urdego.com
+        target: /etc/letsencrypt/live/urdego.com
+        read_only: true
+      - type: bind
+        source: /etc/letsencrypt/archive/urdego.com
+        target: /etc/letsencrypt/archive/urdego.com
+        read_only: true
 
   # User Service
   user_service:
