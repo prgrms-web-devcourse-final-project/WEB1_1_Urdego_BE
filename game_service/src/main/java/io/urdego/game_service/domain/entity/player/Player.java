@@ -27,4 +27,7 @@ public class Player {
 
     @Column(nullable = false)
     private Long gameId;
+
+    public void updateTotalScore(int updatedScore) {
+    }
 }
