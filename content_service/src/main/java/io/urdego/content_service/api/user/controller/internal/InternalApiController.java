@@ -6,10 +6,7 @@ import io.urdego.content_service.api.user.service.UserContentService;
 import io.urdego.content_service.common.client.UserServiceClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,6 +28,14 @@ public class InternalApiController {
 
         List<UserContentResponse> response = userContentService.getContents(userIdList);
 
+        return ResponseEntity.ok().body(response);
+    }
+
+    // 개별 컨텐츠 정보 조회
+    @GetMapping(value = "/game/{contentId}")
+    public ResponseEntity<UserContentResponse> getContent(@PathVariable Long contentId) {
+
+        UserContentResponse response = userContentService.getContent(contentId);
         return ResponseEntity.ok().body(response);
     }
 }
