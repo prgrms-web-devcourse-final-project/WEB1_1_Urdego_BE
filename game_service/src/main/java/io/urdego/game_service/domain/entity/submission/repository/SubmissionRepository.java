@@ -8,6 +8,4 @@ import java.util.List;
 
 @Repository
 public interface SubmissionRepository extends JpaRepository<Submission, Long> {
-    List<Submission> findByRoundId(Long roundId);
-    List<Submission> findByPlayerId(Long playerId);
 }
