@@ -2,11 +2,14 @@ package io.urdego.group_service.api.service.group;
 
 import io.urdego.group_service.api.controller.group.dto.request.CreateGroupReq;
 import io.urdego.group_service.api.controller.group.dto.request.UpdateGroupReq;
+import io.urdego.group_service.api.controller.group.dto.response.GroupCreateRes;
 import io.urdego.group_service.api.controller.group.dto.response.GroupInfoRes;
 import io.urdego.group_service.api.controller.group.dto.response.GroupListRes;
 import io.urdego.group_service.api.controller.group.dto.response.GroupRes;
+import io.urdego.group_service.common.client.GameServiceClient;
 import io.urdego.group_service.common.client.NotificationServiceClient;
 import io.urdego.group_service.common.client.UserServiceClient;
+import io.urdego.group_service.common.client.request.GroupInfoReq;
 import io.urdego.group_service.common.client.request.NotificationRequestInfo;
 import io.urdego.group_service.common.client.request.UserNicknameRequest;
 import io.urdego.group_service.common.exception.ExceptionMessage;
@@ -36,13 +39,15 @@ public class GroupServiceImpl implements GroupService {
     private final GroupMemberRepository groupMemberRepository;
     private final UserServiceClient userServiceClient;
     private final NotificationServiceClient notificationServiceClient;
+    private final GameServiceClient gameServiceClient;
 
     // 그룹 생성
     @Override
-    public GroupRes createGroup(CreateGroupReq request) {
+    public GroupCreateRes createGroup(CreateGroupReq request) {
 
         Long roomManagerId = request.userId();
 
+        //그룹 생성
         Group group = groupRepository.save(
                 Group.builder()
                 .groupName(request.groupName())
@@ -59,17 +64,24 @@ public class GroupServiceImpl implements GroupService {
                 )
         ).userIds();
 
-        // 초대된 유저들의 id로 초대 알림 발송 _groupId 포함
+        // 초대된 유저들의 id로 초대 알림 발송
         String sendLog = notificationServiceClient.sendNotification(
                 NotificationRequestInfo.of(
                         group.getGroupId(),
                         roomManagerId,
                         ids));
 
-//        GameInfo info = request.gameInfo();
-//        gameService.createGame(info);
+        // 게임 서비스에 게임 생성 요청 _게임 서비스의 게임생성 API 미구현
+        Long gameId = 0L;
+//        Long gameId = gameServiceClient.createGame(
+//                GroupInfoReq.builder().
+//                        groupId(group.getGroupId()).
+//                        totalRounds(request.totalRounds()).
+//                        timer(group.getTimer()).
+//                        playerCounts(request.memberLimit()).
+//                        invitedUsers(ids).build());
 
-        return GroupRes.from(group);
+        return GroupCreateRes.of(group.getGroupId(), gameId);
     }
 
     // 그룹 정보 수정
