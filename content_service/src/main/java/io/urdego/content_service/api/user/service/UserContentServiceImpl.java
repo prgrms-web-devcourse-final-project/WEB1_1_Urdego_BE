@@ -1,6 +1,8 @@
 package io.urdego.content_service.api.user.service;
 
 import io.urdego.content_service.api.user.controller.request.ContentUploadRequest;
+import io.urdego.content_service.api.user.controller.response.UserContentListAndCursorIdxResponse;
+import io.urdego.content_service.api.user.controller.response.UserContentResponse;
 import io.urdego.content_service.common.exception.ExceptionMessage;
 import io.urdego.content_service.common.exception.aws.AwsException;
 import io.urdego.content_service.common.exception.user.UserContentException;
@@ -17,6 +19,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Collections;
+import java.util.List;
+
 @Slf4j
 @Service
 @Transactional
@@ -25,6 +30,7 @@ public class UserContentServiceImpl implements UserContentService {
 
     private final S3Service s3Service;
     private final UserContentRepository userContentRepository;
+    private static final Long MAX_LIMIT = 10L;
 
     // 단일 컨텐츠 등록
     @Override
@@ -38,6 +44,7 @@ public class UserContentServiceImpl implements UserContentService {
                 UserContent.builder()
                         .userId(request.getUserId())
                         .contentName(request.getContentName())
+                        .address(request.getAddress())
                         .url(url)
                         .contentInfo(contentInfo)
                         .latitude(request.getLatitude())
@@ -63,6 +70,7 @@ public class UserContentServiceImpl implements UserContentService {
                             .url(url)
                             .contentInfo(contentInfo)
                             .contentName(request.getContentName())
+                            .address(request.getAddress())
                             .latitude(request.getLatitude())
                             .longitude(request.getLongitude())
                             .hint(request.getHint())
@@ -91,6 +99,34 @@ public class UserContentServiceImpl implements UserContentService {
         }
     }
 
+    // 유저 컨텐츠 조회
+    @Override
+    public UserContentListAndCursorIdxResponse getUserContents(
+            Long userId, Long cursorIdx, Long limit) {
+
+        limit = Math.min(limit, MAX_LIMIT);
+
+        List<UserContentResponse> userContents = userContentRepository.findUserContentsByUserId_CursorPaging(userId, cursorIdx, limit);
+
+        // 컨텐츠가 비어있을경우 빈 배열 반환
+        if (userContents.isEmpty()) {
+
+            return UserContentListAndCursorIdxResponse.builder()
+                    .userContents(Collections.emptyList())
+                    .userId(userId)
+                    .build();
+        }
+
+        UserContentListAndCursorIdxResponse response =
+                UserContentListAndCursorIdxResponse.builder()
+                        .userContents(userContents)
+                        .userId(userId)
+                        .build();
+        response.setNextCursorIdx();
+
+        return response;
+    }
+
     // 단일 파일 업로드 처리
     private String uploadFile(Long userId, MultipartFile file) {
         return s3Service.uploadSingleContent(userId, file);
@@ -104,14 +140,9 @@ public class UserContentServiceImpl implements UserContentService {
     // 컨텐츠 조회
     private UserContent findUserContentByIdOrException(Long contentId) {
         return userContentRepository
-                .findById(contentId)
-                .orElseThrow(
-                        () -> {
-                            log.warn(
-                                    ">>>> {} : {} <<<<",
-                                    contentId,
-                                    ExceptionMessage.USER_CONTENT_NOT_FOUND);
-                            throw new UserContentException(ExceptionMessage.USER_CONTENT_NOT_FOUND);
-                        });
+                .findById(contentId).orElseThrow(() -> {
+                    log.warn(">>>> {} : {} <<<<", contentId, ExceptionMessage.USER_CONTENT_NOT_FOUND);
+                    throw new UserContentException(ExceptionMessage.USER_CONTENT_NOT_FOUND);
+                });
     }
 }

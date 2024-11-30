@@ -16,7 +16,6 @@ build/
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
-/src/main/generated/
 
 ### IntelliJ IDEA ###
 .idea
@@ -36,9 +35,3 @@ out/
 
 ### VS Code ###
 .vscode/
-
-### dockerfile
-Dockerfile-dev
-
-### yml
-*.yml
