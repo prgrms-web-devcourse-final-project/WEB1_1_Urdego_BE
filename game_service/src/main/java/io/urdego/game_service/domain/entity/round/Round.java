@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -26,13 +28,14 @@ public class Round {
     @Column(nullable = false)
     private Long gameId;
 
-    @Column(nullable = false)
-    private Long contentId;
+    @ElementCollection
+    @CollectionTable(name = "round_contents", joinColumns = @JoinColumn(name = "round_id"))
+    private List<Long> contentIds;
 
     @Builder
-    public Round(int roundNum, Long gameId, Long contentId) {
+    public Round(int roundNum, Long gameId, List<Long> contentIds) {
         this.roundNum = roundNum;
         this.gameId = gameId;
-        this.contentId = contentId;
+        this.contentIds = contentIds;
     }
 }
