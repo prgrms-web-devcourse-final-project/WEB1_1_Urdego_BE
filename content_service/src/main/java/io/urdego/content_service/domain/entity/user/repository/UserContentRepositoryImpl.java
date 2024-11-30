@@ -1,18 +1,15 @@
 package io.urdego.content_service.domain.entity.user.repository;
 
-import static io.urdego.content_service.domain.entity.user.QUserContent.userContent;
-
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-
 import io.urdego.content_service.api.user.controller.response.UserContentResponse;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+
+import static io.urdego.content_service.domain.entity.user.QUserContent.userContent;
 
 @Component
 @RequiredArgsConstructor
@@ -33,6 +30,7 @@ public class UserContentRepositoryImpl implements UserContentRepositoryCustom {
                                         userContent.id,
                                         userContent.url,
                                         userContent.contentName,
+                                        userContent.address,
                                         userContent.latitude,
                                         userContent.longitude,
                                         userContent.hint,
