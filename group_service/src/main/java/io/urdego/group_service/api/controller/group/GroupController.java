@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 import io.urdego.group_service.api.controller.group.dto.request.CreateGroupReq;
 import io.urdego.group_service.api.controller.group.dto.request.UpdateGroupReq;
+import io.urdego.group_service.api.controller.group.dto.response.GroupCreateRes;
 import io.urdego.group_service.api.controller.group.dto.response.GroupInfoRes;
 import io.urdego.group_service.api.controller.group.dto.response.GroupListRes;
 import io.urdego.group_service.api.controller.group.dto.response.GroupRes;
@@ -26,9 +27,9 @@ public class GroupController {
 
     // 그룹 생성
     @PostMapping
-    public ResponseEntity<GroupRes> createGroup(@RequestBody CreateGroupReq request) {
+    public ResponseEntity<GroupCreateRes> createGroup(@RequestBody CreateGroupReq request) {
         log.info("GroupController.createGroup");
-        GroupRes response = groupService.createGroup(request);
+        GroupCreateRes response = groupService.createGroup(request);
         return ResponseEntity.status(CREATED).body(response);
     }
 
