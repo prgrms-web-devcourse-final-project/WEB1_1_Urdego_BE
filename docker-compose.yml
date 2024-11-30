@@ -16,7 +16,7 @@ services:
     ports:
       - "443:443"
     volumes:
-      - /path/to/keystore.p12:/path/to/keystore.p12:ro
+      - /etc/letsencrypt/keystore.p12:/etc/letsencrypt/keystore.p12:ro
 
   # User Service
   user_service:
