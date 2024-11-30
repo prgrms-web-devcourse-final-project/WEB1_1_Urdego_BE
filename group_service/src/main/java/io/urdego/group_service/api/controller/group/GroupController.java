@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 import io.urdego.group_service.api.controller.group.dto.request.CreateGroupReq;
 import io.urdego.group_service.api.controller.group.dto.request.UpdateGroupReq;
+import io.urdego.group_service.api.controller.group.dto.response.GroupCreateRes;
 import io.urdego.group_service.api.controller.group.dto.response.GroupInfoRes;
 import io.urdego.group_service.api.controller.group.dto.response.GroupListRes;
 import io.urdego.group_service.api.controller.group.dto.response.GroupRes;
@@ -12,20 +13,23 @@ import io.urdego.group_service.api.service.group.GroupService;
 
 import lombok.RequiredArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/group-service/groups")
 @RequiredArgsConstructor
+@Slf4j
 public class GroupController {
 
     private final GroupService groupService;
 
     // 그룹 생성
     @PostMapping
-    public ResponseEntity<GroupRes> createGroup(@RequestBody CreateGroupReq request) {
-        GroupRes response = groupService.createGroup(request);
+    public ResponseEntity<GroupCreateRes> createGroup(@RequestBody CreateGroupReq request) {
+        log.info("GroupController.createGroup");
+        GroupCreateRes response = groupService.createGroup(request);
         return ResponseEntity.status(CREATED).body(response);
     }
 
@@ -33,15 +37,8 @@ public class GroupController {
     @PutMapping("/{groupId}")
     public ResponseEntity<GroupRes> updateGroup(
             @PathVariable Long groupId, @RequestBody UpdateGroupReq request) {
-        // 요청 객체에 그룹 ID 설정
-        request =
-                new UpdateGroupReq(
-                        groupId,
-                        request.groupName(),
-                        request.description(),
-                        request.memberLimit(),
-                        request.userId());
-        GroupRes response = groupService.updateGroup(request);
+
+        GroupRes response = groupService.updateGroup(groupId, request);
         return ResponseEntity.status(OK).body(response);
     }
 

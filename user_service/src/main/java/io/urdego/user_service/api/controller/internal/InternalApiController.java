@@ -1,6 +1,8 @@
 package io.urdego.user_service.api.controller.internal;
 
+import io.urdego.user_service.api.controller.internal.response.UserIdListResponse;
 import io.urdego.user_service.api.controller.internal.response.UserInfo;
+import io.urdego.user_service.api.controller.internal.response.UserNicknameRequest;
 import io.urdego.user_service.api.controller.internal.response.UserResponse;
 import io.urdego.user_service.api.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -32,5 +34,11 @@ public class InternalApiController {
     public ResponseEntity<List<Long>> validateUserIds(@RequestParam(name = "userIds") List<Long> userIds) {
         List<Long> userIdList = userService.validateUserIds(userIds);
         return ResponseEntity.ok().body(userIdList);
+    }
+
+    @PostMapping("/users/ids")
+    public ResponseEntity<UserIdListResponse> mapNicknameToIdInBatch(@RequestBody UserNicknameRequest request) {
+        List<Long> ids = userService.getIdByNicknameInBatch(request.nicknames());
+        return ResponseEntity.ok(UserIdListResponse.of(ids));
     }
 }
