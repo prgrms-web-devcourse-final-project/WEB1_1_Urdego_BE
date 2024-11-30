@@ -32,6 +32,7 @@ public class UserContentController {
     public ResponseEntity<Void> uploadContent(@RequestParam("file") MultipartFile file,
                                               @RequestParam("userId") Long userId,
                                               @RequestParam("contentName") String contentName,
+                                              @RequestParam("address") String address,
                                               @RequestParam("latitude") Double latitude,
                                               @RequestParam("longitude") Double longitude,
                                               @RequestParam("hint") String hint) {
@@ -43,6 +44,7 @@ public class UserContentController {
                 ContentUploadRequest.builder()
                         .userId(userResponse.getUserId())
                         .contentName(contentName)
+                        .address(address)
                         .latitude(latitude)
                         .longitude(longitude)
                         .hint(hint)
@@ -58,6 +60,7 @@ public class UserContentController {
     public ResponseEntity<Void> uploadMultipleContents(@RequestParam("files") MultipartFile[] files,
                                                        @RequestParam("userId") Long userId,
                                                        @RequestParam("contentName") String contentName,
+                                                       @RequestParam("address") String address,
                                                        @RequestParam("latitude") Double latitude,
                                                        @RequestParam("longitude") Double longitude,
                                                        @RequestParam("hint") String hint) {
@@ -70,6 +73,7 @@ public class UserContentController {
                 ContentUploadRequest.builder()
                         .userId(userResponse.getUserId())
                         .contentName(contentName)
+                        .address(address)
                         .latitude(latitude)
                         .longitude(longitude)
                         .hint(hint)
