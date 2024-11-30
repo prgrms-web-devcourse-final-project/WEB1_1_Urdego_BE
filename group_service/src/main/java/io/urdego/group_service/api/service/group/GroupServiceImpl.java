@@ -7,6 +7,7 @@ import io.urdego.group_service.api.controller.group.dto.response.GroupListRes;
 import io.urdego.group_service.api.controller.group.dto.response.GroupRes;
 import io.urdego.group_service.common.client.NotificationServiceClient;
 import io.urdego.group_service.common.client.UserServiceClient;
+import io.urdego.group_service.common.client.request.NotificationRequestInfo;
 import io.urdego.group_service.common.client.request.UserNicknameRequest;
 import io.urdego.group_service.common.exception.ExceptionMessage;
 import io.urdego.group_service.common.exception.group.GroupException;
@@ -39,29 +40,17 @@ public class GroupServiceImpl implements GroupService {
     // 그룹 생성
     @Override
     public GroupRes createGroup(CreateGroupReq request) {
-        log.info("GroupServiceImpl.createGroup");
+
+        Long roomManagerId = request.userId();
 
         Group group = groupRepository.save(
                 Group.builder()
                 .groupName(request.groupName())
                 .description(request.description())
                 .memberLimit(request.memberLimit())
-                .userId(request.userId())
+                .userId(roomManagerId)
                 .totalRounds(request.totalRounds())
                 .build());
-
-        log.info("GroupServiceImpl.createGroup 53");
-
-        // 그룹생성자인 유저로 그룹 멤버 생성 후 저장
-        // 생성자에게 MANAGER 권한 부여
-        groupMemberRepository.save(
-                GroupMember.builder()
-                .groupId(group.getGroupId())
-                .userId(group.getUserId())
-                .memberRole(GroupMemberRole.MANAGER)
-                .build());
-
-        log.info("GroupServiceImpl.createGroup 64");
 
         //초대된 유저들의 닉네임을 id로 매핑
         List<Long> ids = userServiceClient.mapNicknameToIdInBatch(
@@ -69,13 +58,16 @@ public class GroupServiceImpl implements GroupService {
                         request.invitedUserNicknames()
                 )
         ).userIds();
-        log.info("user service - mapNicknameToIdInBatch - success");
-        for (Long id : ids) {
-            System.out.println("id :" + id);
-        }
 
         // 초대된 유저들의 id로 초대 알림 발송 _groupId 포함
-//        notificationServiceClient.inviteUsersToGroup(ids, group.getGroupId());
+        String sendLog = notificationServiceClient.sendNotification(
+                NotificationRequestInfo.of(
+                        group.getGroupId(),
+                        roomManagerId,
+                        ids));
+
+//        GameInfo info = request.gameInfo();
+//        gameService.createGame(info);
 
         return GroupRes.from(group);
     }
