@@ -2,6 +2,7 @@ package io.urdego.group_service.api.service.group;
 
 import io.urdego.group_service.api.controller.group.dto.request.CreateGroupReq;
 import io.urdego.group_service.api.controller.group.dto.request.UpdateGroupReq;
+import io.urdego.group_service.api.controller.group.dto.response.GroupInfoRes;
 import io.urdego.group_service.api.controller.group.dto.response.GroupListRes;
 import io.urdego.group_service.api.controller.group.dto.response.GroupRes;
 import io.urdego.group_service.common.exception.ExceptionMessage;
@@ -39,6 +40,7 @@ public class GroupServiceImpl implements GroupService {
                         .description(request.description())
                         .memberLimit(request.memberLimit())
                         .userId(request.userId())
+                        .totalRounds(request.totalRounds())
                         .build();
 
         group = groupRepository.save(group);
@@ -85,10 +87,10 @@ public class GroupServiceImpl implements GroupService {
     // 그룹 정보 조회
     @Override
     @Transactional(readOnly = true)
-    public GroupRes getGroupInfo(Long groupId) {
+    public GroupInfoRes getGroupInfo(Long groupId) {
         Group group = findByGroupIdOrThrowGroupException(groupId);
-
-        return GroupRes.from(group);
+        List<GroupMember> members = groupMemberRepository.findByGroupId(groupId);
+        return GroupInfoRes.of(group, members);
     }
 
     // 그룹 리스트 조회

@@ -7,6 +7,7 @@ public record GroupRes(
         String groupName,
         String description,
         Integer memberLimit,
+        Integer totalRounds,
         boolean isDeleted,
         Long userId) {
     public static GroupRes from(Group group) {
@@ -15,6 +16,7 @@ public record GroupRes(
                 group.getGroupName(),
                 group.getDescription(),
                 group.getMemberLimit(),
+                group.getTotalRounds(),
                 group.isDeleted(),
                 group.getUserId());
     }

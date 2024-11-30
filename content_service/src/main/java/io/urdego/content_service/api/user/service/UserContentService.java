@@ -1,6 +1,7 @@
 package io.urdego.content_service.api.user.service;
 
 import io.urdego.content_service.api.user.controller.request.ContentUploadRequest;
+import io.urdego.content_service.api.user.controller.response.UserContentListAndCursorIdxResponse;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,4 +15,7 @@ public interface UserContentService {
 
     // 컨텐츠 삭제
     void deleteContent(Long contentId);
+
+    // 컨텐츠 조회
+    UserContentListAndCursorIdxResponse getUserContents(Long userId, Long cursorIdx, Long limit);
 }
