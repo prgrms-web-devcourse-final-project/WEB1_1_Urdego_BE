@@ -175,6 +175,16 @@ public class UserContentServiceImpl implements UserContentService {
                 .collect(Collectors.toList());
     }
 
+    // 컨텐츠 단일 조회
+    @Override
+    public UserContentResponse getContent(Long contentId) {
+
+        // 컨텐츠 조회
+        UserContent userContent = findUserContentByIdOrException(contentId);
+
+        return UserContentResponse.of(userContent);
+    }
+
     // 단일 파일 업로드 처리
     private String uploadFile(Long userId, MultipartFile file) {
         return s3Service.uploadSingleContent(userId, file);
