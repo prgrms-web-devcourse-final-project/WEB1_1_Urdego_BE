@@ -27,10 +27,14 @@ public class UserContent extends BaseEntity {
     @Column(name = "url", nullable = false)
     private String url;
 
-    @Embedded private ContentInfo contentInfo;
+    @Embedded
+    private ContentInfo contentInfo;
 
     @Column(name = "content_name", nullable = false)
     private String contentName;
+
+    @Column(name = "address")
+    private String address;  // 도로명 주소
 
     @Column(name = "latitude") // 유저가 핀꽂은 위치
     private Double latitude;
@@ -42,18 +46,12 @@ public class UserContent extends BaseEntity {
     private String hint;
 
     @Builder
-    public UserContent(
-            Long userId,
-            String url,
-            ContentInfo contentInfo,
-            String contentName,
-            Double latitude,
-            Double longitude,
-            String hint) {
+    public UserContent(Long userId, String url, ContentInfo contentInfo, String contentName, String address, Double latitude, Double longitude, String hint) {
         this.userId = userId;
         this.url = url;
         this.contentInfo = contentInfo;
         this.contentName = contentName;
+        this.address = address;
         this.latitude = latitude;
         this.longitude = longitude;
         this.hint = hint;
