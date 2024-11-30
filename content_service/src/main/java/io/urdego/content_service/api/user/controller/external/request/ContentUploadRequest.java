@@ -17,6 +17,8 @@ public class ContentUploadRequest {
 
     private String contentName;
 
+    private String address;
+
     private Double latitude;
 
     private Double longitude;
