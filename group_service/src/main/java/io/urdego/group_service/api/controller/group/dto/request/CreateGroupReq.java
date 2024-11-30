@@ -9,4 +9,4 @@ public record CreateGroupReq(
         Integer totalRounds // 라운드 수
         ) {}
 
-}
+
