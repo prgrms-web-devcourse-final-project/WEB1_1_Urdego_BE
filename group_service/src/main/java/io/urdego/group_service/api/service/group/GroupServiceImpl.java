@@ -12,6 +12,7 @@ import io.urdego.group_service.common.client.UserServiceClient;
 import io.urdego.group_service.common.client.request.GroupInfoReq;
 import io.urdego.group_service.common.client.request.NotificationRequestInfo;
 import io.urdego.group_service.common.client.request.UserNicknameRequest;
+import io.urdego.group_service.common.client.response.ResponseUserInfo;
 import io.urdego.group_service.common.exception.ExceptionMessage;
 import io.urdego.group_service.common.exception.group.GroupException;
 import io.urdego.group_service.common.exception.groupMember.GroupMemberException;
@@ -64,12 +65,19 @@ public class GroupServiceImpl implements GroupService {
                 )
         ).userIds();
 
+        //방장 id를 닉네임으로 매핑
+        ResponseUserInfo roomManagerInfo = userServiceClient.getUserById(roomManagerId);
+
         // 초대된 유저들의 id로 초대 알림 발송
         String sendLog = notificationServiceClient.sendNotification(
                 NotificationRequestInfo.of(
                         group.getGroupId(),
-                        roomManagerId,
-                        ids));
+                        group.getGroupName(),
+                        roomManagerId,  //sender 닉네임
+                        roomManagerInfo.nickname(),
+                        ids,
+                        request.invitedUserNicknames()));  //초대된사람들 닉네임
+
 
         // 게임 서비스에 게임 생성 요청 _게임 서비스의 게임생성 API 미구현
         Long gameId = 0L;
