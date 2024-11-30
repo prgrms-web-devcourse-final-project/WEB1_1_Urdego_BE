@@ -41,6 +41,7 @@ public class UserContentServiceImpl implements UserContentService {
                 UserContent.builder()
                         .userId(request.getUserId())
                         .contentName(request.getContentName())
+                        .address(request.getAddress())
                         .url(url)
                         .contentInfo(contentInfo)
                         .latitude(request.getLatitude())
@@ -66,6 +67,7 @@ public class UserContentServiceImpl implements UserContentService {
                             .url(url)
                             .contentInfo(contentInfo)
                             .contentName(request.getContentName())
+                            .address(request.getAddress())
                             .latitude(request.getLatitude())
                             .longitude(request.getLongitude())
                             .hint(request.getHint())
@@ -101,9 +103,7 @@ public class UserContentServiceImpl implements UserContentService {
 
         limit = Math.min(limit, MAX_LIMIT);
 
-        List<UserContentResponse> userContents =
-                userContentRepository.findUserContentsByUserId_CursorPaging(
-                        userId, cursorIdx, limit);
+        List<UserContentResponse> userContents = userContentRepository.findUserContentsByUserId_CursorPaging(userId, cursorIdx, limit);
 
         // 컨텐츠가 비어있을경우 빈 배열 반환
         if (userContents.isEmpty()) {
@@ -188,14 +188,9 @@ public class UserContentServiceImpl implements UserContentService {
     // 컨텐츠 조회
     private UserContent findUserContentByIdOrException(Long contentId) {
         return userContentRepository
-                .findById(contentId)
-                .orElseThrow(
-                        () -> {
-                            log.warn(
-                                    ">>>> {} : {} <<<<",
-                                    contentId,
-                                    ExceptionMessage.USER_CONTENT_NOT_FOUND);
-                            throw new UserContentException(ExceptionMessage.USER_CONTENT_NOT_FOUND);
-                        });
+                .findById(contentId).orElseThrow(() -> {
+                    log.warn(">>>> {} : {} <<<<", contentId, ExceptionMessage.USER_CONTENT_NOT_FOUND);
+                    throw new UserContentException(ExceptionMessage.USER_CONTENT_NOT_FOUND);
+                });
     }
 }

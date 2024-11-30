@@ -19,6 +19,8 @@ public class UserContentResponse {
 
     private String contentName;
 
+    private String address;
+
     private Double latitude;
 
     private Double longitude;

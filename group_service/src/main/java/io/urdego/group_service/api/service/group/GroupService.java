@@ -2,6 +2,7 @@ package io.urdego.group_service.api.service.group;
 
 import io.urdego.group_service.api.controller.group.dto.request.CreateGroupReq;
 import io.urdego.group_service.api.controller.group.dto.request.UpdateGroupReq;
+import io.urdego.group_service.api.controller.group.dto.response.GroupInfoRes;
 import io.urdego.group_service.api.controller.group.dto.response.GroupListRes;
 import io.urdego.group_service.api.controller.group.dto.response.GroupRes;
 
@@ -13,7 +14,7 @@ public interface GroupService {
     GroupRes updateGroup(UpdateGroupReq request);
 
     // 그룹 정보 조회
-    GroupRes getGroupInfo(Long groupId);
+    GroupInfoRes getGroupInfo(Long groupId);
 
     // 그룹 리스트 조회
     GroupListRes getAllGroups();

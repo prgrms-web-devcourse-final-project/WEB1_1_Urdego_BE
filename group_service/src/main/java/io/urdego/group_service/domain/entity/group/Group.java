@@ -29,6 +29,11 @@ public class Group extends BaseEntity {
     @Column(name = "member_limit", nullable = false)
     private Integer memberLimit;
 
+    @Column(name = "total_rounds", nullable = false)
+    private Integer totalRounds;
+
+    private Integer timer; // 60초 고정
+
     // 그룹 상태 처리 (for soft delete)
     @Column(nullable = false)
     private boolean isDeleted = false;
@@ -38,12 +43,19 @@ public class Group extends BaseEntity {
     private Long userId;
 
     @Builder
-    public Group(String groupName, String description, Integer memberLimit, Long userId) {
+    public Group(
+            String groupName,
+            String description,
+            Integer memberLimit,
+            Integer totalRounds,
+            Long userId) {
         this.groupName = groupName;
         this.description = description;
         this.memberLimit = memberLimit;
         this.isDeleted = false;
+        this.totalRounds = totalRounds;
         this.userId = userId;
+        this.timer = 60; // 60초 고정
     }
 
     // 그룹 정보 수정 메서드
