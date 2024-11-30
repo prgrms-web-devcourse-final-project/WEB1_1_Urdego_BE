@@ -23,4 +23,7 @@ public interface UserContentService {
 
     // 게임 컨텐츠 조회
     List<UserContentResponse> getContents(List<Long> userIds);
+
+    // 컨텐츠 단일 조회
+    UserContentResponse getContent(Long contentId);
 }
