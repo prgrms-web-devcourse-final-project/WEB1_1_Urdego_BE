@@ -17,9 +17,7 @@ public class NotificationController {
 	//알림 발행 및 보내기
 	@PostMapping("/send")
 	public String senNotification(@RequestBody NotificationRequestInfo requestInfo) {
-		notificationPublisher.publishToUser(requestInfo.targetIds(), requestInfo.senderId(), requestInfo.groupId());
+		notificationPublisher.publishToUser(requestInfo);
 		return "Notifications sent to " + requestInfo.targetIds().size() + " users.";
 	}
-
-	//그룹 웹 소켓에 연결하기
 }
