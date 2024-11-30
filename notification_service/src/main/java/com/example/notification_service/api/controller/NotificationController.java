@@ -21,5 +21,5 @@ public class NotificationController {
 		return "Notifications sent to " + requestInfo.targetIds().size() + " users.";
 	}
 
-	//그룹 웹 소켓에 연결하기
+	//그룹 웹 소켓에 연결하기 return userId
 }
