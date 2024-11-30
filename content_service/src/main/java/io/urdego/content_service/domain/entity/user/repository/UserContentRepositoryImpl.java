@@ -3,7 +3,7 @@ package io.urdego.content_service.domain.entity.user.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import io.urdego.content_service.api.user.controller.response.UserContentResponse;
+import io.urdego.content_service.api.user.controller.external.response.UserContentResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -22,19 +22,16 @@ public class UserContentRepositoryImpl implements UserContentRepositoryCustom {
             Long userId, Long cursorIdx, Long limit) {
 
         JPAQuery<UserContentResponse> query =
-                queryFactory
-                        .select(
-                                Projections.constructor(
-                                        UserContentResponse.class,
-                                        userContent.userId,
-                                        userContent.id,
-                                        userContent.url,
-                                        userContent.contentName,
-                                        userContent.address,
-                                        userContent.latitude,
-                                        userContent.longitude,
-                                        userContent.hint,
-                                        userContent.contentInfo))
+                queryFactory.select(Projections.constructor(UserContentResponse.class,
+                                userContent.userId,
+                                userContent.id,
+                                userContent.url,
+                                userContent.contentName,
+                                userContent.address,
+                                userContent.latitude,
+                                userContent.longitude,
+                                userContent.hint,
+                                userContent.contentInfo))
                         .from(userContent)
                         .where(userContent.userId.eq(userId))
                         .orderBy(userContent.id.asc());
@@ -44,5 +41,24 @@ public class UserContentRepositoryImpl implements UserContentRepositoryCustom {
         }
 
         return query.limit(limit).fetch();
+    }
+
+
+    @Override
+    public List<UserContentResponse> findRandomContentsByUserIds(List<Long> userIds) {
+        return queryFactory
+                .select(Projections.constructor(UserContentResponse.class,
+                        userContent.userId,
+                        userContent.id,
+                        userContent.url,
+                        userContent.contentName,
+                        userContent.address,
+                        userContent.latitude,
+                        userContent.longitude,
+                        userContent.hint,
+                        userContent.contentInfo))
+                .from(userContent)
+                .where(userContent.userId.in(userIds))
+                .fetch();
     }
 }
