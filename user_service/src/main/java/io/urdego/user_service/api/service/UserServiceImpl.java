@@ -7,9 +7,7 @@ import io.urdego.user_service.api.controller.internal.response.UserResponse;
 import io.urdego.user_service.common.exception.UserNotFoundException;
 import io.urdego.user_service.domain.UserRepository;
 import io.urdego.user_service.domain.entity.User;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,6 +63,13 @@ public class UserServiceImpl implements UserService {
     public UserInfo findUserByEmail(String email) {
         User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
         return UserInfo.convertToUserInfo(user);
+    }
+
+    @Override
+    public List<Long> validateUserIds(List<Long> userIds) {
+
+        // 유효한 ID만 반환
+        return userRepository.findByUserIds(userIds);
     }
 
     //    @Override
