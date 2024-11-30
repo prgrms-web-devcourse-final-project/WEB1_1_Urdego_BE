@@ -115,6 +115,25 @@ jobs:
           docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/group-service .
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/group-service
 
+      ####################################################################################################
+
+      - name: Generate application.yml for Game Service
+        working-directory: ./game_service
+        run: |
+          mkdir -p ./src/main/resources
+          echo "${{ secrets.GROUP_SERVICE_APPLICATION_YML }}" > ./src/main/resources/application.yml
+
+      - name: Build Game Service with Gradle
+        working-directory: ./game_service
+        run: ./gradlew build
+
+      - name: Build and Push Game Service
+        working-directory: ./game_service
+        run: |
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/game-service .
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/game-service          
+
+
       # 5. Docker 컨테이너 배포 (EC2 또는 서버)
       - name: Upload docker-compose.yml to EC2
         run: |
