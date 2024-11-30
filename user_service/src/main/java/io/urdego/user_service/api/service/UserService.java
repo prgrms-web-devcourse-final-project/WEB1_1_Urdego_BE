@@ -43,4 +43,6 @@ public interface UserService {
 
     // Feign userId 검증
     List<Long> validateUserIds(List<Long> userIds);
+
+    List<Long> getIdByNicknameInBatch(List<String> nicknames);
 }
