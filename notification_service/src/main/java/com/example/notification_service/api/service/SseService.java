@@ -4,6 +4,6 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 public interface SseService {
 	void init();
-	SseEmitter connect(Long userId);
+	SseEmitter connect(String email);
 	void disconnect(Long userId);
 }

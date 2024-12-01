@@ -1,5 +1,7 @@
 package com.example.notification_service.api.service;
 
+import com.example.notification_service.api.controller.dto.UserResponseInfo;
+import com.example.notification_service.common.client.UserServiceClient;
 import com.example.notification_service.domain.NotificationMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
@@ -21,6 +23,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public class SseServiceImpl implements SseService {
 	private final RedisMessageListenerContainer container;
 	private final ObjectMapper objectMapper;
+	private final UserServiceClient userServiceClient;
 
 	private Map<Long, SseEmitter> emitters = new ConcurrentHashMap<>();
 
@@ -74,7 +77,9 @@ public class SseServiceImpl implements SseService {
 	}
 
 	@Override
-	public SseEmitter connect(Long userId) {
+	public SseEmitter connect(String email) {
+		UserResponseInfo userInfo = userServiceClient.getUser(email);
+		Long userId = userInfo.userId();
 		SseEmitter emitter = new SseEmitter(Long.MAX_VALUE); // 연결 시간
 		emitters.put(userId,emitter);
 
@@ -88,26 +93,6 @@ public class SseServiceImpl implements SseService {
 			emitters.remove(userId);
 		});
 
-	/*	// 채널 구독
-		container.addMessageListener(new MessageListener() {
-			@Override
-			public void onMessage(Message message, byte[] pattern) {
-				String channel = new String(pattern);
-				String msgStr = new String(message.getBody());
-
-				log.debug("Received message on channel {}: {}", channel, msgStr);
-
-				if(channel.equals("user:" + userId)){
-					try{
-						emitter.send(SseEmitter.event().data(msgStr));
-						log.debug("Sent SSE message to userId: {}", userId);
-					} catch (IOException e){
-						log.error("Failed to send SSE to user {}: {}", userId, e.getMessage());
-						emitters.remove(userId);
-					}
-				}
-			}
-		}, new PatternTopic("user:" + userId));*/
 		return emitter;
 	}
 
