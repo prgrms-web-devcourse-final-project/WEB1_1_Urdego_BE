@@ -5,8 +5,11 @@ import org.apache.logging.log4j.message.StringFormattedMessage;
 
 public record NotificationRequestInfo(
 		Long groupId,
+		String groupName,
 		Long senderId,
-		List<Long> targetIds
+		String senderNickname,
+		List<Long> targetIds,
+		List<String> targetNicknames
 ) {
 
 }

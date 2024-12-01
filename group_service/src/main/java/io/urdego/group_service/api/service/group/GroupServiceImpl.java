@@ -2,9 +2,17 @@ package io.urdego.group_service.api.service.group;
 
 import io.urdego.group_service.api.controller.group.dto.request.CreateGroupReq;
 import io.urdego.group_service.api.controller.group.dto.request.UpdateGroupReq;
+import io.urdego.group_service.api.controller.group.dto.response.GroupCreateRes;
 import io.urdego.group_service.api.controller.group.dto.response.GroupInfoRes;
 import io.urdego.group_service.api.controller.group.dto.response.GroupListRes;
 import io.urdego.group_service.api.controller.group.dto.response.GroupRes;
+import io.urdego.group_service.common.client.GameServiceClient;
+import io.urdego.group_service.common.client.NotificationServiceClient;
+import io.urdego.group_service.common.client.UserServiceClient;
+import io.urdego.group_service.common.client.request.GroupInfoReq;
+import io.urdego.group_service.common.client.request.NotificationRequestInfo;
+import io.urdego.group_service.common.client.request.UserNicknameRequest;
+import io.urdego.group_service.common.client.response.ResponseUserInfo;
 import io.urdego.group_service.common.exception.ExceptionMessage;
 import io.urdego.group_service.common.exception.group.GroupException;
 import io.urdego.group_service.common.exception.groupMember.GroupMemberException;
@@ -30,39 +38,64 @@ public class GroupServiceImpl implements GroupService {
 
     private final GroupRepository groupRepository;
     private final GroupMemberRepository groupMemberRepository;
+    private final UserServiceClient userServiceClient;
+    private final NotificationServiceClient notificationServiceClient;
+    private final GameServiceClient gameServiceClient;
 
     // 그룹 생성
     @Override
-    public GroupRes createGroup(CreateGroupReq request) {
-        Group group =
+    public GroupCreateRes createGroup(CreateGroupReq request) {
+
+        Long roomManagerId = request.userId();
+
+        //그룹 생성
+        Group group = groupRepository.save(
                 Group.builder()
-                        .groupName(request.groupName())
-                        .description(request.description())
-                        .memberLimit(request.memberLimit())
-                        .userId(request.userId())
-                        .totalRounds(request.totalRounds())
-                        .build();
+                .groupName(request.groupName())
+                .description(request.description())
+                .memberLimit(request.memberLimit())
+                .userId(roomManagerId)
+                .totalRounds(request.totalRounds())
+                .build());
 
-        group = groupRepository.save(group);
+        //초대된 유저들의 닉네임을 id로 매핑
+        List<Long> ids = userServiceClient.mapNicknameToIdInBatch(
+                UserNicknameRequest.of(
+                        request.invitedUserNicknames()
+                )
+        ).userIds();
 
-        // 생성자에게 MANAGER 권한 부여
-        GroupMember manager =
-                GroupMember.builder()
-                        .groupId(group.getGroupId())
-                        .userId(group.getUserId())
-                        .memberRole(GroupMemberRole.MANAGER)
-                        .build();
-        groupMemberRepository.save(manager);
+        //방장 id를 닉네임으로 매핑
+        ResponseUserInfo roomManagerInfo = userServiceClient.getUserById(roomManagerId);
 
-        log.info("Group created : {} by {}", group, request.userId());
+        // 초대된 유저들의 id로 초대 알림 발송
+        String sendLog = notificationServiceClient.sendNotification(
+                NotificationRequestInfo.of(
+                        group.getGroupId(),
+                        group.getGroupName(),
+                        roomManagerId,  //sender 닉네임
+                        roomManagerInfo.nickname(),
+                        ids,
+                        request.invitedUserNicknames()));  //초대된사람들 닉네임
 
-        return GroupRes.from(group);
+
+        // 게임 서비스에 게임 생성 요청 _게임 서비스의 게임생성 API 미구현
+        Long gameId = 0L;
+//        Long gameId = gameServiceClient.createGame(
+//                GroupInfoReq.builder().
+//                        groupId(group.getGroupId()).
+//                        totalRounds(request.totalRounds()).
+//                        timer(group.getTimer()).
+//                        playerCounts(request.memberLimit()).
+//                        invitedUsers(ids).build());
+
+        return GroupCreateRes.of(group.getGroupId(), gameId);
     }
 
     // 그룹 정보 수정
     @Override
-    public GroupRes updateGroup(UpdateGroupReq request) {
-        Group group = findByGroupIdOrThrowGroupException(request.groupId());
+    public GroupRes updateGroup(Long groupId, UpdateGroupReq request) {
+        Group group = findByGroupIdOrThrowGroupException(groupId);
 
         // 수정 권한 검증
         groupMemberRepository
