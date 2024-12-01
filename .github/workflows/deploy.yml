@@ -133,6 +133,23 @@ jobs:
           docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/game-service .
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/game-service          
 
+      ####################################################################################################
+
+      - name: Generate application.yml for Notification Service
+        working-directory: ./notification_service
+        run: |
+          mkdir -p ./src/main/resources
+          echo "${{ secrets.NOTIFICATION_SERVICE_APPLICATION_YML }}" > ./src/main/resources/application.yml
+
+      - name: Build Notification Service with Gradle
+        working-directory: ./notification_service
+        run: ./gradlew build
+
+      - name: Build and Push Notification Service
+        working-directory: ./notification_service
+        run: |
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/notification-service .
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/notification-service          
 
       # 5. Docker 컨테이너 배포 (EC2 또는 서버)
       - name: Upload docker-compose.yml to EC2
@@ -150,6 +167,7 @@ jobs:
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/user-service
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/content-service
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/group-service
+            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/notification-service
             docker compose down
             docker compose up -d
           EOF
