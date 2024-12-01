@@ -21,6 +21,7 @@ public interface UserService {
     String login(String email, String password);
 
     // 닉네임으로 유저 검색
+    UserInfo findByOneNickname(String nickname);
     List<UserInfoResponse> findByNickname(String string);
 
     //    UserDetail getDetail(Long userId);
