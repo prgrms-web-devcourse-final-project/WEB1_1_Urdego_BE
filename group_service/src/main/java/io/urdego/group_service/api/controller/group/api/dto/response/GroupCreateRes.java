@@ -1,4 +1,4 @@
-package io.urdego.group_service.api.controller.group.dto.response;
+package io.urdego.group_service.api.controller.group.api.dto.response;
 
 public record GroupCreateRes(
         Long groupId,

@@ -42,6 +42,10 @@ public class Group extends BaseEntity {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
+    //현재 참여한 그룹멤버에게 부여할 그룹참가번호
+    //1부터 시작, 번호 부여 후 ++
+    private Integer gaveParticipantNumber;
+
     @Builder
     public Group(String groupName, String description, Integer memberLimit, Integer totalRounds, Long userId) {
         this.groupName = groupName;
@@ -51,6 +55,7 @@ public class Group extends BaseEntity {
         this.userId = userId;
         this.isDeleted = false;
         this.timer = 60; // 60초 고정
+        this.gaveParticipantNumber = 1;
     }
 
     // 그룹 정보 수정 메서드
@@ -67,5 +72,9 @@ public class Group extends BaseEntity {
 
     public void activate() {
         this.isDeleted = false;
+    }
+
+    public Integer addMember() {
+        return gaveParticipantNumber++;
     }
 }

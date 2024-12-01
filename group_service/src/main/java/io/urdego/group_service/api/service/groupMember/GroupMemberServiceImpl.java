@@ -1,21 +1,22 @@
 package io.urdego.group_service.api.service.groupMember;
 
-import io.urdego.group_service.api.controller.groupMember.dto.request.AddGroupMemberReq;
+import io.urdego.group_service.api.controller.group.websocket.response.GroupMemberStatusResponse;
 import io.urdego.group_service.api.controller.groupMember.dto.response.GroupMemberListRes;
 import io.urdego.group_service.api.controller.groupMember.dto.response.GroupMemberRes;
-import io.urdego.group_service.common.client.response.ResponseUserInfo;
 import io.urdego.group_service.common.client.UserServiceClient;
+import io.urdego.group_service.common.client.request.UserRequest;
+import io.urdego.group_service.common.client.response.ResponseUserInfo;
+import io.urdego.group_service.common.client.response.UserInfo;
 import io.urdego.group_service.common.exception.ExceptionMessage;
 import io.urdego.group_service.common.exception.group.GroupException;
 import io.urdego.group_service.common.exception.groupMember.GroupMemberException;
 import io.urdego.group_service.domain.entity.group.Group;
 import io.urdego.group_service.domain.entity.group.repository.GroupRepository;
 import io.urdego.group_service.domain.entity.groupMember.GroupMember;
+import io.urdego.group_service.domain.entity.groupMember.GroupMemberRole;
 import io.urdego.group_service.domain.entity.groupMember.repository.GroupMemberRepository;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +34,7 @@ public class GroupMemberServiceImpl implements GroupMemberService {
 
     // 그룹에 멤버 추가
     @Override
-    public GroupMemberRes addMember(Long groupId, AddGroupMemberReq request) {
+    public GroupMemberRes addMember(Long groupId, String nickname, GroupMemberRole role) {
         // 그룹 존재 여부 확인
         Group group =
                 groupRepository
@@ -55,35 +56,32 @@ public class GroupMemberServiceImpl implements GroupMemberService {
             throw new GroupMemberException(ExceptionMessage.GROUP_MEMBER_LIMITED.getText());
         }
 
-        // user-service에서 사용자 정보 가져오기
-        ResponseUserInfo userInfo = userServiceClient.getUserById(request.userId());
-
+        //유저서비스에게 닉네임으로 유저 정보 호출
+        System.out.println("GroupMemberServiceImpl.addMember 60");
+        System.out.println("nickname = " + nickname);
+        UserInfo userInfo = userServiceClient.getUserByNickname(UserRequest.of(nickname));
+        System.out.println("GroupMemberServiceImpl.addMember 63");
         // 이미 그룹 멤버인지 확인
-        groupMemberRepository
-                .findByGroupIdAndUserId(groupId, request.userId())
-                .ifPresent(
-                        member -> {
-                            log.warn(
-                                    "UserId {}, GroupId {} : {}",
-                                    request.userId(),
-                                    groupId,
-                                    ExceptionMessage.GROUP_MEMBER_ALREADY_EXISTS);
-                            throw new GroupMemberException(
-                                    ExceptionMessage.GROUP_MEMBER_ALREADY_EXISTS.getText());
-                        });
+//        groupMemberRepository
+//                .findByGroupIdAndUserId(groupId, userInfo.userId())
+//                .ifPresent(
+//                        member -> {
+//                            log.warn(
+//                                    "UserId {}, GroupId {} : {}",
+//                                    userInfo.userId(),
+//                                    groupId,
+//                                    ExceptionMessage.GROUP_MEMBER_ALREADY_EXISTS);
+//                            throw new GroupMemberException(
+//                                    ExceptionMessage.GROUP_MEMBER_ALREADY_EXISTS.getText());
+//                        });
 
-        GroupMember groupMember =
-                GroupMember.builder()
-                        .groupId(group.getGroupId())
-                        // .userId(request.userId())
-                        .userId(userInfo.userId())
-                        .memberRole(request.role())
-                        .build();
-        groupMember = groupMemberRepository.save(groupMember);
+        GroupMember saveGroupMember = groupMemberRepository.save(GroupMember.builder()
+                .group(group)
+                .userId(userInfo.userId())
+                .memberRole(role)
+                .build());
 
-        log.info("UserId : {}, GroupId : {}, Role : {}", request.userId(), groupId, request.role());
-
-        return GroupMemberRes.from(groupMember);
+        return GroupMemberRes.from(saveGroupMember);
     }
 
     // 그룹 멤버 제거
@@ -119,5 +117,22 @@ public class GroupMemberServiceImpl implements GroupMemberService {
         List<GroupMemberRes> memberList = members.stream().map(GroupMemberRes::from).toList();
 
         return GroupMemberListRes.from(memberList);
+    }
+
+    @Override
+    public List<GroupMemberStatusResponse> getStatus(Long groupId) {
+        List<GroupMember> groupMembers = groupMemberRepository.findByGroupId(groupId);
+        return groupMembers.stream().map(groupMember -> {
+            ResponseUserInfo userInfo = userServiceClient.getUserById(groupMember.getUserId());
+            return GroupMemberStatusResponse.from(groupMember, userInfo.nickname());
+        }).toList();
+    }
+
+    @Override
+    public void ready(Long groupId, String nickname) {
+        UserInfo userInfo = userServiceClient.getUserByNickname(UserRequest.of(nickname));
+        GroupMember groupMember = groupMemberRepository.findByGroupIdAndUserId(groupId, userInfo.userId())
+                .orElseThrow(() -> new GroupMemberException("NOT FOUND GROUP_MEMBER"));
+        groupMember.ready();
     }
 }
