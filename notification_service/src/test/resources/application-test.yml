@@ -1,8 +1,0 @@
-spring:
-  redis:
-    host: localhost  # Redis를 실제로 사용하지 않도록 로컬 호스트를 설정
-    port: 6379
-eureka:
-  client:
-    register-with-eureka: false
-    fetch-registry: false
