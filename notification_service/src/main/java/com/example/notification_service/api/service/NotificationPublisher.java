@@ -21,17 +21,8 @@ import org.springframework.stereotype.Service;
 public class NotificationPublisher {
 	private final StringRedisTemplate redisTemplate;
 	private final ObjectMapper objectMapper;
-	private final UserServiceClient userServiceClient;
-	private final GroupServiceClient groupServiceClient;
 
 	public void publishToUser(NotificationRequestInfo requestInfo){
-		//TODO feign 호출이 너무 많아서 배치 조회 알아보기
-		/*//Id들 nickName 및 groupName로 전환
-		String senderNickName = userServiceClient.getUser(senderId).nickname();
-		log.info("senderNickName : {}",senderNickName);
-		String groupName = groupServiceClient.getGroupInfo(groupId).groupName();
-		log.info("groupName : {}",groupName);
-		List<String> targetNickNames = new ArrayList<>();*/
 		for(int i = 0; i< requestInfo.targetIds().size(); i++){
 			//알림 메세지 생성
 			NotificationMessage notification = NotificationMessage.of(
