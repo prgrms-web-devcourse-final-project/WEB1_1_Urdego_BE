@@ -146,7 +146,6 @@ jobs:
         working-directory: ./notification_service
         run: |
           chmod +x ./gradlew
-          ./gradlew build
           ./gradlew build -x test
 
       - name: Build and Push Notification Service
