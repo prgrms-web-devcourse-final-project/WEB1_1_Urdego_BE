@@ -1,13 +1,6 @@
 version: '3.8'
 
 services:
-  # Redis
-  redis:
-    image: redis:latest
-    container_name: redis
-    ports:
-      - "6379:6379"
-
   # Eureka Server
   discovery_service:
     image: geonoo/discovery-service:latest
@@ -61,12 +54,6 @@ services:
   notification-service:
     image: geonoo/notification-service:latest
     container_name: notification-service
-    depends_on:
-      - redis
-    environment:
-      - SPRING_REDIS_HOST=redis
-      - SPRING_REDIS_PORT=6379
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
     ports:
       - "8085:8085"
     # restart: always
