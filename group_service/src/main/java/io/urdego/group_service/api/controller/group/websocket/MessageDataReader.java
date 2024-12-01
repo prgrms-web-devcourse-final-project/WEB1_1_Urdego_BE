@@ -6,10 +6,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class MessageDataReader {
 
-    public String read(Object data) {
+    public String readString(Object data) {
         if (data instanceof String) {
             return (String)data;
         }
         throw new TypeCastException();
+    }
+
+    public Long readLong(Object data) {
+        return Long.parseLong(readString(data));
     }
 }

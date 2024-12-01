@@ -1,7 +1,6 @@
 package io.urdego.group_service.api.service.groupMember;
 
-import io.urdego.group_service.api.controller.group.websocket.dto.GroupMemberStatusResponse;
-import io.urdego.group_service.api.controller.groupMember.dto.request.AddGroupMemberReq;
+import io.urdego.group_service.api.controller.group.websocket.response.GroupMemberStatusResponse;
 import io.urdego.group_service.api.controller.groupMember.dto.response.GroupMemberListRes;
 import io.urdego.group_service.api.controller.groupMember.dto.response.GroupMemberRes;
 import io.urdego.group_service.domain.entity.groupMember.GroupMemberRole;

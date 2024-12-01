@@ -1,4 +1,4 @@
-package io.urdego.group_service.api.controller.group.websocket.dto;
+package io.urdego.group_service.api.controller.group.websocket.response;
 
 import io.urdego.group_service.domain.entity.groupMember.GroupMember;
 import lombok.Data;
