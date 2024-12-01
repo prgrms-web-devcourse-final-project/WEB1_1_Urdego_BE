@@ -10,6 +10,17 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-22.04
 
+    services:
+      redis:
+        image: redis:7.4
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping" 
+          --health-interval 10s 
+          --health-timeout 5s 
+          --health-retries 5
+
     steps:
       # 1. 코드 체크아웃
       - name: Checkout code
@@ -140,6 +151,7 @@ jobs:
         run: |
           mkdir -p ./src/main/resources
           echo "${{ secrets.NOTIFICATION_SERVICE_APPLICATION_YML }}" > ./src/main/resources/application.yml
+          sed -i 's/host: 3\.39\.135\.47/host: redis/' ./src/main/resources/application.yml
 
       - name: Build Notification Service with Gradle
         working-directory: ./notification_service
