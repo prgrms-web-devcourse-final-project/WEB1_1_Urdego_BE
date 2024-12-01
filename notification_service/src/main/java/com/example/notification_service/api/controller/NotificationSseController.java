@@ -24,9 +24,9 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public class NotificationSseController {
 	private final SseService sseService;
 	//SSE 연결 프론트에서 email로 준다고 함
-	@GetMapping("/connect/{userId}")
-	public SseEmitter connect(@PathVariable("userId") Long userId) {
-		return sseService.connect(userId);
+	@GetMapping("/connect/{email}")
+	public SseEmitter connect(@PathVariable("email") String email) {
+		return sseService.connect(email);
 	}
 
 	//SSE 연결 끊기
