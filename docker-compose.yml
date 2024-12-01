@@ -51,7 +51,7 @@ services:
       # restart: always
 
 #  # Notification Service
-  notification-service:
+  notification_service:
     image: geonoo/notification-service:latest
     container_name: notification-service
     ports:
