@@ -66,10 +66,9 @@ services:
     environment:
       - SPRING_REDIS_HOST=redis
       - SPRING_REDIS_PORT=6379
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://3.39.135.47:8761/eureka
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
     ports:
       - "8085:8085"
     # restart: always
 
-# Redis
 
