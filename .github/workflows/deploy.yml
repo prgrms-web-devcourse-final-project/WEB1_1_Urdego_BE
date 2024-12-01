@@ -152,6 +152,8 @@ jobs:
           mkdir -p ./src/main/resources
           echo "${{ secrets.NOTIFICATION_SERVICE_APPLICATION_YML }}" > ./src/main/resources/application.yml
           sed -i 's/host: 3\.39\.135\.47/host: redis/' ./src/main/resources/application.yml
+          sed -i 's/defaultZone: http:\/\/3\.39\.135\.47:8761\/eureka/defaultZone: http:\/\/localhost:8761\/eureka/' ./src/main/resources/application.yml
+
 
       - name: Build Notification Service with Gradle
         working-directory: ./notification_service
