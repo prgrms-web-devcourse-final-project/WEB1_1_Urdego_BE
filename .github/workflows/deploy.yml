@@ -141,9 +141,6 @@ jobs:
           mkdir -p ./src/main/resources
           echo "${{ secrets.NOTIFICATION_SERVICE_APPLICATION_YML }}" > ./src/main/resources/application.yml
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x ./gradlew
-
       - name: Build Notification Service with Gradle
         working-directory: ./notification_service
         run: ./gradlew build
