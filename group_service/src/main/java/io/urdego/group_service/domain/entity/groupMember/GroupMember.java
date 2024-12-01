@@ -45,4 +45,7 @@ public class GroupMember {
         memberStatus = "notReady";
         this.participantNumber = group.addMember();
     }
+    public void ready() {
+        this.memberStatus = "Ready";
+    }
 }

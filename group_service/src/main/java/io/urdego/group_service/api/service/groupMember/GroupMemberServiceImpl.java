@@ -127,4 +127,12 @@ public class GroupMemberServiceImpl implements GroupMemberService {
             return GroupMemberStatusResponse.from(groupMember, userInfo.nickname());
         }).toList();
     }
+
+    @Override
+    public void ready(Long groupId, String nickname) {
+        UserInfo userInfo = userServiceClient.getUserByNickname(UserRequest.of(nickname));
+        GroupMember groupMember = groupMemberRepository.findByGroupIdAndUserId(groupId, userInfo.userId())
+                .orElseThrow(() -> new GroupMemberException("NOT FOUND GROUP_MEMBER"));
+        groupMember.ready();
+    }
 }

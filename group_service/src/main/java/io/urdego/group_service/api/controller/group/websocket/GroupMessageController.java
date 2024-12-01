@@ -32,16 +32,17 @@ public class GroupMessageController {
             case PARTICIPANT -> {
                 String nickname = messageDataReader.read(request.data().get("nickname"));
                 GroupMemberRole role = GroupMemberRole.valueOf(messageDataReader.read(request.data().get("role")));
-
                 groupMemberService.addMember(groupId, nickname, role);
-                List<GroupMemberStatusResponse> groupMemberStatusResponseList = groupMemberService.getStatus(groupId);
 
+                List<GroupMemberStatusResponse> groupMemberStatusResponseList = groupMemberService.getStatus(groupId);
                 yield new MessageResponse<>(GroupStatusResponse.of(groupMemberStatusResponseList));
             }
             case READY -> {
-                //그룹(대기방) 현황 응답 _nickname, status, id _status: Ready / notReady
-                log.info("EVENT TYPE : READY");
-                yield new MessageResponse("hello world!");
+                String nickname = messageDataReader.read(request.data().get("nickname"));
+                groupMemberService.ready(groupId, nickname);
+
+                List<GroupMemberStatusResponse> groupMemberStatusResponseList = groupMemberService.getStatus(groupId);
+                yield new MessageResponse<>(GroupStatusResponse.of(groupMemberStatusResponseList));
             }
             case START -> {
                 log.info("EVENT TYPE : START");

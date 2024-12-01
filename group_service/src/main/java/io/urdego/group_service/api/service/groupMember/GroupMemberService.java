@@ -22,4 +22,6 @@ public interface GroupMemberService {
     GroupMemberListRes getMemberList(Long groupId);
 
     List<GroupMemberStatusResponse> getStatus(Long groupId);
+
+    void ready(Long groupId, String nickname);
 }
