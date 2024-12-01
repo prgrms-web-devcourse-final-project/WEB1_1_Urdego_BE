@@ -26,8 +26,8 @@ public class GameServiceImpl implements GameService{
 
     // 게임 생성 및 시작
     @Override
-    public GameRes startGame(GameStartReq request) {
-        GroupInfoRes groupInfo = groupServiceClient.getGroupInfo(request.groupId());
+    public GameRes startGame(Long groupId) {
+        GroupInfoRes groupInfo = groupServiceClient.getGroupInfo(groupId);
 
         Game game = Game.builder()
                 .totalRounds(groupInfo.totalRounds())
