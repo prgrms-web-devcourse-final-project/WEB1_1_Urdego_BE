@@ -23,10 +23,10 @@ public class InternalApiController {
     public ResponseEntity<List<UserContentResponse>> getContents(@RequestBody List<Long> userIds) {
 
 
-        // Feign 유저 검증
-        List<Long> userIdList = userServiceClient.validateUserIds(userIds);
+       /* // Feign 유저 검증
+        List<Long> userIdList = userServiceClient.validateUserIds(userIds);*/
 
-        List<UserContentResponse> response = userContentService.getContents(userIdList);
+        List<UserContentResponse> response = userContentService.getContents(userIds);
 
         return ResponseEntity.ok().body(response);
     }
