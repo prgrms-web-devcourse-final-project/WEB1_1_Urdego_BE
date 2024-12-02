@@ -6,7 +6,6 @@ import io.urdego.group_service.common.client.response.ResponseUserInfo;
 import io.urdego.group_service.common.client.response.UserIdListResponse;
 import io.urdego.group_service.common.client.response.UserInfo;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;

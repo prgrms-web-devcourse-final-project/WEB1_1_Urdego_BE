@@ -1,8 +1,5 @@
 package io.urdego.group_service.api.controller.group.api;
 
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
-
 import io.urdego.group_service.api.controller.group.api.dto.request.CreateGroupReq;
 import io.urdego.group_service.api.controller.group.api.dto.request.UpdateGroupReq;
 import io.urdego.group_service.api.controller.group.api.dto.response.GroupCreateRes;
@@ -10,12 +7,13 @@ import io.urdego.group_service.api.controller.group.api.dto.response.GroupInfoRe
 import io.urdego.group_service.api.controller.group.api.dto.response.GroupListRes;
 import io.urdego.group_service.api.controller.group.api.dto.response.GroupRes;
 import io.urdego.group_service.api.service.group.GroupService;
-
 import lombok.RequiredArgsConstructor;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping("/api/group-service/groups")
@@ -71,5 +69,5 @@ public class GroupController {
     }
 
     //그룹 웹 소켓 open
-    
+
 }

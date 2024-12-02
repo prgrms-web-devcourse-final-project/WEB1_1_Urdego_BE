@@ -50,12 +50,12 @@ public class GroupServiceImpl implements GroupService {
         //그룹 생성
         Group group = groupRepository.save(
                 Group.builder()
-                .groupName(request.groupName())
-                .description(request.description())
-                .memberLimit(request.memberLimit())
-                .userId(roomManagerId)
-                .totalRounds(request.totalRounds())
-                .build());
+                        .groupName(request.groupName())
+                        .description(request.description())
+                        .memberLimit(request.memberLimit())
+                        .userId(roomManagerId)
+                        .totalRounds(request.totalRounds())
+                        .build());
 
         //초대된 유저들의 닉네임을 id로 매핑
         List<Long> ids = userServiceClient.mapNicknameToIdInBatch(
