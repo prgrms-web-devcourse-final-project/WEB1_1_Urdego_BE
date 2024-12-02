@@ -1,8 +1,6 @@
-package config;
+package io.urdego.gateway_service.config;
 
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Info;
-
+import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,12 +8,42 @@ import org.springframework.context.annotation.Configuration;
 public class SwaggerConfig {
 
     @Bean
-    public OpenAPI urdegoOpenAPI() {
-        return new OpenAPI()
-                .info(
-                        new Info()
-                                .title("API Gateway")
-                                .description("전체 마이크로서비스별 API 모음")
-                                .version("v1.0"));
+    public GroupedOpenApi userServiceApi() {
+        return GroupedOpenApi.builder()
+                .group("user-service")
+                .pathsToMatch("/api/user-service/**")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi contentServiceApi() {
+        return GroupedOpenApi.builder()
+                .group("content-service")
+                .pathsToMatch("/api/content-service/**")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi groupServiceApi() {
+        return GroupedOpenApi.builder()
+                .group("group-service")
+                .pathsToMatch("/api/group-service/**")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi gameServiceApi() {
+        return GroupedOpenApi.builder()
+                .group("game-service")
+                .pathsToMatch("/api/game-service/**")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi notificationServiceApi() {
+        return GroupedOpenApi.builder()
+                .group("notification-service")
+                .pathsToMatch("/api/notification-service/**")
+                .build();
     }
 }
