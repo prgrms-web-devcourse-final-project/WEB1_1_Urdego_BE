@@ -43,18 +43,13 @@ public class Group extends BaseEntity {
     private Long userId;
 
     @Builder
-    public Group(
-            String groupName,
-            String description,
-            Integer memberLimit,
-            Integer totalRounds,
-            Long userId) {
+    public Group(String groupName, String description, Integer memberLimit, Integer totalRounds, Long userId) {
         this.groupName = groupName;
         this.description = description;
         this.memberLimit = memberLimit;
-        this.isDeleted = false;
         this.totalRounds = totalRounds;
         this.userId = userId;
+        this.isDeleted = false;
         this.timer = 60; // 60초 고정
     }
 

@@ -1,3 +1,4 @@
+/*
 package com.example.notification_service.config;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -22,8 +23,11 @@ public class RedisConfig {
 		return new LettuceConnectionFactory(host, port);
 	}
 
+
+
 	@Bean
 	public StringRedisTemplate redisTemplate(RedisConnectionFactory redisConnectionFactory) {
 		return new StringRedisTemplate(redisConnectionFactory);
 	}
 }
+*/

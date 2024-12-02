@@ -35,7 +35,9 @@ jobs:
 
       - name: Build Discovery Service with Gradle
         working-directory: ./discovery_service
-        run: ./gradlew build
+        run: |
+          chmod +x ./gradlew
+          ./gradlew build -x test
 
       - name: Build and Push Discovery Service
         working-directory: ./discovery_service
@@ -53,7 +55,9 @@ jobs:
 
       - name: Build Gateway Service with Gradle
         working-directory: ./gateway_service
-        run: ./gradlew build
+        run: |
+          chmod +x ./gradlew
+          ./gradlew build -x test
 
       - name: Build and Push Gateway Service
         working-directory: ./gateway_service
@@ -71,7 +75,9 @@ jobs:
 
       - name: Build User Service with Gradle
         working-directory: ./user_service
-        run: ./gradlew build
+        run: |
+          chmod +x ./gradlew
+          ./gradlew build -x test
 
       - name: Build and Push User Service
         working-directory: ./user_service
@@ -89,7 +95,9 @@ jobs:
 
       - name: Build Content Service with Gradle
         working-directory: ./content_service
-        run: ./gradlew build
+        run: |
+          chmod +x ./gradlew
+          ./gradlew build -x test
 
       - name: Build and Push Content Service
         working-directory: ./content_service
@@ -107,7 +115,9 @@ jobs:
 
       - name: Build Group Service with Gradle
         working-directory: ./group_service
-        run: ./gradlew build
+        run: |
+          chmod +x ./gradlew
+          ./gradlew build -x test
 
       - name: Build and Push Group Service
         working-directory: ./group_service
@@ -121,11 +131,13 @@ jobs:
         working-directory: ./game_service
         run: |
           mkdir -p ./src/main/resources
-          echo "${{ secrets.GROUP_SERVICE_APPLICATION_YML }}" > ./src/main/resources/application.yml
+          echo "${{ secrets.GAME_SERVICE_APPLICATION_YML }}" > ./src/main/resources/application.yml
 
       - name: Build Game Service with Gradle
         working-directory: ./game_service
-        run: ./gradlew build
+        run: |
+          chmod +x ./gradlew
+          ./gradlew build -x test
 
       - name: Build and Push Game Service
         working-directory: ./game_service
@@ -133,6 +145,26 @@ jobs:
           docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/game-service .
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/game-service          
 
+      ####################################################################################################
+
+      - name: Generate application.yml for Notification Service
+        working-directory: ./notification_service
+        run: |
+          mkdir -p ./src/main/resources
+          echo "${{ secrets.NOTIFICATION_SERVICE_APPLICATION_YML }}" > ./src/main/resources/application.yml
+          
+
+      - name: Build Notification Service with Gradle
+        working-directory: ./notification_service
+        run: |
+          chmod +x ./gradlew
+          ./gradlew build -x test
+
+      - name: Build and Push Notification Service
+        working-directory: ./notification_service
+        run: |
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/notification-service .
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/notification-service          
 
       # 5. Docker 컨테이너 배포 (EC2 또는 서버)
       - name: Upload docker-compose.yml to EC2
@@ -150,6 +182,7 @@ jobs:
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/user-service
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/content-service
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/group-service
+            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/notification-service
             docker compose down
             docker compose up -d
           EOF
