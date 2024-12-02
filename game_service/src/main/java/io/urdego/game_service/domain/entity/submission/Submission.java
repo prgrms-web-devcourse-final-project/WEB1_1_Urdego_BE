@@ -31,17 +31,17 @@ public class Submission {
 
     // FK
     @Column(nullable = false)
-    private Long playerId;
+    private Long userId;
 
     @Column(nullable = false)
     private Long roundId;
 
     @Builder
-    public Submission(double latitude, double longitude, int score, Long playerId, Long roundId) {
+    public Submission(double latitude, double longitude, int score, Long userId, Long roundId) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.score = score;
-        this.playerId = playerId;
+        this.userId = userId;
         this.roundId = roundId;
     }
 }

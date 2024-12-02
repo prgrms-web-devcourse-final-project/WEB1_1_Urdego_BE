@@ -2,11 +2,20 @@ package io.urdego.game_service.api.service.submission;
 
 import io.urdego.game_service.api.controller.submission.dto.request.SubmissionReq;
 import io.urdego.game_service.api.controller.submission.dto.response.SubmissionRes;
+import io.urdego.game_service.api.service.game.GameServiceImpl;
 import io.urdego.game_service.common.client.ContentServiceClient;
+import io.urdego.game_service.common.client.GroupServiceClient;
+import io.urdego.game_service.common.client.UserServiceClient;
+import io.urdego.game_service.common.client.dto.request.UserReq;
 import io.urdego.game_service.common.client.dto.response.ContentRes;
+import io.urdego.game_service.common.client.dto.response.GroupInfoRes;
+import io.urdego.game_service.common.client.dto.response.UserInfoRes;
+import io.urdego.game_service.common.client.dto.response.UserRes;
 import io.urdego.game_service.common.exception.ExceptionMessage;
 import io.urdego.game_service.common.exception.content.ContentException;
 import io.urdego.game_service.common.exception.round.RoundException;
+import io.urdego.game_service.common.exception.user.UserException;
+import io.urdego.game_service.domain.entity.game.Game;
 import io.urdego.game_service.domain.entity.round.Round;
 import io.urdego.game_service.domain.entity.round.repository.RoundRepository;
 import io.urdego.game_service.domain.entity.submission.Submission;
@@ -16,6 +25,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 
 @Slf4j
 @Service
@@ -24,13 +35,25 @@ import org.springframework.transaction.annotation.Transactional;
 public class SubmissionServiceImpl implements SubmissionService {
 
     private final RoundRepository roundRepository;
+    private final GameServiceImpl gameServiceImpl;
+    private final GroupServiceClient groupServiceClient;
     private SubmissionRepository submissionRepository;
+    private final UserServiceClient userServiceClient;
     private ContentServiceClient contentServiceClient;
 
     // 답안 제출
     @Override
     public SubmissionRes submitAnswer(SubmissionReq request) {
-        // 1. 라운드에서 정답 컨텐츠 추출
+        // 1. 닉네임으로 사용자 조회
+        UserInfoRes userInfo = userServiceClient.getUserIdByNickname(new UserReq(request.nickname()));
+        if (userInfo == null || userInfo.userId() == null) {
+            log.warn("{} / nickname : {}", ExceptionMessage.USER_NOT_FOUND, request.nickname());
+            throw new UserException(ExceptionMessage.USER_NOT_FOUND.getText());
+        }
+
+        Long userId = userInfo.userId();
+
+        // 2. 라운드에서 정답 컨텐츠 추출
         Round round = roundRepository.findById(request.roundId())
                 .orElseThrow(() -> new RoundException(ExceptionMessage.ROUND_NOT_FOUND.getText() + "roundId : " + request.roundId()));
 
@@ -42,7 +65,7 @@ public class SubmissionServiceImpl implements SubmissionService {
         Long contentId = round.getContentIds().get(0);
         ContentRes content = contentServiceClient.getContent(contentId);
 
-        // 2. 거리 계산
+        // 3. 거리 계산
         double distance = calculateDistance(
                 request.latitude(),
                 request.longitude(),
@@ -50,21 +73,50 @@ public class SubmissionServiceImpl implements SubmissionService {
                 content.longitude()
         );
 
-        // 3. 점수 계산
+        // 4. 점수 계산
         int score = calculateScore(distance);
 
-        // 4. 제출
+        // 5. 제출 정보 저장
         Submission submission = Submission.builder()
                 .latitude(request.latitude())
                 .longitude(request.longitude())
                 .score(score)
-                .playerId(request.playerId())
+                .userId(userId)
                 .roundId(request.roundId())
                 .build();
 
-        submission = submissionRepository.save(submission);
+        submissionRepository.save(submission);
 
-        return SubmissionRes.from(submission);
+        // 6. 모든 플레이어 정보 및 총점 계산
+        Game game = gameServiceImpl.findByGameIdOrThrowGameException(round.getGameId());
+        GroupInfoRes groupInfo = groupServiceClient.getGroupInfo(game.getGroupId());
+
+        List<SubmissionRes.PlayerSubmission> playerSubmissions = groupInfo.invitedUsers()
+                .stream()
+                .map(id -> {
+                    UserRes user = userServiceClient.getUserById(id);
+                    // 각 플레이어의 제출 정보
+                    Submission playerSubmission = submissionRepository.findByPlayerIdAndRoundId(userId, round.getRoundId())
+                            .orElseThrow(() -> new IllegalArgumentException("Submission not found for playerId: " + userId));
+
+                    // 플레이어 총점 계산
+                    int totalScore = submissionRepository.findAllByPlayerId(userId)
+                            .stream()
+                            .mapToInt(Submission::getScore)
+                            .sum();
+
+                    return new SubmissionRes.PlayerSubmission(
+                            user.nickname(),
+                            playerSubmission.getLatitude(),
+                            playerSubmission.getLongitude(),
+                            playerSubmission.getScore(),
+                            totalScore
+                    );
+                })
+                .toList();
+
+        // 6. 응답 생성
+        return SubmissionRes.of(content, playerSubmissions);
 
     }
 
