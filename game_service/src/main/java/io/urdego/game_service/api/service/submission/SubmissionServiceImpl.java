@@ -91,32 +91,32 @@ public class SubmissionServiceImpl implements SubmissionService {
         Game game = gameServiceImpl.findByGameIdOrThrowGameException(round.getGameId());
         GroupInfoRes groupInfo = groupServiceClient.getGroupInfo(game.getGroupId());
 
-        List<SubmissionRes.PlayerSubmission> playerSubmissions = groupInfo.invitedUsers()
+        List<SubmissionRes.UserSubmission> userSubmissions = groupInfo.invitedUsers()
                 .stream()
                 .map(id -> {
                     UserRes user = userServiceClient.getUserById(id);
                     // 각 플레이어의 제출 정보
-                    Submission playerSubmission = submissionRepository.findByPlayerIdAndRoundId(userId, round.getRoundId())
-                            .orElseThrow(() -> new IllegalArgumentException("Submission not found for playerId: " + userId));
+                    Submission userSubmission = submissionRepository.findByUserIdAndRoundId(userId, round.getRoundId())
+                            .orElseThrow(() -> new IllegalArgumentException("Submission not found for userId: " + userId));
 
                     // 플레이어 총점 계산
-                    int totalScore = submissionRepository.findAllByPlayerId(userId)
+                    int totalScore = submissionRepository.findAllByUserId(userId)
                             .stream()
                             .mapToInt(Submission::getScore)
                             .sum();
 
-                    return new SubmissionRes.PlayerSubmission(
+                    return new SubmissionRes.UserSubmission(
                             user.nickname(),
-                            playerSubmission.getLatitude(),
-                            playerSubmission.getLongitude(),
-                            playerSubmission.getScore(),
+                            userSubmission.getLatitude(),
+                            userSubmission.getLongitude(),
+                            userSubmission.getScore(),
                             totalScore
                     );
                 })
                 .toList();
 
         // 6. 응답 생성
-        return SubmissionRes.of(content, playerSubmissions);
+        return SubmissionRes.of(content, userSubmissions);
 
     }
 
