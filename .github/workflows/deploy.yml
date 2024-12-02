@@ -26,8 +26,8 @@ jobs:
       - name: Docker Login
         run: echo "${{ secrets.DOCKER_HUB_ACCESSKEY }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
 
-      # 4. 각 서비스 빌드 및 Docker 이미지 푸시
-      - name: Build and Push Discovery Service
+      # 4. Docker 이미지 빌드 및 푸시
+      - name: Build Discovery Service
         working-directory: ./discovery_service
         run: |
           chmod +x ./gradlew
@@ -35,7 +35,7 @@ jobs:
           docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/discovery-service .
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/discovery-service
 
-      - name: Build and Push Gateway Service
+      - name: Build Gateway Service
         working-directory: ./gateway_service
         run: |
           chmod +x ./gradlew
@@ -43,7 +43,7 @@ jobs:
           docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/gateway-service .
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/gateway-service
 
-      - name: Build and Push User Service
+      - name: Build User Service
         working-directory: ./user_service
         run: |
           chmod +x ./gradlew
@@ -51,7 +51,7 @@ jobs:
           docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/user-service .
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/user-service
 
-      - name: Build and Push Content Service
+      - name: Build Content Service
         working-directory: ./content_service
         run: |
           chmod +x ./gradlew
@@ -59,7 +59,7 @@ jobs:
           docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/content-service .
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/content-service
 
-      - name: Build and Push Group Service
+      - name: Build Group Service
         working-directory: ./group_service
         run: |
           chmod +x ./gradlew
@@ -67,7 +67,7 @@ jobs:
           docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/group-service .
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/group-service
 
-      - name: Build and Push Game Service
+      - name: Build Game Service
         working-directory: ./game_service
         run: |
           chmod +x ./gradlew
@@ -75,7 +75,7 @@ jobs:
           docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/game-service .
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/game-service
 
-      - name: Build and Push Notification Service
+      - name: Build Notification Service
         working-directory: ./notification_service
         run: |
           chmod +x ./gradlew
@@ -83,17 +83,11 @@ jobs:
           docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/notification-service .
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/notification-service
 
-      # 5. 서버로 yml 파일 및 docker-compose.yml 업로드
-      - name: Upload yml and docker-compose.yml to EC2
+      # 5. 서버에서 기존 docker-compose.yml로 컨테이너 재배포
+      - name: Deploy Docker Containers
         run: |
           echo "${{ secrets.EC2_SSH_KEY }}" > urdego-keypair.pem
           chmod 600 urdego-keypair.pem
-          scp -o StrictHostKeyChecking=no -i urdego-keypair.pem \
-            ./docker-compose.yml \
-            ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/
-
-      - name: Deploy Docker Containers
-        run: |
           ssh -o StrictHostKeyChecking=no -i urdego-keypair.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
             cd /home/${{ secrets.EC2_USER }}
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/discovery-service
