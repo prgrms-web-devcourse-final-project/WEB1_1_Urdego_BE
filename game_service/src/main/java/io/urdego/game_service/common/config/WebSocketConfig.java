@@ -12,17 +12,17 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         // 클라이언트 구독 주제 설정
-        config.enableSimpleBroker("/topic", "/queue");
+        config.enableSimpleBroker("/game-service/subscribe");
         // 클라이언트가 메시지를 보낼 때의 엔드포인트
-        config.setApplicationDestinationPrefixes("/app");
+        config.setApplicationDestinationPrefixes("/game-service/publish");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         // WebSocket 연결 엔드포인트 설정
-        registry.addEndpoint("/ws/game")
-                .setAllowedOrigins("*")
-                .withSockJS(); // SockJS를 통한 fallback 지원
+        registry.addEndpoint("/game-service/connect")
+                .setAllowedOrigins("*");
+//                .withSockJS(); // SockJS를 통한 fallback 지원
     }
 
 }
