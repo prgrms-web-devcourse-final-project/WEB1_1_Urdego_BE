@@ -20,12 +20,13 @@ public class GroupMemberController {
 
     // 그룹에 멤버 추가
     //@TODO 웹 소켓이 필요함
-    @PostMapping
-    public ResponseEntity<Void> addMember(
-            @PathVariable Long groupId, @RequestBody AddGroupMemberReq request) {
-        groupMemberService.addMember(groupId, request);
-        return ResponseEntity.status(OK).build();
-    }
+//    API가 아닌, 웹 소켓 메시지를 통해 groupMemberService 의 addMember 실행
+//    @PostMapping
+//    public ResponseEntity<Void> addMember(
+//            @PathVariable Long groupId, @RequestBody AddGroupMemberReq request) {
+//        groupMemberService.addMember(groupId, request);
+//        return ResponseEntity.status(OK).build();
+//    }
 
     // 그룹에서 멤버 삭제
     @DeleteMapping("/{userId}")

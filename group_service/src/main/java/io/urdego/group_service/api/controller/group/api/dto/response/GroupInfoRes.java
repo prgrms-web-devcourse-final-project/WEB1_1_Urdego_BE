@@ -1,4 +1,4 @@
-package io.urdego.group_service.api.controller.group.dto.response;
+package io.urdego.group_service.api.controller.group.api.dto.response;
 
 import io.urdego.group_service.domain.entity.group.Group;
 import io.urdego.group_service.domain.entity.groupMember.GroupMember;

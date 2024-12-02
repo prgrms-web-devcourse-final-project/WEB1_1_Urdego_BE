@@ -1,8 +1,10 @@
 package io.urdego.group_service.common.client;
 
 import io.urdego.group_service.common.client.request.UserNicknameRequest;
+import io.urdego.group_service.common.client.request.UserRequest;
 import io.urdego.group_service.common.client.response.ResponseUserInfo;
 import io.urdego.group_service.common.client.response.UserIdListResponse;
+import io.urdego.group_service.common.client.response.UserInfo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,4 +18,7 @@ public interface UserServiceClient {
 
     @PostMapping("/api/user-service/users/ids")
     UserIdListResponse mapNicknameToIdInBatch(@RequestBody UserNicknameRequest request);
+
+    @PostMapping("/api/user-service/usersByNickname")
+    UserInfo getUserByNickname(@RequestBody UserRequest request) ;
 }

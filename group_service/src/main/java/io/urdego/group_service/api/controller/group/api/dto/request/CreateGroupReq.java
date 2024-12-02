@@ -1,4 +1,4 @@
-package io.urdego.group_service.api.controller.group.dto.request;
+package io.urdego.group_service.api.controller.group.api.dto.request;
 
 import java.util.List;
 

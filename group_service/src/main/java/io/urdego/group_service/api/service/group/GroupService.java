@@ -1,11 +1,11 @@
 package io.urdego.group_service.api.service.group;
 
-import io.urdego.group_service.api.controller.group.dto.request.CreateGroupReq;
-import io.urdego.group_service.api.controller.group.dto.request.UpdateGroupReq;
-import io.urdego.group_service.api.controller.group.dto.response.GroupCreateRes;
-import io.urdego.group_service.api.controller.group.dto.response.GroupInfoRes;
-import io.urdego.group_service.api.controller.group.dto.response.GroupListRes;
-import io.urdego.group_service.api.controller.group.dto.response.GroupRes;
+import io.urdego.group_service.api.controller.group.api.dto.request.CreateGroupReq;
+import io.urdego.group_service.api.controller.group.api.dto.request.UpdateGroupReq;
+import io.urdego.group_service.api.controller.group.api.dto.response.GroupCreateRes;
+import io.urdego.group_service.api.controller.group.api.dto.response.GroupInfoRes;
+import io.urdego.group_service.api.controller.group.api.dto.response.GroupListRes;
+import io.urdego.group_service.api.controller.group.api.dto.response.GroupRes;
 
 public interface GroupService {
     // 그룹 생성

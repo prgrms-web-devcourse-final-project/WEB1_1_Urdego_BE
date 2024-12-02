@@ -47,6 +47,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserInfo findByOneNickname(String nickname) {
+        User user = userRepository.findByNickname(nickname).orElseThrow(UserNotFoundException::new);
+        return UserInfo.convertToUserInfo(user);
+    }
+
+    @Override
     public UserResponse findUserById(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         return UserResponse.builder()

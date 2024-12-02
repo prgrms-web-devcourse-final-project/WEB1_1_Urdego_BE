@@ -1,15 +1,14 @@
 package io.urdego.group_service.api.service.group;
 
-import io.urdego.group_service.api.controller.group.dto.request.CreateGroupReq;
-import io.urdego.group_service.api.controller.group.dto.request.UpdateGroupReq;
-import io.urdego.group_service.api.controller.group.dto.response.GroupCreateRes;
-import io.urdego.group_service.api.controller.group.dto.response.GroupInfoRes;
-import io.urdego.group_service.api.controller.group.dto.response.GroupListRes;
-import io.urdego.group_service.api.controller.group.dto.response.GroupRes;
+import io.urdego.group_service.api.controller.group.api.dto.request.CreateGroupReq;
+import io.urdego.group_service.api.controller.group.api.dto.request.UpdateGroupReq;
+import io.urdego.group_service.api.controller.group.api.dto.response.GroupCreateRes;
+import io.urdego.group_service.api.controller.group.api.dto.response.GroupInfoRes;
+import io.urdego.group_service.api.controller.group.api.dto.response.GroupListRes;
+import io.urdego.group_service.api.controller.group.api.dto.response.GroupRes;
 import io.urdego.group_service.common.client.GameServiceClient;
 import io.urdego.group_service.common.client.NotificationServiceClient;
 import io.urdego.group_service.common.client.UserServiceClient;
-import io.urdego.group_service.common.client.request.GroupInfoReq;
 import io.urdego.group_service.common.client.request.NotificationRequestInfo;
 import io.urdego.group_service.common.client.request.UserNicknameRequest;
 import io.urdego.group_service.common.client.response.ResponseUserInfo;
@@ -51,12 +50,12 @@ public class GroupServiceImpl implements GroupService {
         //그룹 생성
         Group group = groupRepository.save(
                 Group.builder()
-                .groupName(request.groupName())
-                .description(request.description())
-                .memberLimit(request.memberLimit())
-                .userId(roomManagerId)
-                .totalRounds(request.totalRounds())
-                .build());
+                        .groupName(request.groupName())
+                        .description(request.description())
+                        .memberLimit(request.memberLimit())
+                        .userId(roomManagerId)
+                        .totalRounds(request.totalRounds())
+                        .build());
 
         //초대된 유저들의 닉네임을 id로 매핑
         List<Long> ids = userServiceClient.mapNicknameToIdInBatch(
