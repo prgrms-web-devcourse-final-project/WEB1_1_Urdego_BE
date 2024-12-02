@@ -27,7 +27,7 @@ public class UserContentServiceImpl implements UserContentService {
 
     private final S3Service s3Service;
     private final UserContentRepository userContentRepository;
-    private static final Long MAX_LIMIT = 10L;
+    private static final Long MAX_LIMIT = 1L;
 
     // 단일 컨텐츠 등록
     @Override
@@ -101,7 +101,7 @@ public class UserContentServiceImpl implements UserContentService {
     public UserContentListAndCursorIdxResponse getUserContents(
             Long userId, Long cursorIdx, Long limit) {
 
-        limit = Math.min(limit, MAX_LIMIT);
+        limit = Math.max(limit, MAX_LIMIT);
 
         List<UserContentResponse> userContents = userContentRepository.findUserContentsByUserId_CursorPaging(userId, cursorIdx, limit);
 
