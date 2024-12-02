@@ -1,10 +1,17 @@
 package io.urdego.game_service.api.controller.submission.dto.request;
 
+import java.util.List;
+
 public record SubmissionReq(
-        Long playerId,
+        String nickname,
         Long roundId,
-        double latitude,
-        double longitude,
-        Long contentId
+        List<Double> coordinate
 ) {
+    public double latitude() {
+        return coordinate.get(0);
+    }
+
+    public double longitude() {
+        return coordinate.get(1);
+    }
 }

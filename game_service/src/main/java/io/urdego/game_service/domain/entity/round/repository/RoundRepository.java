@@ -8,5 +8,4 @@ import java.util.List;
 
 @Repository
 public interface RoundRepository extends JpaRepository<Round, Long> {
-    List<Round> findByGameId(Long gameId);
 }

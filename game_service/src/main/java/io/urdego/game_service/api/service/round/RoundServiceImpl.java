@@ -2,14 +2,14 @@ package io.urdego.game_service.api.service.round;
 
 import io.urdego.game_service.api.controller.round.dto.request.RoundCreateReq;
 import io.urdego.game_service.api.controller.round.dto.response.RoundRes;
+import io.urdego.game_service.api.service.game.GameServiceImpl;
 import io.urdego.game_service.common.client.ContentServiceClient;
 import io.urdego.game_service.common.client.GroupServiceClient;
 import io.urdego.game_service.common.client.dto.response.ContentRes;
+import io.urdego.game_service.common.client.dto.response.GroupInfoRes;
 import io.urdego.game_service.common.exception.ExceptionMessage;
 import io.urdego.game_service.common.exception.content.ContentException;
-import io.urdego.game_service.common.exception.game.GameException;
 import io.urdego.game_service.domain.entity.game.Game;
-import io.urdego.game_service.domain.entity.game.repository.GameRepository;
 import io.urdego.game_service.domain.entity.round.Round;
 import io.urdego.game_service.domain.entity.round.repository.RoundRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -26,43 +30,66 @@ import java.util.List;
 public class RoundServiceImpl implements RoundService{
 
     private final RoundRepository roundRepository;
-    private final GameRepository gameRepository;
+    private final GameServiceImpl gameServiceImpl;
     private final ContentServiceClient contentServiceClient;
     private final GroupServiceClient groupServiceClient;
 
     // 라운드 생성
     @Override
     public RoundRes createRound(RoundCreateReq request) {
+        // 1. 게임 정보 조회
+        Long currentGameId = request.gameId();
+        Game game = gameServiceImpl.findByGameIdOrThrowGameException(currentGameId);
 
-        List<ContentRes> contentList = contentServiceClient.getUserContents(request.playerIds());
-        List<Long> contentIds = contentList.stream()
+        // 2. 그룹에서 플레이어 ID 조회
+        GroupInfoRes groupInfo = groupServiceClient.getGroupInfo(game.getGroupId());
+        List<Long> playerIds = groupInfo.invitedUsers();
+
+        // 3. 플레이어별 컨텐츠 가져오기
+        List<ContentRes> contentList = contentServiceClient.getUserContents(playerIds);
+        if (contentList.isEmpty()) {
+            log.warn("{} / PlayerIds : {}", ExceptionMessage.ROUND_CONTENT_NOT_FOUND, playerIds);
+            throw new ContentException(ExceptionMessage.ROUND_CONTENT_NOT_FOUND.getText());
+        }
+
+        // 4. 위도, 경도를 기준으로 그룹화
+        Map<String, List<ContentRes>> groupedByExactLocation = contentList.stream()
+                .collect(Collectors.groupingBy(content -> content.latitude() + "," + content.longitude()));
+
+        // 5. 그룹 중 하나를 랜덤으로 선택
+        Map.Entry<String, List<ContentRes>> selectedGroup = selectRandomGroup(groupedByExactLocation);
+        List<ContentRes> selectedContents = selectedGroup.getValue();
+
+        List<Long> contentIds = selectedContents.stream()
                 .map(ContentRes::contentId)
                 .toList();
 
+        // 6. 라운드 생성
         Round round = Round.builder()
-                .gameId(request.gameId())
+                .gameId(currentGameId)
                 .roundNum(request.roundNum())
                 .contentIds(contentIds)
                 .build();
         round = roundRepository.save(round);
 
-        if (contentList.isEmpty()) {
-            log.warn("{} / PlayerIds : {}", ExceptionMessage.ROUND_CONTENT_NOT_FOUND.getText(), request.playerIds());
-            throw new ContentException(ExceptionMessage.ROUND_CONTENT_NOT_FOUND.getText());
-        }
+        log.info("Round {} created with {} problems, location: {}", round.getRoundNum(), selectedContents.size(), selectedGroup.getKey());
 
-        log.info("Round {} created with {} problems", round.getRoundNum(), contentList.size());
+        // 7. 응답 생성
+        List<String> contentUrls = contentList.stream()
+                .map(ContentRes::url)
+                .toList();
 
-        return RoundRes.from(round);
+        String hint = contentList.get(0).hint();
+        return RoundRes.from(round.getRoundId(), game.getTimer(), contentUrls, hint);
     }
 
-//    // 그룹-게임 정보 매핑 내부 메서드
-//    public Long findGroupId(Long gameId) {
-//        return gameRepository.findById(gameId)
-//                .map(Game::getGroupId)
-//                .orElseThrow(() -> {
-//                    log.warn("GameId {} : {}", gameId, ExceptionMessage.GAME_NOT_FOUND);
-//                    return new GameException(ExceptionMessage.GAME_NOT_FOUND.getText());
-//                });
-//    }
+    private Map.Entry<String, List<ContentRes>> selectRandomGroup(Map<String, List<ContentRes>> groupedByLocation) {
+        List<Map.Entry<String, List<ContentRes>>> groups = new ArrayList<>(groupedByLocation.entrySet());
+        if (groups.isEmpty()) {
+            throw new ContentException(ExceptionMessage.ROUND_CONTENT_NOT_FOUND.getText());
+        }
+        // 랜덤으로 그룹 선택
+        return groups.get(new Random().nextInt(groups.size()));
+    }
+
 }

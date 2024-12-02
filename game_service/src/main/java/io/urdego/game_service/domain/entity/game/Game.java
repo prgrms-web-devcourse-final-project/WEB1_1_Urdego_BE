@@ -1,6 +1,5 @@
 package io.urdego.game_service.domain.entity.game;
 
-import io.urdego.game_service.domain.entity.player.Player;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,10 +29,11 @@ public class Game {
     private int timer;
 
     @Column(nullable = false)
-    private int playerCounts;
-
-    @Column(nullable = false)
     private boolean inProgress;
+
+    @ElementCollection
+    @CollectionTable(name = "player_ids", joinColumns = @JoinColumn(name = "game_id"))
+    private List<Long> playerIds;
 
     private LocalDateTime startedAt;
     private LocalDateTime endedAt;
@@ -43,11 +43,11 @@ public class Game {
     private Long groupId;
 
     @Builder
-    public Game(int totalRounds, int timer, int playerCounts, boolean inProgress, Long groupId) {
+    public Game(int totalRounds, int timer, boolean inProgress, List<Long> playerIds, Long groupId) {
         this.totalRounds = totalRounds;
         this.timer = timer;
-        this.playerCounts = playerCounts;
         this.inProgress = inProgress;
+        this.playerIds = playerIds;
         this.groupId = groupId;
     }
 

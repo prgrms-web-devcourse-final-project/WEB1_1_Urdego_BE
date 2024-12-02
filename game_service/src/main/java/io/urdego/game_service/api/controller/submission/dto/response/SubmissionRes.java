@@ -1,23 +1,30 @@
 package io.urdego.game_service.api.controller.submission.dto.response;
 
-import io.urdego.game_service.domain.entity.submission.Submission;
+import io.urdego.game_service.common.client.dto.response.ContentRes;
+
+import java.util.List;
 
 public record SubmissionRes(
-        Long submissionId,
-        Long playerId,
-        Long roundId,
-        double latitude,
-        double longitude,
-        int score
+        Coordinate answerCoordinate,
+        List<UserSubmission> submitCoordinates
 ) {
-    public static SubmissionRes from(Submission submission) {
+    public static SubmissionRes of(ContentRes content, List<UserSubmission> submissions) {
         return new SubmissionRes(
-                submission.getSubmissionId(),
-                submission.getPlayerId(),
-                submission.getRoundId(),
-                submission.getLatitude(),
-                submission.getLongitude(),
-                submission.getScore()
+                new Coordinate(content.latitude(), content.longitude()),
+                submissions
         );
     }
+
+    public static record Coordinate(
+            double latitude,
+            double longitude
+    ) {}
+
+    public static record UserSubmission(
+            String nickname,
+            double latitude,
+            double longitude,
+            int score,
+            int totalScore
+    ) {}
 }
