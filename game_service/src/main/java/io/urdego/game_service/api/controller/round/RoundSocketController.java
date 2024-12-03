@@ -19,8 +19,8 @@ public class RoundSocketController {
     private final RoundService roundService;
 
     // 라운드 생성
-    @MessageMapping("/rounds/{roundId}/create")
-    @SendTo("/game-service/subscribe/rounds/{roundId}/create")
+    @MessageMapping("/rounds/create")
+    @SendTo("/game-service/subscribe/rounds/create")
     public RoundRes createRound(@Payload RoundCreateReq request) {
         log.info("Create round for gameId: {}", request.gameId());
         return roundService.createRound(request);
