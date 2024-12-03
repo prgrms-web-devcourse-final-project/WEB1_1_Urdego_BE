@@ -1,17 +1,22 @@
 package io.urdego.game_service.api.controller.round.dto.response;
 
-import io.urdego.game_service.domain.entity.round.Round;
+import java.util.List;
 
 public record RoundRes(
-        Long gameId,
         Long roundId,
-        int roundNum
+        int roundNum,
+        int roundTimer,
+        List<String> contentUrls,
+        String hint
+
 ) {
-    public static RoundRes from(Round round) {
+    public static RoundRes from(Long roundId, int roundNum,  int roundTimer, List<String> contentUrls, String hint) {
         return new RoundRes(
-                round.getGameId(),
-                round.getRoundId(),
-                round.getRoundNum()
+                roundId,
+                roundNum,
+                roundTimer,
+                contentUrls,
+                hint
         );
     }
 }
