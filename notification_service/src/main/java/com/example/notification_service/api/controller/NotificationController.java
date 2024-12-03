@@ -2,6 +2,7 @@ package com.example.notification_service.api.controller;
 
 import com.example.notification_service.api.controller.dto.NotificationRequestInfo;
 import com.example.notification_service.api.service.NotificationPublisher;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +16,7 @@ public class NotificationController {
 	private final NotificationPublisher notificationPublisher;
 
 	//알림 발행 및 보내기
+	@ApiResponse(responseCode = "200", description = "알림 발송 성공")
 	@PostMapping("/send")
 	public String senNotification(@RequestBody NotificationRequestInfo requestInfo) {
 		notificationPublisher.publishToUser(requestInfo);

@@ -1,6 +1,7 @@
 package com.example.notification_service.api.controller;
 
 import com.example.notification_service.api.service.SseService;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,7 +24,8 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 @RequestMapping("/api/notification-service/sse")
 public class NotificationSseController {
 	private final SseService sseService;
-	//SSE 연결 프론트에서 email로 준다고 함
+	//SSE 연결
+	@ApiResponse(responseCode = "200", description = "sse 연결 성공")
 	@GetMapping("/connect/{email}")
 	public SseEmitter connect(@PathVariable("email") String email) {
 		return sseService.connect(email);

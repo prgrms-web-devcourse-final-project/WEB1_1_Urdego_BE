@@ -10,5 +10,4 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface GroupServiceClient {
 	@GetMapping("api/group-service/groups/{groupId}")
 	GroupResponseInfo getGroupInfo(@PathVariable Long groupId);
-
 }
