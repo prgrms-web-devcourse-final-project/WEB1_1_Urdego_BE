@@ -1,4 +1,4 @@
-package com.example.notification_service.common.exception;
+package io.urdego.notification_service.common.exception;
 
 import feign.FeignException;
 import org.springframework.http.ResponseEntity;
