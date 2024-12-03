@@ -11,6 +11,7 @@ import io.urdego.group_service.common.client.NotificationServiceClient;
 import io.urdego.group_service.common.client.UserServiceClient;
 import io.urdego.group_service.common.client.request.NotificationRequestInfo;
 import io.urdego.group_service.common.client.request.UserNicknameRequest;
+import io.urdego.group_service.common.client.request.UserRequest;
 import io.urdego.group_service.common.client.response.ResponseUserInfo;
 import io.urdego.group_service.common.exception.ExceptionMessage;
 import io.urdego.group_service.common.exception.group.GroupException;
@@ -45,27 +46,25 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public GroupCreateRes createGroup(CreateGroupReq request) {
 
-        Long roomManagerId = request.userId();
+        String roomManagerNickname = request.host();
+        Long roomManagerId = userServiceClient.getUserByNickname(UserRequest.of(roomManagerNickname)).userId();
 
         //그룹 생성
         Group group = groupRepository.save(
                 Group.builder()
-                        .groupName(request.groupName())
-                        .description(request.description())
-                        .memberLimit(request.memberLimit())
+                        .groupName(request.title())
+                        .memberLimit(request.maxPlayers())
                         .userId(roomManagerId)
-                        .totalRounds(request.totalRounds())
+                        .totalRounds(request.rounds())
+                        .timer(request.timer())
                         .build());
 
         //초대된 유저들의 닉네임을 id로 매핑
         List<Long> ids = userServiceClient.mapNicknameToIdInBatch(
                 UserNicknameRequest.of(
-                        request.invitedUserNicknames()
+                        request.invitedFriends()
                 )
         ).userIds();
-
-        //방장 id를 닉네임으로 매핑
-        ResponseUserInfo roomManagerInfo = userServiceClient.getUserById(roomManagerId);
 
         // 초대된 유저들의 id로 초대 알림 발송
         String sendLog = notificationServiceClient.sendNotification(
@@ -73,11 +72,10 @@ public class GroupServiceImpl implements GroupService {
                         group.getGroupId(),
                         group.getGroupName(),
                         roomManagerId,  //sender 닉네임
-                        roomManagerInfo.nickname(),
+                        roomManagerNickname,
                         ids,
-                        request.invitedUserNicknames()));  //초대된사람들 닉네임
-
-
+                        request.invitedFriends()));  //초대된사람들 닉네임
+        
         // 게임 서비스에 게임 생성 요청 _게임 서비스의 게임생성 API 미구현
         Long gameId = 0L;
 //        Long gameId = gameServiceClient.createGame(
