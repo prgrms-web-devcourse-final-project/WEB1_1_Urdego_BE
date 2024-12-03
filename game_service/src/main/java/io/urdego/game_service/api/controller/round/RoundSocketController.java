@@ -29,8 +29,8 @@ public class RoundSocketController {
     // 라운드 종료
     @MessageMapping("/rounds/{roundId}/end")
     @SendTo("/game-service/subscribe/rounds/{roundId}/end")
-    public String endRound(@DestinationVariable Long roundId) {
-        log.info("Ending roundId: {}", roundId);
-        return "라운드가 종료되었습니다!";
+    public String endRound(@DestinationVariable int roundNum) {
+        log.info("Ending round: {}", roundNum);
+        return roundNum + "라운드가 종료되었습니다!";
     }
 }

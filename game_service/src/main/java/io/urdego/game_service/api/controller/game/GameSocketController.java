@@ -1,6 +1,7 @@
 package io.urdego.game_service.api.controller.game;
 
 import io.urdego.game_service.api.controller.game.dto.response.GameRes;
+import io.urdego.game_service.api.controller.game.dto.response.GameStartRes;
 import io.urdego.game_service.api.service.game.GameService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,13 +20,13 @@ public class GameSocketController {
     // 게임 시작
     @MessageMapping("/game/start")
     @SendTo("/game-service/subscribe/game/start")
-    public Long startGame(Long groupId) {
-        log.info("Game start requested for groupId: {}", groupId);
+    public GameStartRes startGame(Long gameId) {
+        log.info("Game start requested for groupId: {}", gameId);
 
-        GameRes gameInfo = gameService.startGame(groupId);
+        GameStartRes gameInfo = gameService.startGame(gameId);
 
         log.info("Game started with gameId: {}", gameInfo.gameId());
-        return gameInfo.gameId();
+        return gameInfo;
     }
 
     // 게임 종료
