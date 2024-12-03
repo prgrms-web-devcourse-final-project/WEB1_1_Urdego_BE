@@ -1,16 +1,9 @@
-package com.example.notification_service.api.controller;
+package io.urdego.notification_service.api.controller;
 
-import com.example.notification_service.api.service.SseService;
+import io.urdego.notification_service.api.service.SseService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import java.io.IOException;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.connection.Message;
-import org.springframework.data.redis.connection.MessageListener;
-import org.springframework.data.redis.listener.PatternTopic;
-import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

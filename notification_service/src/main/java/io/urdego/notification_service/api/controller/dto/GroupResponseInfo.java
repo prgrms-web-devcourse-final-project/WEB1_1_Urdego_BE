@@ -1,4 +1,4 @@
-package com.example.notification_service.api.controller.dto;
+package io.urdego.notification_service.api.controller.dto;
 
 import java.util.List;
 

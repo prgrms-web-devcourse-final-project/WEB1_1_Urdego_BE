@@ -1,4 +1,4 @@
-package com.example.notification_service.config;
+package io.urdego.notification_service.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;

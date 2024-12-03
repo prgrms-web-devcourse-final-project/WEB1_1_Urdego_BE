@@ -1,4 +1,4 @@
-package com.example.notification_service.domain;
+package io.urdego.notification_service.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;

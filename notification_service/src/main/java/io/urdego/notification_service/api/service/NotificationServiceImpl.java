@@ -1,14 +1,10 @@
-package com.example.notification_service.api.service;
+package io.urdego.notification_service.api.service;
 
-import com.example.notification_service.api.controller.dto.NotificationRequestInfo;
-import com.example.notification_service.common.client.GroupServiceClient;
-import com.example.notification_service.common.client.UserServiceClient;
-import com.example.notification_service.domain.NotificationMessage;
+import io.urdego.notification_service.api.controller.dto.NotificationRequestInfo;
+import io.urdego.notification_service.domain.NotificationMessage;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,11 +14,12 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class NotificationPublisher {
+public class NotificationServiceImpl implements NotificationService {
 	private final StringRedisTemplate redisTemplate;
 	private final ObjectMapper objectMapper;
 
-	public void publishToUser(NotificationRequestInfo requestInfo){
+	@Override
+	public void publishNotification(NotificationRequestInfo requestInfo){
 		for(int i = 0; i< requestInfo.targetIds().size(); i++){
 			//알림 메세지 생성
 			NotificationMessage notification = NotificationMessage.of(

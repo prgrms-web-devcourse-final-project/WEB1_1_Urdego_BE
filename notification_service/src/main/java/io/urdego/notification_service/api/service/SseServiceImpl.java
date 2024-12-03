@@ -1,8 +1,8 @@
-package com.example.notification_service.api.service;
+package io.urdego.notification_service.api.service;
 
-import com.example.notification_service.api.controller.dto.UserResponseInfo;
-import com.example.notification_service.common.client.UserServiceClient;
-import com.example.notification_service.domain.NotificationMessage;
+import io.urdego.notification_service.api.controller.dto.UserResponseInfo;
+import io.urdego.notification_service.common.client.UserServiceClient;
+import io.urdego.notification_service.domain.NotificationMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import java.io.IOException;
@@ -83,6 +83,8 @@ public class SseServiceImpl implements SseService {
 		SseEmitter emitter = new SseEmitter(Long.MAX_VALUE); // 연결 시간
 		emitters.put(userId,emitter);
 
+		log.info("Connected to user {}", userId);
+
 		//SSE 연결 종료 시 클라이언트 제거
 		emitter.onCompletion(() -> {
 			log.debug("SSE connection completed userId: {}", userId);
@@ -92,6 +94,16 @@ public class SseServiceImpl implements SseService {
 			log.debug("SSE connection timed out userId: {}", userId);
 			emitters.remove(userId);
 		});
+
+		//연결 확인 메세지
+		try{
+			emitter.send(SseEmitter.event()
+					.name("Connect")
+					.data("Connect to email : " + email)
+			);
+		}catch (IOException e){
+			log.error("Failed to send SSE to email {}", email, e);
+		}
 
 		return emitter;
 	}

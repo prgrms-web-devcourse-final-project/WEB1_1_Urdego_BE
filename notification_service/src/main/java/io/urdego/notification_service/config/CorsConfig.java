@@ -1,4 +1,4 @@
-package com.example.notification_service.config;
+package io.urdego.notification_service.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

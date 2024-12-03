@@ -1,4 +1,4 @@
-package com.example.notification_service.config;
+package io.urdego.notification_service.config;
 
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;

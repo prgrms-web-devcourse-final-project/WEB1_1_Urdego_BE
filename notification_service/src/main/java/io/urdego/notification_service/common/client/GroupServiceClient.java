@@ -1,8 +1,7 @@
-package com.example.notification_service.common.client;
+package io.urdego.notification_service.common.client;
 
-import com.example.notification_service.api.controller.dto.GroupResponseInfo;
+import io.urdego.notification_service.api.controller.dto.GroupResponseInfo;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 

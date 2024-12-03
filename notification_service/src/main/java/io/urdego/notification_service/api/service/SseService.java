@@ -1,4 +1,4 @@
-package com.example.notification_service.api.service;
+package io.urdego.notification_service.api.service;
 
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
