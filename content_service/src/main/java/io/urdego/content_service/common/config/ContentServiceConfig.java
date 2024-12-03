@@ -40,10 +40,5 @@ public class ContentServiceConfig implements WebMvcConfigurer {
         mapper.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
 
         return mapper;
-    }
-
-    @Bean
-    public void setDefaultTimeZone() {
-        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
-    }
+    }}
 }
