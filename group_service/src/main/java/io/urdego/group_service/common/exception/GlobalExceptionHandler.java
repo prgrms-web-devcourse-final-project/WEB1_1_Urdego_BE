@@ -1,5 +1,6 @@
 package io.urdego.group_service.common.exception;
 
+import feign.FeignException;
 import io.urdego.group_service.common.exception.group.GroupException;
 import io.urdego.group_service.common.exception.groupMember.GroupMemberException;
 
@@ -7,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -46,5 +49,16 @@ public class GlobalExceptionHandler {
                         "Internal Server Error",
                         e.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(FeignException.class)
+    public ResponseEntity<ErrorResponse> handleFeignException(FeignException e) {
+
+        String errorMsg = e.getMessage();
+
+        ErrorResponse error =
+                ErrorResponse.from(e.status(), BAD_REQUEST.getReasonPhrase(), errorMsg);
+
+        return ResponseEntity.badRequest().body(error);
     }
 }
