@@ -18,7 +18,7 @@ public class GameSocketController {
 
     // 게임 시작
     @MessageMapping("/game/start")
-    @SendTo("/topic/game/start")
+    @SendTo("/game-service/subscribe/game/start")
     public Long startGame(Long groupId) {
         log.info("Game start requested for groupId: {}", groupId);
 
