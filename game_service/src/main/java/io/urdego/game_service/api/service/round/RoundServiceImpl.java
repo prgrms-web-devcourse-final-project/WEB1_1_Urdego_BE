@@ -80,7 +80,7 @@ public class RoundServiceImpl implements RoundService{
                 .toList();
 
         String hint = contentList.get(0).hint();
-        return RoundRes.from(round.getRoundId(), game.getTimer(), contentUrls, hint);
+        return RoundRes.from(round.getRoundId(), round.getRoundNum(), game.getTimer(), contentUrls, hint);
     }
 
     private Map.Entry<String, List<ContentRes>> selectRandomGroup(Map<String, List<ContentRes>> groupedByLocation) {
