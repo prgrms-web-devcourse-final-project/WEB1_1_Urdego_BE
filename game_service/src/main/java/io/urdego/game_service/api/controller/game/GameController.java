@@ -2,6 +2,7 @@ package io.urdego.game_service.api.controller.game;
 
 import io.urdego.game_service.api.controller.game.dto.response.GameRes;
 import io.urdego.game_service.api.service.game.GameService;
+import io.urdego.game_service.common.client.dto.response.GroupInfoRes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +17,9 @@ public class GameController {
     private final GameService gameService;
 
     // 게임 생성
-    @PostMapping("/games/{gruopId}/start")
-    public ResponseEntity<Long> createGame(@PathVariable Long groupId) {
-        GameRes response = gameService.startGame(groupId);
+    @PostMapping("/games")
+    public ResponseEntity<Long> createGame(@RequestBody GroupInfoRes groupInfoRes) {
+        GameRes response = gameService.createGame(groupInfoRes.groupId());
         return ResponseEntity.ok(response.gameId());
     }
 }

@@ -1,6 +1,7 @@
 package io.urdego.game_service.api.service.game;
 
 import io.urdego.game_service.api.controller.game.dto.response.GameRes;
+import io.urdego.game_service.api.controller.game.dto.response.GameStartRes;
 import io.urdego.game_service.common.client.GroupServiceClient;
 import io.urdego.game_service.common.client.dto.response.GroupInfoRes;
 import io.urdego.game_service.common.exception.ExceptionMessage;
@@ -23,9 +24,9 @@ public class GameServiceImpl implements GameService{
     private final GameRepository gameRepository;
     private final GroupServiceClient groupServiceClient;
 
-    // 게임 생성 및 시작
+    // 게임 생성
     @Override
-    public GameRes startGame(Long groupId) {
+    public GameRes createGame(Long groupId) {
         GroupInfoRes groupInfo = groupServiceClient.getGroupInfo(groupId);
 
         Game game = Game.builder()
@@ -37,11 +38,21 @@ public class GameServiceImpl implements GameService{
                 .build();
 
         game = gameRepository.save(game);
+
+        return GameRes.from(game);
+    }
+
+    // 게임 시작
+    @Override
+    public GameStartRes startGame(Long gameId) {
+        Game game = findByGameIdOrThrowGameException(gameId);
+
         game.setStartedAt(LocalDateTime.now());
+        gameRepository.save(game);
 
         log.info("Game started at : {}", game.getStartedAt());
 
-        return GameRes.from(game);
+        return GameStartRes.from(game);
     }
 
     // 게임 종료
