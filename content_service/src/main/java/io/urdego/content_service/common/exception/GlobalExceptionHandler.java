@@ -1,7 +1,6 @@
 package io.urdego.content_service.common.exception;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-
+import feign.FeignException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -9,6 +8,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.stream.Collectors;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -49,6 +50,17 @@ public class GlobalExceptionHandler {
 
         ErrorResponse error =
                 ErrorResponse.from(BAD_REQUEST.value(), BAD_REQUEST.getReasonPhrase(), errorMsg);
+
+        return ResponseEntity.badRequest().body(error);
+    }
+
+    @ExceptionHandler(FeignException.class)
+    public ResponseEntity<ErrorResponse> handleFeignException(FeignException e) {
+
+        String errorMsg = e.getMessage();
+
+        ErrorResponse error =
+                ErrorResponse.from(e.status(), BAD_REQUEST.getReasonPhrase(), errorMsg);
 
         return ResponseEntity.badRequest().body(error);
     }
