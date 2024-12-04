@@ -19,7 +19,7 @@ public class GameController {
     // 게임 생성
     @PostMapping("/games")
     public ResponseEntity<Long> createGame(@RequestBody GroupCreateReq groupCreateReq) {
-        GameRes response = gameService.createGame(groupCreateReq.groupId());
+        GameRes response = gameService.createGame(groupCreateReq);
         return ResponseEntity.ok(response.gameId());
     }
 }
