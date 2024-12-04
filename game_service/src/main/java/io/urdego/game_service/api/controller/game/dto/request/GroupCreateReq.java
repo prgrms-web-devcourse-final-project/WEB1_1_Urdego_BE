@@ -4,7 +4,6 @@ public record GroupCreateReq(
         Long groupId,
         int totalRounds,
         int timer,
-        int playerCounts,
         String groupName,
         Integer memberLimit,
         boolean isDeleted

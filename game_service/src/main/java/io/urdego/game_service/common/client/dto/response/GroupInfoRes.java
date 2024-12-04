@@ -6,7 +6,6 @@ public record GroupInfoRes(
         Long groupId,
         int totalRounds,
         int timer,
-        int playerCounts,
         List<Long> invitedUserIds,
         String groupName,
         Integer memberLimit,
