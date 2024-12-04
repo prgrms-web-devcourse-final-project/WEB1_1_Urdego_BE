@@ -31,10 +31,6 @@ public class Game {
     @Column(nullable = false)
     private boolean inProgress;
 
-    @ElementCollection
-    @CollectionTable(name = "player_ids", joinColumns = @JoinColumn(name = "game_id"))
-    private List<Long> playerIds;
-
     private LocalDateTime startedAt;
     private LocalDateTime endedAt;
 
@@ -43,11 +39,10 @@ public class Game {
     private Long groupId;
 
     @Builder
-    public Game(int totalRounds, int timer, boolean inProgress, List<Long> playerIds, Long groupId) {
+    public Game(int totalRounds, int timer, boolean inProgress, Long groupId) {
         this.totalRounds = totalRounds;
         this.timer = timer;
         this.inProgress = inProgress;
-        this.playerIds = playerIds;
         this.groupId = groupId;
     }
 

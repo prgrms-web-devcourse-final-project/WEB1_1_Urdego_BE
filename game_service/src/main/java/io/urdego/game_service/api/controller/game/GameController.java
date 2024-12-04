@@ -1,8 +1,8 @@
 package io.urdego.game_service.api.controller.game;
 
+import io.urdego.game_service.api.controller.game.dto.request.GroupCreateReq;
 import io.urdego.game_service.api.controller.game.dto.response.GameRes;
 import io.urdego.game_service.api.service.game.GameService;
-import io.urdego.game_service.common.client.dto.response.GroupInfoRes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +18,8 @@ public class GameController {
 
     // 게임 생성
     @PostMapping("/games")
-    public ResponseEntity<Long> createGame(@RequestBody GroupInfoRes groupInfoRes) {
-        GameRes response = gameService.createGame(groupInfoRes.groupId());
+    public ResponseEntity<Long> createGame(@RequestBody GroupCreateReq groupCreateReq) {
+        GameRes response = gameService.createGame(groupCreateReq);
         return ResponseEntity.ok(response.gameId());
     }
 }

@@ -1,5 +1,6 @@
 package io.urdego.game_service.api.service.game;
 
+import io.urdego.game_service.api.controller.game.dto.request.GroupCreateReq;
 import io.urdego.game_service.api.controller.game.dto.response.GameRes;
 import io.urdego.game_service.api.controller.game.dto.response.GameStartRes;
 import io.urdego.game_service.common.client.GroupServiceClient;
@@ -26,14 +27,12 @@ public class GameServiceImpl implements GameService{
 
     // 게임 생성
     @Override
-    public GameRes createGame(Long groupId) {
-        GroupInfoRes groupInfo = groupServiceClient.getGroupInfo(groupId);
+    public GameRes createGame(GroupCreateReq groupInfo) {
 
         Game game = Game.builder()
                 .totalRounds(groupInfo.totalRounds())
                 .timer(groupInfo.timer())
                 .inProgress(true)
-                .playerIds(groupInfo.invitedUserIds())
                 .groupId(groupInfo.groupId())
                 .build();
 
