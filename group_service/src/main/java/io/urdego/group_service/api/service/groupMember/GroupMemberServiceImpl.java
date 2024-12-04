@@ -57,10 +57,7 @@ public class GroupMemberServiceImpl implements GroupMemberService {
         }
 
         //유저서비스에게 닉네임으로 유저 정보 호출
-        System.out.println("GroupMemberServiceImpl.addMember 60");
-        System.out.println("nickname = " + nickname);
         UserInfo userInfo = userServiceClient.getUserByNickname(UserRequest.of(nickname));
-        System.out.println("GroupMemberServiceImpl.addMember 63");
         // 이미 그룹 멤버인지 확인
 //        groupMemberRepository
 //                .findByGroupIdAndUserId(groupId, userInfo.userId())
