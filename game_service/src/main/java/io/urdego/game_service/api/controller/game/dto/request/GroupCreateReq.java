@@ -1,13 +1,10 @@
-package io.urdego.game_service.common.client.dto.response;
+package io.urdego.game_service.api.controller.game.dto.request;
 
-import java.util.List;
-
-public record GroupInfoRes(
+public record GroupCreateReq(
         Long groupId,
         int totalRounds,
         int timer,
         int playerCounts,
-        List<Long> invitedUserIds,
         String groupName,
         Integer memberLimit,
         boolean isDeleted

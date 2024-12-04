@@ -33,7 +33,6 @@ public class GameServiceImpl implements GameService{
                 .totalRounds(groupInfo.totalRounds())
                 .timer(groupInfo.timer())
                 .inProgress(true)
-                .playerIds(groupInfo.invitedUserIds())
                 .groupId(groupInfo.groupId())
                 .build();
 
