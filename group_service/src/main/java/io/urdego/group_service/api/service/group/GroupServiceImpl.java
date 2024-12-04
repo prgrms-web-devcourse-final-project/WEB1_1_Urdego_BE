@@ -1,6 +1,7 @@
 package io.urdego.group_service.api.service.group;
 
 import io.urdego.group_service.api.controller.group.api.dto.request.CreateGroupReq;
+import io.urdego.group_service.api.controller.group.api.dto.request.GroupCreateReq;
 import io.urdego.group_service.api.controller.group.api.dto.request.UpdateGroupReq;
 import io.urdego.group_service.api.controller.group.api.dto.response.GroupCreateRes;
 import io.urdego.group_service.api.controller.group.api.dto.response.GroupInfoRes;
@@ -77,14 +78,15 @@ public class GroupServiceImpl implements GroupService {
                         request.invitedFriends()));  //초대된사람들 닉네임
         
         // 게임 서비스에 게임 생성 요청 _게임 서비스의 게임생성 API 미구현
-        Long gameId = 0L;
-//        Long gameId = gameServiceClient.createGame(
-//                GroupInfoReq.builder().
-//                        groupId(group.getGroupId()).
-//                        totalRounds(request.totalRounds()).
-//                        timer(group.getTimer()).
-//                        playerCounts(request.memberLimit()).
-//                        invitedUsers(ids).build());
+        Long gameId = gameServiceClient.createGame(
+                GroupCreateReq.builder()
+                        .groupId(group.getGroupId())
+                        .totalRounds(request.rounds())
+                        .timer(request.timer())
+                        .groupName(request.title())
+                        .memberLimit(request.maxPlayers())
+                        .isDeleted(false)
+                        .build());
 
         return GroupCreateRes.of(group.getGroupId(), gameId);
     }
