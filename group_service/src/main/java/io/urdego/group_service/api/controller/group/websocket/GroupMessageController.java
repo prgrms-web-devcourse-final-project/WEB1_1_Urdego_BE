@@ -37,6 +37,7 @@ public class GroupMessageController {
                 groupMemberService.addMember(groupId, nickname, role);
 
                 List<GroupMemberStatusResponse> groupMemberStatusResponseList = groupMemberService.getStatus(groupId);
+                log.info("groupMemberStatusResponseList.size() = {}" , groupMemberStatusResponseList.size());
                 yield new MessageResponse<>(GroupStatusResponse.of(groupMemberStatusResponseList));
             }
             case READY -> {
