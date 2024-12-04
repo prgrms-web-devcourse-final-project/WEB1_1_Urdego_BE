@@ -28,9 +28,10 @@ public class GroupMessageController {
     @MessageMapping("/group/{groupId}")
     @SendTo("/group-service/subscribe/group/{groupId}")
     public MessageResponse<?> sendMessage(MessageRequest request, @DestinationVariable Long groupId) {
-
+        log.info("GroupMessageController.sendMessage");
         return switch (request.eventType()) {
             case PARTICIPANT -> {
+                log.info("GroupMessageController.sendMessage : PARTICIPANT SUCCESS");
                 String nickname = messageDataReader.readString(request.data().get("nickname"));
                 GroupMemberRole role = GroupMemberRole.valueOf(messageDataReader.readString(request.data().get("role")));
                 groupMemberService.addMember(groupId, nickname, role);
