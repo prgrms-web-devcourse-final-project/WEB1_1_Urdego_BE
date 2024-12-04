@@ -43,7 +43,12 @@ public class RoundServiceImpl implements RoundService{
 
         // 2. 그룹에서 플레이어 ID 조회
         GroupInfoRes groupInfo = groupServiceClient.getGroupInfo(game.getGroupId());
-        List<Long> playerIds = groupInfo.invitedUsers();
+        log.info("Fetched group info: {}", groupInfo);
+        List<Long> playerIds = groupInfo.invitedUserIds();
+        if (playerIds == null || playerIds.isEmpty()) {
+            log.warn("No invited users found for groupId: {}", game.getGroupId());
+            throw new IllegalArgumentException("No invited users found");
+        }
 
         // 3. 플레이어별 컨텐츠 가져오기
         List<ContentRes> contentList = contentServiceClient.getUserContents(playerIds);

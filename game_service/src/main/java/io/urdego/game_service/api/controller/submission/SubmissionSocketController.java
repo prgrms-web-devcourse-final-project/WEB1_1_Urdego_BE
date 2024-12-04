@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 
@@ -20,7 +21,7 @@ public class SubmissionSocketController {
 
     // 답안 제출
     @MessageMapping("game/{gameId}/rounds/{roundId}/submit")
-    @SendToUser("/game-service/subscribe/score")
+    @SendTo("/game-service/subscribe/score")
     public SubmissionRes submitAnswer(
             @DestinationVariable Long gameId,
             @DestinationVariable Long roundId,

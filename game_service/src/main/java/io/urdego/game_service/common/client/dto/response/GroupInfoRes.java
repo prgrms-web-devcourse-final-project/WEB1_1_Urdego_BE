@@ -7,6 +7,10 @@ public record GroupInfoRes(
         int totalRounds,
         int timer,
         int playerCounts,
-        List<Long> invitedUsers
+        List<Long> invitedUserIds,
+        String groupName,
+        String description,
+        Integer memberLimit,
+        boolean isDeleted
 ) {
 }
