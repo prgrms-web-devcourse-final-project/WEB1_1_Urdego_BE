@@ -25,8 +25,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
-
 
 @Slf4j
 @Service
@@ -37,9 +37,9 @@ public class SubmissionServiceImpl implements SubmissionService {
     private final RoundRepository roundRepository;
     private final GameServiceImpl gameServiceImpl;
     private final GroupServiceClient groupServiceClient;
-    private SubmissionRepository submissionRepository;
+    private final SubmissionRepository submissionRepository;
     private final UserServiceClient userServiceClient;
-    private ContentServiceClient contentServiceClient;
+    private final ContentServiceClient contentServiceClient;
 
     // 답안 제출
     @Override
@@ -91,19 +91,28 @@ public class SubmissionServiceImpl implements SubmissionService {
         Game game = gameServiceImpl.findByGameIdOrThrowGameException(round.getGameId());
         GroupInfoRes groupInfo = groupServiceClient.getGroupInfo(game.getGroupId());
 
-        List<SubmissionRes.UserSubmission> userSubmissions = groupInfo.invitedUsers()
+        List<SubmissionRes.UserSubmission> userSubmissions = groupInfo.invitedUserIds()
                 .stream()
                 .map(id -> {
                     UserRes user = userServiceClient.getUserById(id);
                     // 각 플레이어의 제출 정보
-                    Submission userSubmission = submissionRepository.findByUserIdAndRoundId(userId, round.getRoundId())
-                            .orElseThrow(() -> new IllegalArgumentException("Submission not found for userId: " + userId));
+                    Submission userSubmission = submissionRepository.findByUserIdAndRoundId(id, round.getRoundId()).orElse(null);
 
                     // 플레이어 총점 계산
                     int totalScore = submissionRepository.findAllByUserId(userId)
                             .stream()
                             .mapToInt(Submission::getScore)
                             .sum();
+
+                    if (userSubmission == null) {
+                        return new SubmissionRes.UserSubmission(
+                                user.nickname(),
+                                0.0,
+                                0.0,
+                                0,
+                                totalScore
+                        );
+                    }
 
                     return new SubmissionRes.UserSubmission(
                             user.nickname(),
@@ -120,30 +129,31 @@ public class SubmissionServiceImpl implements SubmissionService {
 
     }
 
-    // 거리 계산 - 하버사인 공식
+    // 거리 계산 - 하버사인 공식(Haversine Formula)
     @Override
     public double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
         final int R = 6371;
         double latDistance = Math.toRadians(lat2 - lat1);
         double lonDistance = Math.toRadians(lon2 - lon1);
-        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2) +
-                Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
-                        Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return R * c;
     }
 
-    // 거리 기반 점수 계산
+    // 거리 기반 점수 계산 - 선형 감소(Linear Decay)
     @Override
     public int calculateScore(double distance) {
-        if (distance < 1) {
-            return 100;
-        } else if (distance < 5) {
-            return 80;
-        } else if (distance < 10) {
-            return 50;
-        } else {
-            return 0;
+        // 선형 감소 점수 계산
+        final int maxScore = 1000; // 최대 점수
+        final double maxDistance = 300.0; // 점수가 0이 되는 기준 거리 (10km)
+
+        if (distance > maxDistance) {
+            return 0; // 최대 거리를 초과하면 점수는 0점
         }
+
+        // 선형 점수 계산 공식
+        return (int) Math.max(0, maxScore - (distance / maxDistance) * maxScore);
     }
 }
