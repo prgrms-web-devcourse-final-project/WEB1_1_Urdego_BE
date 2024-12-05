@@ -3,8 +3,13 @@
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="FrameworkDetectionExcludesConfiguration">
     <file type="web" url="file://$PROJECT_DIR$/content_service" />
+    <file type="web" url="file://$PROJECT_DIR$/discovery_service" />
+    <file type="web" url="file://$PROJECT_DIR$/game_service" />
+    <file type="web" url="file://$PROJECT_DIR$/gateway_service" />
+    <file type="web" url="file://$PROJECT_DIR$/group_service" />
     <file type="web" url="file://$PROJECT_DIR$/notification" />
     <file type="web" url="file://$PROJECT_DIR$/notification_service" />
+    <file type="web" url="file://$PROJECT_DIR$/user_service" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="corretto-17" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />

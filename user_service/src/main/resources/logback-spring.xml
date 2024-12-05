@@ -1,0 +1,21 @@
+<configuration>
+    <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
+        <!-- Loki URL 설정 -->
+        <lokiUrl>http://loki:3100/loki/api/v1/push</lokiUrl>
+
+        <!-- 각 서비스 구분을 위한 레이블 -->
+        <labels>
+            <label name="application" value="user-service" />
+        </labels>
+
+        <!-- 로그 패턴 설정 -->
+        <encoder>
+            <pattern>%date{ISO8601} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 로그 수준 설정 -->
+    <root level="INFO">
+        <appender-ref ref="LOKI" />
+    </root>
+</configuration>
