@@ -43,6 +43,14 @@ public class UserContentRepositoryImpl implements UserContentRepositoryCustom {
         return query.limit(limit).fetch();
     }
 
+    @Override
+    public Long countUserContentsByUserId(Long userId) {
+        return queryFactory.select(userContent.id.count())
+                .from(userContent)
+                .where(userContent.userId.eq(userId))
+                .fetchOne();
+    }
+
 
     @Override
     public List<UserContentResponse> findRandomContentsByUserIds(List<Long> userIds) {
