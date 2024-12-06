@@ -98,13 +98,13 @@ public class UserContentController {
 
     // 컨텐츠 조회
     @ApiResponse(responseCode = "200", description = "유저 컨텐츠 조회 성공", content = @Content(schema = @Schema(implementation = UserContentListAndCursorIdxResponse.class)))
-    @GetMapping(value = "{userId}/contents")
-    public ResponseEntity<UserContentListAndCursorIdxResponse> getUserContents(@PathVariable(name = "userId") Long userId,
+    @GetMapping(value = "{nickname}/contents")
+    public ResponseEntity<UserContentListAndCursorIdxResponse> getUserContents(@PathVariable(name = "nickname") String nickname,
                                                                                @Min(value = 0) @RequestParam(name = "cursorIdx", required = false) Long cursorIdx,
                                                                                @Min(value = 1) @RequestParam(name = "limit", defaultValue = "5") Long limit) {
 
         // Feign 유저 검증
-        UserResponse userResponse = userServiceClient.getUserById(userId);
+        UserResponse userResponse = userServiceClient.getUserInfoByNickname(nickname);
 
         UserContentListAndCursorIdxResponse responses =
                 userContentService.getUserContents(userResponse.getUserId(), cursorIdx, limit);

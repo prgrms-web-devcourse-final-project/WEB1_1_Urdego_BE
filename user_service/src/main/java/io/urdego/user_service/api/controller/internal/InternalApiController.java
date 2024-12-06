@@ -31,6 +31,12 @@ public class InternalApiController {
         return ResponseEntity.ok().body(response);
     }
 
+    @GetMapping("/user-name/{nickname}")
+    public ResponseEntity<UserInfo> getUserByName(@PathVariable("nickname") String nickname) {
+        UserInfo response = userService.findByOneNickname(nickname);
+        return ResponseEntity.ok().body(response);
+    }
+
     @PostMapping("/usersByNickname")
     public ResponseEntity<UserInfo> getUserByNickname(@RequestBody UserRequest request) {
         UserInfo response = userService.findByOneNickname(request.nickname());

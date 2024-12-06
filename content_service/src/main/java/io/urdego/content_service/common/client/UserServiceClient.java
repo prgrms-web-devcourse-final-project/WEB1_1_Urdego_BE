@@ -17,4 +17,7 @@ public interface UserServiceClient {
 
     @GetMapping("/api/user-service/users/validate")
     List<Long> validateUserIds(@RequestParam List<Long> userIds);
+
+    @GetMapping("/api/user-service/user-name/{nickname}")
+    UserResponse getUserInfoByNickname(@PathVariable("nickname") String nickname);
 }
