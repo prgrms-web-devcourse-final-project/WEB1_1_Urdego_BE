@@ -105,6 +105,9 @@ public class UserContentServiceImpl implements UserContentService {
 
         List<UserContentResponse> userContents = userContentRepository.findUserContentsByUserId_CursorPaging(userId, cursorIdx, limit);
 
+        // 총 컨텐츠 수 조회
+        Long totalContent = userContentRepository.countUserContentsByUserId(userId);
+
         // 컨텐츠가 비어있을경우 빈 배열 반환
         if (userContents.isEmpty()) {
 
@@ -117,6 +120,7 @@ public class UserContentServiceImpl implements UserContentService {
         UserContentListAndCursorIdxResponse response =
                 UserContentListAndCursorIdxResponse.builder()
                         .userContents(userContents)
+                        .totalContent(totalContent)
                         .userId(userId)
                         .build();
         response.setNextCursorIdx();

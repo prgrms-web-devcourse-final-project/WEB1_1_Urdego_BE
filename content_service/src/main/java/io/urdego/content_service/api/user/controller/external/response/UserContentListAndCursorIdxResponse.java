@@ -17,6 +17,8 @@ public class UserContentListAndCursorIdxResponse {
 
     private Long cursorIdx;
 
+    private Long totalContent;
+
     public void setNextCursorIdx() {
         cursorIdx =
                 userContents == null || userContents.isEmpty()

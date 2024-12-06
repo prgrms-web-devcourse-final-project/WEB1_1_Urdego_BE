@@ -11,4 +11,7 @@ public interface UserContentRepositoryCustom {
 
     // userIds를 통해 게임 컨텐츠를 랜덤 조회한다.
     List<UserContentResponse> findRandomContentsByUserIds(List<Long> userIds);
+
+    // userId를 통해 유저의 전체 컨텐츠를 반환한다.
+    Long countUserContentsByUserId(Long userId);
 }
