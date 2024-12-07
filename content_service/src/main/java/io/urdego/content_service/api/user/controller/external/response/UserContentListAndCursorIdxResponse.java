@@ -23,6 +23,6 @@ public class UserContentListAndCursorIdxResponse {
         cursorIdx =
                 userContents == null || userContents.isEmpty()
                         ? 0L
-                        : userContents.get(userContents.size() - 1).getUserId();
+                        : userContents.get(userContents.size() - 1).getContentId();
     }
 }
