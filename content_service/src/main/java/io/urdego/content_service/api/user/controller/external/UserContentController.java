@@ -30,7 +30,7 @@ public class UserContentController {
     @ApiResponse(responseCode = "200", description = "컨텐츠 업로드 성공")
     @PostMapping(value = "/contents", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> uploadContent(@RequestParam("file") MultipartFile file,
-                                              @RequestParam("userId") Long userId,
+                                              @RequestParam("nickname") String nickname,
                                               @RequestParam("contentName") String contentName,
                                               @RequestParam("address") String address,
                                               @RequestParam("latitude") Double latitude,
@@ -38,7 +38,7 @@ public class UserContentController {
                                               @RequestParam("hint") String hint) {
 
         // Feign 유저 검증
-        UserResponse userResponse = userServiceClient.getUserById(userId);
+        UserResponse userResponse = userServiceClient.getUserInfoByNickname(nickname);
 
         ContentUploadRequest request =
                 ContentUploadRequest.builder()
@@ -58,7 +58,7 @@ public class UserContentController {
     @ApiResponse(responseCode = "200", description = "다중 컨텐츠 업로드 성공")
     @PostMapping(value = "/contents/multiple", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> uploadMultipleContents(@RequestParam("files") MultipartFile[] files,
-                                                       @RequestParam("userId") Long userId,
+                                                       @RequestParam("nickname") String nickname,
                                                        @RequestParam("contentName") String contentName,
                                                        @RequestParam("address") String address,
                                                        @RequestParam("latitude") Double latitude,
@@ -66,7 +66,7 @@ public class UserContentController {
                                                        @RequestParam("hint") String hint) {
 
         // Feign 유저 검증
-        UserResponse userResponse = userServiceClient.getUserById(userId);
+        UserResponse userResponse = userServiceClient.getUserInfoByNickname(nickname);
 
         // 각 파일에 대해 처리
         ContentUploadRequest request =
@@ -85,12 +85,12 @@ public class UserContentController {
 
     // 컨텐츠 단일 삭제
     @ApiResponse(responseCode = "200", description = "컨텐츠 삭제 성공")
-    @DeleteMapping(value = "{userId}/contents/{contentId}")
-    public ResponseEntity<Void> deleteContent(@PathVariable(name = "userId") Long userId,
+    @DeleteMapping(value = "{nickname}/contents/{contentId}")
+    public ResponseEntity<Void> deleteContent(@PathVariable(name = "nickname") String nickname,
                                               @PathVariable(name = "contentId") Long contentId) {
 
         // Feign 유저 검증
-        userServiceClient.getUserById(userId);
+        userServiceClient.getUserInfoByNickname(nickname);
 
         userContentService.deleteContent(contentId);
         return ResponseEntity.ok().build();
