@@ -15,6 +15,7 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PRIVATE)
 @Entity(name = "Round")
+@Table(name = "Round", uniqueConstraints = @UniqueConstraint(columnNames = {"game_id", "round_num"}))
 public class Round {
 
     @Id
