@@ -43,15 +43,16 @@ public class RoundServiceImpl implements RoundService{
         RLock lock = redissonClient.getLock(lockKey);
 
         try {
-            // 락을 시도
-            if (!lock.tryLock(10, 5, TimeUnit.SECONDS)) {   // 10초 대기, 5초 동안 락 유지
-                throw new IllegalStateException("Unable to acquire lock for round creation.");
+            if (!lock.tryLock(15, 10, TimeUnit.SECONDS)) {
+                log.warn("라운드 생성 락 획득 실패. gameId: {}, roundNum: {}", request.gameId(), request.roundNum());
+                throw new IllegalStateException("다른 프로세스에서 라운드 생성을 진행중...");
             }
 
-            // 중복 라운드 확인
-            if (roundRepository.existsByGameIdAndRoundNum(request.gameId(), request.roundNum())) {
-                log.warn("Round already exists for gameId: {}, roundNum: {}", request.gameId(), request.roundNum());
-                throw new IllegalStateException("Round already exists.");
+            // 비관적 락으로 중복 확인
+            Optional<Round> existingRound = roundRepository.findByGameIdAndRoundNumForUpdate(request.gameId(), request.roundNum());
+            if (existingRound.isPresent()) {
+                log.warn("중복 라운드 생성이 감지되었습니다. gameId: {}, roundNum: {}", request.gameId(), request.roundNum());
+                throw new IllegalStateException("이미 존재하는 라운드입니다.");
             }
 
             // 게임 정보 조회
@@ -60,11 +61,11 @@ public class RoundServiceImpl implements RoundService{
 
             // 그룹에서 플레이어 ID 조회
             GroupInfoRes groupInfo = groupServiceClient.getGroupInfo(game.getGroupId());
-            log.info("Fetched group info: {}", groupInfo);
+            log.info("그룹 정보 불러오기. : {}", groupInfo);
             List<Long> playerIds = groupInfo.invitedUserIds();
             if (playerIds == null || playerIds.isEmpty()) {
-                log.warn("No invited users found for groupId: {}", game.getGroupId());
-                throw new IllegalArgumentException("No invited users found");
+                log.warn("해당 그룹 아이디로 초대된 유저가 없습니다. : {}", game.getGroupId());
+                throw new IllegalArgumentException("초대된 유저가 없습니다.");
             }
 
             // 플레이어별 컨텐츠 가져오기
@@ -99,7 +100,7 @@ public class RoundServiceImpl implements RoundService{
                     .build();
             round = roundRepository.save(round);
 
-            log.info("Round {} created with {} problems, location: {}", round.getRoundNum(), limitedContents.size(), selectedGroup.getKey());
+            log.info("Round {} 생성. {} 개의 문제, 위치 정보: {}", round.getRoundNum(), limitedContents.size(), selectedGroup.getKey());
 
             // 응답 생성
             List<String> contentUrls = limitedContents.stream()
@@ -111,7 +112,7 @@ public class RoundServiceImpl implements RoundService{
 
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new IllegalStateException("Failed to acquire lock for round creation.", e);
+            throw new IllegalStateException("라운드 생성 락 획득 실패.", e);
         } finally {
             if (lock.isHeldByCurrentThread()) {
                 lock.unlock();
