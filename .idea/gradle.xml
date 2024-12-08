@@ -58,6 +58,14 @@
         <option name="externalProjectPath" value="$PROJECT_DIR$/notification-service" />
       </GradleProjectSettings>
       <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/notification_service" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/notification_service" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/user_service" />
         <option name="modules">
           <set>

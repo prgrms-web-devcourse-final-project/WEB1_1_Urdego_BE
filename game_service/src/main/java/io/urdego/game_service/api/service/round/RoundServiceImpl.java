@@ -17,10 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -61,11 +58,16 @@ public class RoundServiceImpl implements RoundService{
         Map<String, List<ContentRes>> groupedByExactLocation = contentList.stream()
                 .collect(Collectors.groupingBy(content -> content.latitude() + "," + content.longitude()));
 
-        // 5. 그룹 중 하나를 랜덤으로 선택
+        // 5. 그룹 중 하나를 랜덤으로 선택, 섞어서 최대 3개 선정
         Map.Entry<String, List<ContentRes>> selectedGroup = selectRandomGroup(groupedByExactLocation);
         List<ContentRes> selectedContents = selectedGroup.getValue();
 
-        List<Long> contentIds = selectedContents.stream()
+        Collections.shuffle(selectedContents);
+        List<ContentRes> limitedContents = selectedContents.stream()
+                .limit(3)
+                .toList();
+
+        List<Long> contentIds = limitedContents.stream()
                 .map(ContentRes::contentId)
                 .toList();
 
@@ -77,14 +79,14 @@ public class RoundServiceImpl implements RoundService{
                 .build();
         round = roundRepository.save(round);
 
-        log.info("Round {} created with {} problems, location: {}", round.getRoundNum(), selectedContents.size(), selectedGroup.getKey());
+        log.info("Round {} created with {} problems, location: {}", round.getRoundNum(), limitedContents.size(), selectedGroup.getKey());
 
         // 7. 응답 생성
-        List<String> contentUrls = contentList.stream()
+        List<String> contentUrls = limitedContents.stream()
                 .map(ContentRes::url)
                 .toList();
 
-        String hint = contentList.get(0).hint();
+        String hint = limitedContents.get(0).hint();
         return RoundRes.from(round.getRoundId(), round.getRoundNum(), game.getTimer(), contentUrls, hint);
     }
 
