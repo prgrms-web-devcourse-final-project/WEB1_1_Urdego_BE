@@ -8,4 +8,5 @@ import java.util.List;
 
 @Repository
 public interface RoundRepository extends JpaRepository<Round, Long> {
+    boolean existsByGameIdAndRoundNum(Long gameId, int roundNum);
 }
