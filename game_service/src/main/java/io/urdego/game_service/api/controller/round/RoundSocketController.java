@@ -9,6 +9,7 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 @Slf4j
@@ -17,20 +18,29 @@ import org.springframework.stereotype.Controller;
 public class RoundSocketController {
 
     private final RoundService roundService;
+    private final SimpMessagingTemplate messagingTemplate;
 
     // 라운드 생성
     @MessageMapping("/rounds/create")
-    @SendTo("/game-service/subscribe/rounds/create")
-    public RoundRes createRound(@Payload RoundCreateReq request) {
+//    @SendTo("/game-service/subscribe/rounds/create")
+    public void createRound(@Payload RoundCreateReq request) {
         log.info("Create round for gameId: {}", request.gameId());
-        return roundService.createRound(request);
+
+        RoundRes roundRes = roundService.createRound(request);
+
+        String destination = "/game-service/subscribe/game/" + request.gameId() + "/rounds/create";
+        messagingTemplate.convertAndSend(destination, roundRes);
     }
 
     // 라운드 종료
     @MessageMapping("/rounds/{roundId}/end")
-    @SendTo("/game-service/subscribe/rounds/{roundId}/end")
-    public String endRound(@DestinationVariable int roundNum) {
+//    @SendTo("/game-service/subscribe/rounds/{roundId}/end")
+    public void endRound(@DestinationVariable int roundNum, @Payload Long gameId) {
         log.info("Ending round: {}", roundNum);
-        return roundNum + "라운드가 종료되었습니다!";
+
+        String response = roundNum + "라운드가 종료되었습니다!";
+
+        String destination = "/game-service/subscribe/game/" + gameId + "/rounds/" + roundNum + "/end";
+        messagingTemplate.convertAndSend(destination, response);
     }
 }
