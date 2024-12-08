@@ -27,10 +27,10 @@ public class SubmissionSocketController {
             @DestinationVariable Long gameId,
             @DestinationVariable Long roundId,
             @Payload SubmissionReq request) {
-        log.info("Submission received for gameId: {}, roundId: {}, nickname: {}", gameId, roundId, request.nickname());
+        log.info("답안이 제출되었습니다. gameId: {}, roundId: {}, nickname: {}", gameId, roundId, request.nickname());
 
         SubmissionRes submissionRes = submissionService.submitAnswer(request);
-        log.info("Processed submission for nickname: {}, result: {}", request.nickname(), submissionRes);
+        log.info("제출 처리 결과: nickname: {}, result: {}", request.nickname(), submissionRes);
 
         String destination = "/game-service/subscribe/game/" + gameId + "/rounds/" + roundId + "/score";
         messagingTemplate.convertAndSend(destination, submissionRes);
