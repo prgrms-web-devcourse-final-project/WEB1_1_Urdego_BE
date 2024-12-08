@@ -43,12 +43,15 @@ public class RoundServiceImpl implements RoundService{
         RLock lock = redissonClient.getLock(lockKey);
 
         try {
-            if (!lock.tryLock(15, 10, TimeUnit.SECONDS)) {
+            boolean lockAcquired = lock.tryLock(15, 30, TimeUnit.SECONDS);
+            if (lockAcquired) {
+                log.info("라운드 생성 락 획득 성공. gameId: {}, roundNum: {}", request.gameId(), request.roundNum());
+            } else {
                 log.warn("라운드 생성 락 획득 실패. gameId: {}, roundNum: {}", request.gameId(), request.roundNum());
                 throw new IllegalStateException("다른 프로세스에서 라운드 생성을 진행중...");
             }
 
-            // 비관적 락으로 중복 확인
+            // 비관적 락 -> 중복 확인
             Optional<Round> existingRound = roundRepository.findByGameIdAndRoundNumForUpdate(request.gameId(), request.roundNum());
             if (existingRound.isPresent()) {
                 log.warn("중복 라운드 생성이 감지되었습니다. gameId: {}, roundNum: {}", request.gameId(), request.roundNum());
@@ -116,6 +119,7 @@ public class RoundServiceImpl implements RoundService{
         } finally {
             if (lock.isHeldByCurrentThread()) {
                 lock.unlock();
+                log.info("제출 처리 락 해제");
             }
         }
     }
