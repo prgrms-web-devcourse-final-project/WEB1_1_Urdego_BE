@@ -49,80 +49,80 @@ public class RoundServiceImpl implements RoundService{
                 log.info("라운드 생성 락 획득 성공. gameId: {}, roundNum: {}", request.gameId(), request.roundNum());
             } else {
                 log.warn("라운드 생성 락 획득 실패. gameId: {}, roundNum: {}", request.gameId(), request.roundNum());
-                throw new IllegalStateException("다른 프로세스에서 라운드 생성을 진행 중...");
+                throw new IllegalStateException("다른 프로세스에서 라운드 생성을 진행중...");
             }
 
-            // 기존 라운드 확인
-            Optional<Round> existingRound = roundRepository.findByGameIdAndRoundNum(request.gameId(), request.roundNum());
+            // 비관적 락 -> 중복 확인
+            Optional<Round> existingRound = roundRepository.findByGameIdAndRoundNumForUpdate(request.gameId(), request.roundNum());
             if (existingRound.isPresent()) {
-                log.info("기존 라운드가 발견되었습니다. gameId: {}, roundNum: {}", request.gameId(), request.roundNum());
+                log.warn("중복 라운드 생성이 감지되었습니다. 기존 라운드 정보를 반환합니다. gameId: {}, roundNum: {}", request.gameId(), request.roundNum());
                 return buildRoundRes(existingRound.get());
             }
 
-            // 새로운 라운드 생성
-            return createNewRound(request);
+            // 게임 정보 조회
+            Long currentGameId = request.gameId();
+            Game game = gameServiceImpl.findByGameIdOrThrowGameException(currentGameId);
+
+            // 그룹에서 플레이어 ID 조회
+            GroupInfoRes groupInfo = groupServiceClient.getGroupInfo(game.getGroupId());
+            log.info("그룹 정보 불러오기. : {}", groupInfo);
+            List<Long> playerIds = groupInfo.invitedUserIds();
+            if (playerIds == null || playerIds.isEmpty()) {
+                log.warn("해당 그룹 아이디로 초대된 유저가 없습니다. : {}", game.getGroupId());
+                throw new IllegalArgumentException("초대된 유저가 없습니다.");
+            }
+
+            // 플레이어별 컨텐츠 가져오기
+            List<ContentRes> contentList = contentServiceClient.getUserContents(playerIds);
+            if (contentList.isEmpty()) {
+                log.warn("{} / PlayerIds : {}", ExceptionMessage.ROUND_CONTENT_NOT_FOUND, playerIds);
+                throw new ContentException(ExceptionMessage.ROUND_CONTENT_NOT_FOUND.getText());
+            }
+
+            // 위도, 경도를 기준으로 그룹화
+            Map<String, List<ContentRes>> groupedByExactLocation = contentList.stream()
+                    .collect(Collectors.groupingBy(content -> content.latitude() + "," + content.longitude()));
+
+            // 그룹 중 하나를 랜덤으로 선택, 섞어서 최대 3개 선정
+            Map.Entry<String, List<ContentRes>> selectedGroup = selectRandomGroup(groupedByExactLocation);
+            List<ContentRes> selectedContents = selectedGroup.getValue();
+
+            Collections.shuffle(selectedContents);
+            List<ContentRes> limitedContents = selectedContents.stream()
+                    .limit(3)
+                    .toList();
+
+            List<Long> contentIds = limitedContents.stream()
+                    .map(ContentRes::contentId)
+                    .toList();
+
+            // 라운드 생성
+            Round round = Round.builder()
+                    .gameId(currentGameId)
+                    .roundNum(request.roundNum())
+                    .contentIds(contentIds)
+                    .build();
+
+            round = roundRepository.save(round);
+            log.info("Round {} 생성. {} 개의 문제, 위치 정보: {}", round.getRoundNum(), limitedContents.size(), selectedGroup.getKey());
+
+            // 응답 생성
+            List<String> contentUrls = limitedContents.stream()
+                    .map(ContentRes::url)
+                    .toList();
+
+            String hint = limitedContents.get(0).hint();
+            return RoundRes.from(round.getRoundId(), round.getRoundNum(), game.getTimer(), contentUrls, hint);
+
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new IllegalStateException("라운드 생성 중 인터럽트 발생", e);
+            throw new IllegalStateException("라운드 생성 락 획득 실패.", e);
         } finally {
             if (lock.isHeldByCurrentThread()) {
                 lock.unlock();
-                log.info("라운드 생성 락 해제.");
+                log.info("제출 처리 락 해제");
             }
         }
-    }
-
-    private RoundRes createNewRound(RoundCreateReq request) {
-        // 게임 정보 조회
-        Game game = gameServiceImpl.findByGameIdOrThrowGameException(request.gameId());
-
-        // 그룹에서 플레이어 ID 조회
-        GroupInfoRes groupInfo = groupServiceClient.getGroupInfo(game.getGroupId());
-        log.info("그룹 정보: {}", groupInfo);
-
-        List<Long> playerIds = groupInfo.invitedUserIds();
-        if (playerIds == null || playerIds.isEmpty()) {
-            log.warn("해당 그룹 아이디로 초대된 유저가 없습니다. : {}", game.getGroupId());
-            throw new IllegalArgumentException("초대된 유저가 없습니다.");
-        }
-
-        // 플레이어별 컨텐츠 가져오기
-        List<ContentRes> contentList = contentServiceClient.getUserContents(playerIds);
-        if (contentList.isEmpty()) {
-            log.warn("{} / PlayerIds : {}", ExceptionMessage.ROUND_CONTENT_NOT_FOUND, playerIds);
-            throw new ContentException(ExceptionMessage.ROUND_CONTENT_NOT_FOUND.getText());
-        }
-
-        // 위도, 경도를 기준으로 그룹화
-        Map<String, List<ContentRes>> groupedByExactLocation = contentList.stream()
-                .collect(Collectors.groupingBy(content -> content.latitude() + "," + content.longitude()));
-
-        // 그룹 중 하나를 랜덤으로 선택, 섞어서 최대 3개 선정
-        Map.Entry<String, List<ContentRes>> selectedGroup = selectRandomGroup(groupedByExactLocation);
-        List<ContentRes> selectedContents = selectedGroup.getValue();
-
-        Collections.shuffle(selectedContents);
-        List<ContentRes> limitedContents = selectedContents.stream()
-                .limit(3)
-                .toList();
-
-        List<Long> contentIds = limitedContents.stream()
-                .map(ContentRes::contentId)
-                .toList();
-
-        // 라운드 생성
-        Round round = Round.builder()
-                .gameId(request.gameId())
-                .roundNum(request.roundNum())
-                .contentIds(contentIds)
-                .build();
-
-        round = roundRepository.save(round);
-
-        log.info("Round {} 생성. {} 개의 문제, 위치 정보: {}", round.getRoundNum(), limitedContents.size(), selectedGroup.getKey());
-
-        // 응답 생성
-        return buildRoundRes(round);
     }
 
     private Map.Entry<String, List<ContentRes>> selectRandomGroup(Map<String, List<ContentRes>> groupedByLocation) {
@@ -138,18 +138,17 @@ public class RoundServiceImpl implements RoundService{
         // 라운드 내부 콘텐츠 ID 목록
         List<Long> contentIds = round.getContentIds();
 
-        // 콘텐츠 ID별 세부정보
+        // 콘텐츠 ID별 세부정보 꺼내오기
         List<ContentRes> contents = contentIds.stream()
                 .map(contentServiceClient::getContent)
                 .toList();
 
-        // 콘텐츠 URL, 힌트
+        // 콘텐츠 URL, 힌트 정리
         List<String> contentUrls = contents.stream().map(ContentRes::url).toList();
         String hint = contents.isEmpty() ? "" : contents.get(0).hint();
 
         log.info("라운드 응답 생성. roundId: {}, roundNum: {}, contents: {}", round.getRoundId(), round.getRoundNum(), contentUrls);
         return RoundRes.from(round.getRoundId(), round.getRoundNum(), 60, contentUrls, hint);
     }
-
 
 }
