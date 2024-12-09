@@ -26,17 +26,12 @@ public class RoundSocketController {
     public void createRound(@Payload RoundCreateReq request) {
         log.info("Create round for gameId: {}", request.gameId());
 
-        try {
-            // 라운드 생성 또는 기존 라운드 반환
-            RoundRes roundRes = roundService.createRound(request);
+        // 라운드 생성 또는 기존 라운드 반환
+        RoundRes roundRes = roundService.createRound(request);
 
-            // 브로드캐스트
-            String destination = "/game-service/subscribe/game/" + request.gameId() + "/rounds/create";
-            messagingTemplate.convertAndSend(destination, roundRes);
-
-        } catch (Exception e) {
-            log.error("라운드 생성 중 오류가 발생했습니다. gameId: {}, roundNum: {}, error: {}", request.gameId(), request.roundNum(), e.getMessage(), e);
-        }
+        // 브로드캐스트
+        String destination = "/game-service/subscribe/game/" + request.gameId() + "/rounds/create";
+        messagingTemplate.convertAndSend(destination, roundRes);
     }
 
     // 라운드 종료
