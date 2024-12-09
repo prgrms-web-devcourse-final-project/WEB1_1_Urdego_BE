@@ -17,4 +17,6 @@ public interface RoundRepository extends JpaRepository<Round, Long> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT r FROM Round r WHERE r.gameId = :gameId AND r.roundNum = :roundNum")
     Optional<Round> findByGameIdAndRoundNumForUpdate(@Param("gameId") Long gameId, @Param("roundNum") int roundNum);
+
+    Optional<Round> findByGameIdAndRoundNum(Long gameId, int roundNum);
 }
