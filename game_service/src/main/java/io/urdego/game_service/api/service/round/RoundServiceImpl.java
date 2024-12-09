@@ -44,7 +44,7 @@ public class RoundServiceImpl implements RoundService{
         RLock lock = redissonClient.getLock(lockKey);
 
         try {
-            boolean lockAcquired = lock.tryLock(15, 30, TimeUnit.SECONDS);
+            boolean lockAcquired = lock.tryLock(30, 60, TimeUnit.SECONDS);
             if (lockAcquired) {
                 log.info("라운드 생성 락 획득 성공. gameId: {}, roundNum: {}", request.gameId(), request.roundNum());
             } else {
@@ -120,7 +120,7 @@ public class RoundServiceImpl implements RoundService{
         } finally {
             if (lock.isHeldByCurrentThread()) {
                 lock.unlock();
-                log.info("제출 처리 락 해제");
+                log.info("라운드 생성 락 해제");
             }
         }
     }
@@ -147,7 +147,7 @@ public class RoundServiceImpl implements RoundService{
         List<String> contentUrls = contents.stream().map(ContentRes::url).toList();
         String hint = contents.isEmpty() ? "" : contents.get(0).hint();
 
-        log.info("라운드 응답 생성. roundId: {}, roundNum: {}, contents: {}", round.getRoundId(), round.getRoundNum(), contentUrls);
+        log.info("라운드 정보. roundId: {}, roundNum: {}, contents: {}", round.getRoundId(), round.getRoundNum(), contentUrls);
         return RoundRes.from(round.getRoundId(), round.getRoundNum(), 60, contentUrls, hint);
     }
 

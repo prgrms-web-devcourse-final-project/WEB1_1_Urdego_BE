@@ -174,15 +174,13 @@ public class SubmissionServiceImpl implements SubmissionService {
     // 거리 기반 점수 계산 - 선형 감소(Linear Decay)
     @Override
     public int calculateScore(double distance) {
-        // 선형 감소 점수 계산
-        final int maxScore = 1000; // 최대 점수
-        final double maxDistance = 200.0; // 점수가 0이 되는 기준 거리 (10km)
+        final int maxScore = 1000;
+        final double maxDistance = 200.0;
 
         if (distance > maxDistance) {
-            return 0; // 최대 거리를 초과하면 점수는 0점
+            return 0;
         }
 
-        // 선형 점수 계산 공식
         return (int) Math.max(0, maxScore - (distance / maxDistance) * maxScore);
     }
 }
